@@ -1,0 +1,70 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Agregar nuevo usuario</h4>
+</div>
+
+<form action="{% url 'usuarios:registrar' %}" method="POST"> {% csrf_token %}
+			<form role="form">
+	<div class="modal-body">
+		
+		<div class="wrap">
+				<div class="box-body">
+					<div class="form-group">
+						<label>RUN</label>
+						<input type="text" class="form-control" name="rut" placeholder="Ingrese rut" required="">
+					</div>
+					<div class="form-group">
+						<label>Nombres</label>
+						<input type="text" class="form-control" name="nombres" placeholder="Ingrese nombres" required="">
+					</div>
+					<div class="form-group">
+						<label>Apellido Paterno</label>
+						<input type="text" class="form-control" name="apellido1" placeholder="Ingrese apellidos" required="">
+					</div>
+					<div class="form-group">
+						<label>Apellido Materno</label>
+						<input type="text" class="form-control" name="apellido2" placeholder="Ingrese apellidos" required="">
+					</div>
+					<div class="form-group">
+						<label>Correo electrónico</label>
+						<input type="email" class="form-control" name="email" placeholder="Ingrese correo electrónico" required="">
+					</div>
+					<div class="form-group">
+						<label>Nombre de usuario</label>
+						<input type="text" class="form-control" name="username" placeholder="Ingrese nombre de usuario" required="">
+					</div>
+					<div class="form-group">
+						<label>Privilegios</label>
+						<select id="grupos" name="tipo_usuario" class="select2_group form-control">
+							<option value="Directivo">Directivo</option>
+							<option value="Comite academico">Comité académico</option>
+							<option value="Docente">Docente</option>
+							<option value="Estudiante">Estudiante</option>
+							<option value="Administrador">Administrador</option>
+							<!-- <option value="Otro">Otro</option> -->
+						</select>
+					</div>
+					<div class="div" style="display: none !important">
+						<div class="form-group">
+							<label>Contraseña</label>
+							<input type="password" class="form-control" name="password1" placeholder="Ingrese contraseña" value="unab2020">
+						</div>
+						<div class="form-group">
+							<label>Confirmar contraseña</label>
+							<input type="password" class="form-control" name="password2" placeholder="Confirme contraseña" value="unab2020">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	  <input type="submit" value="Guardar" class="btn btn-primary" >
+	  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+	</div>
+</form>
+
+
+{% block js %}
+
+{% endblock %}

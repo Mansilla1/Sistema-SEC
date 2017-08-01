@@ -1,0 +1,205 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Nueva Evaluación{% endblock %}
+
+{% block css %}
+<!-- Custom css -->
+<link rel="stylesheet" href="{% static 'app/css/evaluacion.css' %}">
+<style>
+	pre {
+		background-color: #fff;
+		border: none;
+		font-size: 13px;
+		font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+	}
+	/*.sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }*/
+  .sortable div { }
+  .sortable li span { position: absolute; margin-left: -1.3em; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Nueva evaluación</h2>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<div class="wizard1 pasado">
+						<h3>
+							Paso 1 <br>
+							<h2><small style="color: #fff;">Seleccionar asignatura</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2 pasado">
+						<h3>
+							Paso 2 <br>
+							<h2><small style="color: #fff;">Agregar preguntas</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2 pasado">
+						<h3>
+							Paso 3 <br>
+							<h2><small style="color: #fff;">Cabeceras</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard3 active">
+						<h3>
+							Paso 4 <br>
+							<h2><small style="color: #fff;">Previsualización</small></h2>
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<hr>
+
+		<div class="col-md-12">
+			<form action="" method="POST"> {% csrf_token %}
+				<div id="formulario" style="display: none !important;">{{ form }}</div>
+				<div class="row">
+					<div class="col-md-10">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<img src="{% static 'img/unab.png' %}" alt="Logo-UNAB" width="100">
+								</div>
+								<div class="col-md-3 col-md-offset-6">
+									<h4>Profesor (es):</h4>
+									<p>{{ evaluacion.datos }}</p>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-5 col-md-offset-4" style="text-align: center;">
+								<h3><strong>{{ evaluacion.titulo }}</strong></h3>
+							</div>
+						</div>
+							<br>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-6">
+									<p>Nombre: ___________________________________________</p>
+								</div>
+								<div class="col-md-4">
+									<p>RUN: __________________________</p>
+								</div>
+								<div class="col-md-2">
+									<p>Fecha: __________</p>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<h5><strong>Instrucciones</strong></h5>
+									<pre>{{ evaluacion.instrucciones }}</pre>
+								</div>
+							</div>
+						</div>
+
+						<div class="row sortable" id="questions">
+							{% for pregunta in evaluacion.preguntas.all %}
+							<div class="col-md-12">
+								<div class="col-md-12" style="border: solid 1px;margin-bottom: 10px;border-radius: 10px;background-color:#CEC7C7;">
+									<div class="col-md-10">
+										<h5><strong>{{ pregunta.pregunta }}</strong></h5>
+										{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
+										<img src="{{ im.url }}" class="img-responsive">
+										{% endthumbnail %}
+									</div>
+									<div class="col-md-2 points">
+										<h5><strong>Puntaje</strong></h5>
+										<input type="number" name="pje_pregunta" required="" class="form-control" maxlength="2">
+									</div>
+									<div class="col-md-12">
+									{% if pregunta.tipo_pregunta == 'Desarrollo' %}
+										{% elif pregunta.tipo_pregunta == 'Alternativas' %}
+											<h5><strong>Alternativas</strong></h5>
+											{% for respuesta in pregunta.respuesta_set.all %}
+												<p>{{ respuesta.opcion }}. {{ respuesta.respuesta }}</p>
+											{% endfor %}
+											{% elif pregunta.tipo_pregunta == 'Pareados' %}
+												<h5><strong>Términos</strong></h5>
+												<div class="col-md-6">
+													<h4 class="text-center">Fila "A"</h4>
+												</div>
+												<div class="col-md-6">
+													<h4 class="text-center">Fila "B"</h4>
+												</div>
+												{% for respuesta in pregunta.respuesta_set.all %}
+												<div class="col-md-6">
+													<div class="col-md-2">
+														<strong>{{ respuesta.opcion }}.</strong>
+													</div>
+													<div class="col-md-10">
+														<p>{{ respuesta.respuesta }}</p>
+													</div>
+												</div>
+												{% endfor %}
+									{% endif %}
+									</div>
+									<hr>
+									<!-- <div class="col-md-2">
+										<p><strong>Puntaje</strong></p>
+										<input type="number" name="pje_pregunta" required="" class="form-control" maxlength="2">
+									</div> -->
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+
+					<div class="col-md-2">
+						<div class="row">
+							<div class="col-md-12">
+								<label for="">Fecha de la evaluación</label>
+								<input type="date" name="fecha_evaluacion" class="form-control" required="">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6"><a href="{% url 'evaluaciones:evaluacion_step3' evaluacion.pk %}" class="btn btn-info">Volver</a></div>
+							<div class="col-md-6"><input type="submit" name="disponible" class="btn btn-success" value="Finalizar"></div>
+							<div class="col-md-12">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+
+<script>
+$( function() {
+    $( ".sortable" ).sortable();
+    $( ".sortable" ).disableSelection();
+  } );
+</script>
+
+<script>
+	$('#formulario').hide()
+</script>
+{% endblock %}

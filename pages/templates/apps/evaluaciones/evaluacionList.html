@@ -1,0 +1,135 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Evaluaciones{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="x_panel">
+			<div class="x_title">
+			<h2>Evaluaciones</h2>
+			<div class="clearfix"></div>
+			</div>
+			<div class="x_content">
+		        <button class="btn btn-success" data-toggle="modal" data-target="#myModalE">Nueva evaluación</button>
+		        <br>
+		        <br>
+		        <table id="datatable" class="table table-hover table-bordered">
+		          	<thead>
+						<tr>
+							<th>Código</th>
+							<th>Evaluación</th>
+							<th>Asignatura</th>
+							<th>Curso</th>
+							<th>Detalle</th>
+							<th>Calificaciones</th>
+							<th>Detalle calificaciones</th>
+						</tr>
+					</thead>
+					{% if evaluaciones %}
+					<tbody>
+						{% for evaluacion in evaluaciones|dictsort:"id" %}
+						{% if evaluacion.disponible == True %}
+							<tr>
+								<td> {{ evaluacion.id }} </td>
+								<td>{% if evaluacion.titulo %} {{ evaluacion.titulo }} {% else %} {% if evaluacion.tipo_evaluacion == 'Otro' %} {{ evaluacion.tipo_evaluacion_otro }} {% else %} {{ evaluacion.tipo_evaluacion }} {% endif %}  {% endif %}</td>
+								<td> {{ evaluacion.curso.asignatura.codigo }} - {{ evaluacion.curso.asignatura.nombre }} </td>
+								<td> {{ evaluacion.curso.nrc }} - {{ evaluacion.curso.regimen }} </td>
+								<td> <a title="Detalle evaluación" href="{% url 'evaluaciones:evaluacion_detail' evaluacion.pk %}" class="btn btn-danger btn-xs" class="text-red"><i class="glyphicon glyphicon-info-sign"></i> <small>Detalle evaluación</small></a> </td>
+								<td> <a title="Subir calificaciones" href="{% url 'evaluaciones:calificacionExcel' evaluacion.pk %}" class="btn btn-success btn-xs" type="button" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-file"></i><small> Subir calificaciones</small></a> </td>
+								<td> {% if evaluacion.promedio_set %} <a title="Calificaciones por estudiantes" href="{% url 'evaluaciones:estudiante_calificacion' evaluacion.pk %}" class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-th-list"></i> <small> Detalle calificaciones</small></a> {% else %} --- {% endif %} </td>
+							</tr>
+						{% endif %}
+						{% endfor %}
+					</tbody>
+					{% else %}
+					<h5>No hay registros</h5>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- MODAL DE CARGAR EXCEL -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+	 <div class="modal-content">
+
+
+	 </div>
+	</div>
+</div>
+
+<!-- MODAL SELECCIÓN EVALUACIÓN -->
+<div class="modal fade" id="myModalE" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		 <div class="modal-content">
+		   <div class="modal-header">
+		       <button type="button" class="close" data-dismiss="modal">&times;</button>
+		       <h4 class="modal-title">Seleccionar tipo de evaluación</h4>
+		     </div>
+		     <div class="modal-body">
+		     	<div class="row">
+     		     	<!-- Evaluación rápida -->
+     		       <div class="col-md-6">
+     		       		<a href="{% url 'evaluaciones:evaluacion_rapida_step1' %}" class="btn btn-success"><i class="fa fa-text"></i> Evaluación rápida</a>
+     		       		<br>
+     		       		<small><i><strong>Nota: </strong>Esta función genera una evaluación de forma automática mediante los parámetros entregados por el usuario.</i></small>
+     		       </div>
+
+     				<!-- Evaluación paso a paso -->
+     				<div class="col-md-6">
+     					<a href="{% url 'evaluaciones:evaluacion_step1' %}" class="btn btn-success"><i class="fa fa-text"></i> Evaluación manual</a>
+     					<br>
+     					<small><i><strong>Nota: </strong>Esta función permite al usuario elaborar una evaluación, desplegándo preguntas, las cuales, el usuario deberá elegir y darle puntaje a la pregunta seleccionada.</i></small>
+     				</div>
+		     	</div>
+
+		     </div>
+		     <div class="modal-footer">
+		       <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+		     </div>
+		 </div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+
+<script>
+$('a[title="Subir calificaciones"]').tooltip();
+
+</script>
+
+<script>
+$(document).ready(function(e) {
+  $("#csv").click(function (e) {
+    $("#datatable").tableExport({
+      type: 'excel',
+      escape: 'false'
+    });
+  });
+});
+</script>
+{% endblock %}

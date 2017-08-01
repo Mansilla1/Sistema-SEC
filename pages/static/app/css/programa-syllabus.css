@@ -1,0 +1,102 @@
+p {
+	white-space: pre-line;
+}
+
+.encabezado {
+	vertical-align:middle;
+	background-color:#999;
+	color:#fff;
+}
+
+td > h3 {
+	font-size: 13px;
+}
+
+table {
+	border: 1px solid #ddd;
+}
+
+.descarga_doc {
+	float:right;
+}
+
+/* Documeto PDF Feedback*/
+
+.table_feedback  {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+.table_feedback td {
+	font-family:Arial, sans-serif;
+	font-size:10px;
+	padding:5px 5px;
+	border: 1px solid #735E5E;
+	overflow:hidden;
+	word-break:normal;
+}
+.table_feedback th {
+	font-family:Arial, sans-serif;
+	font-size:10px;
+	font-weight:normal;
+	padding:5px 5px;
+	border: 1px solid #735E5E;
+	overflow:hidden;
+	word-break:normal;
+}
+.table_feedback .col_table {
+	font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+	text-align:center;
+	vertical-align:middle;
+}
+.table_feedback .hd_table {
+	font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+	text-align:center;
+}
+
+/*Tabla evaluación*/
+
+.tabla_ev  {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+.tabla_ev td {
+	font-family:Arial, sans-serif;
+	font-size:12px;
+	padding:5px 5px;
+	border: 1px solid #ddd;
+	overflow:hidden;
+	word-break:normal;
+}
+.tabla_ev th {
+	font-family:Arial, sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	padding:5px 5px;
+	border: 1px solid #ddd;
+	overflow:hidden;
+	word-break:normal;
+}
+.tabla_ev .porcnt {
+	font-weight:bold;
+	font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+	background-color:#c0c0c0;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+}
+.tabla_ev .rsrc_list {
+	font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+	text-align:center;
+	vertical-align:middle;
+}
+.tabla_ev .rsrc_list2 {
+	text-align:center;
+	vertical-align:middle;
+}
+.tabla_ev .resource {
+	font-weight:bold;
+	font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+	background-color:#c0c0c0;
+	color:#000000;
+	text-align:center;
+}

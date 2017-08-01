@@ -1,0 +1,122 @@
+{% load static %}
+{% load thumbnail %}
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Evaluar pregunta {{ preguntas.pk }}</h4>
+</div>
+
+<div class="modal-body">
+  <form action="/preguntas/pregunta-evaluar/{{ preguntas.pk }}/" method="POST"> {% csrf_token %}
+        <p><strong>Asignatura:</strong> {{ preguntas.asignatura.nombre }} - {{ preguntas.asignatura.codigo }}</p>
+        <p><strong>Contenido: </strong>{{ preguntas.unidad.nombre }}</p>
+        <p><strong>Dificultad: </strong>{{ preguntas.dificultad }}</p>
+        <p><strong>Tipo de pregunta: </strong>{{ preguntas.tipo_pregunta }}</p>
+        <p><strong>Propuesta por: </strong>{{ preguntas.usuario.perfilusuario.nombres }} {{ preguntas.usuario.perfilusuario.apellido1 }} {{ preguntas.usuario.perfilusuario.apellido2 }}</p>
+        <p><strong>Pregunta: </strong>{{ preguntas.pregunta }} <br>
+
+        {% thumbnail preguntas.imagen_pregunta "350x260" crop="center" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}
+
+        {% if preguntas.tipo_pregunta == 'Pregunta de desarrollo' %}
+        <p><strong>Respuesta: </strong> {% for respuesta in preguntas.respuesta_set.all %} {{ respuesta.respuesta }}  
+
+        {% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+        {% endthumbnail %} {% endfor %}</p>
+
+        {% elif preguntas.tipo_pregunta == 'Seleccion multiple' %}
+
+        <p><strong>Respuestas: </strong></p>
+
+        {% for respuesta in preguntas.respuesta_set.all %}
+          {% if respuesta.status_respuesta == True %}
+          <p><strong> {{ respuesta.opcion }}*. {{ respuesta.respuesta }}</strong></p> 
+          {% else %}
+          <p><strong> {{ respuesta.opcion }}.</strong> {{ respuesta.respuesta }}</p>
+          {% endif %}
+        {% endfor %}
+        
+        {% elif preguntas.tipo_pregunta == 'Terminos pareados' %}
+          <h4><strong>Respuestas:</strong></h4>
+            <div class="row">
+              <div class="col-md-6">
+                <h4 class="text-center">Fila "A"</h4>
+              </div>
+              <div class="col-md-6">
+                <h4 class="text-center">Fila "B"</h4>
+              </div>
+              {% for respuesta in preguntas.respuesta_set.all %}
+              <div class="col-md-6">
+                <div class="col-md-2">
+                  <strong>{{ respuesta.opcion }}.</strong>
+                </div>
+                <div class="col-md-10">
+                  <p>{{ respuesta.respuesta }}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+        {% endif %}
+        <br>
+        <div id="formulario" style="display: none !important">{{ form }} <input type="text" name="dificultad" value="{{ preguntas.dificultad }}"></div>
+        <!-- <div class="checkbox-row">                          
+          <input id="id_status" name="status" type="checkbox">
+          <label class="vCheckboxLabel" for="id_status">Status</label>    
+        </div> -->
+        <input type="submit" value="Aceptar pregunta" id="aceptar" class="btn btn-success" name="status">
+        <button id="rechazar" class="btn btn-warning">Observación</button>
+        {% if preguntas.count > 1 %} <input type="submit" value="Rechazar pregunta" class="btn btn-danger" name="rechazada">{% endif %}
+        
+        <br>
+        <div class="form-group" id="observacion">
+          <label for="">Observación</label>
+          <input type="text" name="observacion" placeholder="Ingrese observación..." size="100" id="observacion_text" class="form-control">
+          <br>
+          <input type="submit" id="observacion_enviar" class="btn btn-primary">
+          <button id="observacion_cancelar" class="btn btn-danger">Cancelar</button>
+        </div>
+
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+</div>
+
+
+
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+<script>
+  $('#formulario').hide();
+  $('#observacion').hide();  
+
+  $('#rechazar').click(function(ev){
+    ev.preventDefault();
+    $('#observacion').show();
+
+    $('#aceptar').attr("disabled", "disabled");
+    $('#observacion_text').attr("required", "required");
+  });
+
+  $('#observacion_cancelar').click(function(ev){
+    ev.preventDefault();
+
+    $('#aceptar').removeAttr("disabled");
+    $('#observacion_text').removeAttr("required");
+    $('#observacion_text').val("");
+
+    $('#observacion').hide();
+  });
+
+</script>
+{% endblock %}

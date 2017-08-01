@@ -1,0 +1,133 @@
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Editar pregunta {{ pregunta.pk }}</h4>
+</div>
+<div class="modal-body">
+	<h4>
+		Se le ha encontrado una <strong>observación</strong> a su pregunta <br>
+		<small><strong>Favor de corregir la pregunta propuesta</strong></small>
+	</h4>
+	<p><strong>Observación:</strong> <i>{{ pregunta.observacion }}</i> </p>
+  
+  <form action="/preguntas/pregunta-editar/{{ pregunta.pk }}/" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <div id="formulario" style="display: none !important">{{ form }}</div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="">Asignatura</label>
+        {{ form.asignatura }}
+      </div>
+      <div class="col-md-6">
+        <label for="">Contenido</label>
+        {{ form.contenido }}
+      </div>
+    </div>
+    <br>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <label for="">Dificultad</label>
+        <select name="dificultad" id="id_dificultad" class="form-control">
+          <option value="10">Básico</option>
+          <option value="20">Intermedio</option>
+          <option value="30">Avanzado</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="">Tipo de respuesta</label>
+        {{ form.tipo_pregunta }}
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-md-8">
+        <label for="">Pregunta</label>
+        {{ form.pregunta }}
+      </div>
+      <div class="col-md-4">
+        <label for="">Imagen</label>
+        {{ form.imagen_pregunta }}
+      </div>
+    </div>
+    <br>
+
+
+    {% if pregunta.tipo_pregunta == 'Desarrollo' %}
+      <div class="row">
+        {% for respuesta in respuestas %}
+            <div class="col-md-8">
+              <label for="">Respuesta</label>
+              <textarea name="" id="" cols="30" rows="10" class="form-control">{{ respuesta.respuesta }}</textarea>
+            </div>
+            <div class="col-md-4">
+              <label for="">Imagen respuesta</label>
+              <input type="file" class="form-control">
+            </div>
+        {% endfor %}
+      </div>
+
+    {% elif pregunta.tipo_pregunta == 'Alternativas' %}
+      <div class="row">
+        <div class="col-md-12">
+          <label for="">Alternativas</label>
+          {% for respuesta in respuestas %}
+              <input type="text" value="{{ respuesta.respuesta }}">
+          {% endfor %}
+        </div>
+      </div>
+
+    {% elif pregunta.tipo_pregunta == 'Pareados' %}
+        <div class="row">
+          <div class="col-md-12">
+            <h5><strong>Respuestas:</strong></h5>
+          </div>
+          <div class="col-md-6">
+            <h4 class="text-center">Fila "A"</h4>
+          </div>
+          <div class="col-md-6">
+            <h4 class="text-center">Fila "B"</h4>
+          </div>
+          {% for respuesta in respuestas %}
+          <div class="col-md-6">
+            <div class="col-md-2">
+              <strong>{{ respuesta.opcion }}.</strong>
+            </div>
+            <div class="col-md-10">
+              <p>{{ respuesta.respuesta }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    {% endif %}
+    
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <input type="submit" value="Guardar" class="btn btn-success">
+      </div>
+    </div>
+  </form>
+
+	
+	<br>
+</div>
+
+<div class="modal-footer">
+  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+</div>
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+
+{% endblock %}

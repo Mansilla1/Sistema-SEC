@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Calificaciones {{ evaluacion.titulo }} <a title="Descargar planilla" href="{% url 'evaluaciones:calificacion' evaluacion.pk %}" class="btn btn-success glyphicon glyphicon-download"></a></h4>
+</div>
+
+<div class="modal-body">
+	<form action="/evaluaciones/agregar/calificaciones/{{ evaluacion.pk }}/" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+		<div class="col-md-6">
+			<div class="form-group">
+				<!-- <a href="{% url 'evaluaciones:calificacion' evaluacion.pk %}" class="btn btn-success"><i class="fa fa-file-excel-o"></i> Planilla de notas</a>
+				<br>
+				<br> -->
+				<label for="">Subir archivo excel con calificaciones</label>
+				<input type="file" name="notas">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="">Nivel de exigencia</label>
+				<select name="exigencia" id="" class="form-control">
+					<option value="50">50%</option>
+					<option value="60" selected="">60%</option>
+					<option value="70">70%</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="">Nota mínima</label>
+				<select name="nota_minima" id="" class="form-control">
+					<option value="1">1,0</option>
+					<option value="2" selected="">2,0</option>
+					<option value="3">3,0</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<input type="submit" value="Guardar" class="btn btn-success">
+			</div>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+</div>
+
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+{% endblock %}
+

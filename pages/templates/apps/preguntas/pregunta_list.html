@@ -1,0 +1,130 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Usuarios del sistema{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+<link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Preguntas</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+
+        {% if usuario != 'Estudiante' %} {% if usuario == 'Docente' or usuario == 'Administrador' %}
+        <div class="center"><a href="{% url 'preguntas:preguntaCreate' %}" class="btn btn-success"><i class=" glyphicon glyphicon-plus"></i> Agregar pregunta</a></div>
+        <br> {% endif %}
+        <table id="datatable" class="table table-hover table-bordered">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Asignatura</th>
+              <th>Dificultad</th>
+              <th>Tipo pregunta</th>
+              <th>Línea de formación</th>
+              <!-- <th>Objetivo de aprendizaje</th> -->
+              <!-- <th>Fecha de creación</th> -->
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          {% if preguntas %}
+          <tbody>
+            {% for pregunta in preguntas|dictsortreversed:"created_at" %} {% if pregunta.rechazada == False %}
+            <tr>
+              <td> <strong>{{ pregunta.id }}</strong></td>
+              <td> {{ pregunta.asignatura.nombre }} </td>
+              <td> {{ pregunta.dificultad }} </td>
+              <td> {{ pregunta.tipo_pregunta }} </td>
+              <td> 
+                {% if pregunta.asignatura.eje_curricular == 'Desarrollo de software' %}
+                  <span class="label label-success">Desarrollo de software</span>
+                {% elif pregunta.asignatura.eje_curricular == 'Arquitectura de software' %}
+                  <span class="label label-danger">Desarrollo de software</span>
+                {% elif pregunta.asignatura.eje_curricular == 'Gestión de proyectos' %}
+                  <span class="label label-warning">Gestión de proyectos</span>
+                {% elif pregunta.asignatura.eje_curricular == 'Comprender y comunicarse en idioma inglés' %}
+                  <span class="label label-default" style="background-color: #EA1595;">Comprender y comunicarse en idioma inglés</span>
+                {% endif %}
+              </td>
+              {% if pregunta.status == True %}
+                <td><i title="Aprobada" class="btn btn-round btn-success btn-xs glyphicon glyphicon-ok" aria-hidden="true"></i>
+                  <p>Aprobada</p>
+                </td>
+                <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-info btn-xs">Detalle</button></a></td>
+              {% else %} {% if not pregunta.observacion and pregunta.status == False and pregunta.corregida == False %}
+                <td><i title="Por evaluar" class="btn btn-round btn-warning btn-xs glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+                  <p>Por evaluar</p>
+                </td>
+              {% elif pregunta.observacion and pregunta.status == False %}
+                <td><i title="En observación" class="btn btn-round btn-danger btn-xs glyphicon glyphicon-remove" aria-hidden="true"></i>
+                  <p>Observación</p>
+                </td>
+              {% elif pregunta.corregida %}
+                <td><i title="Corregida" class="btn btn-round btn-warning btn-xs glyphicon glyphicon-remove" aria-hidden="true"></i>
+                  <p>Corregida</p>
+                </td>
+              {% endif %} {% if usuario == 'Docente' and pregunta.usuario == user %} {% if pregunta.observacion %}
+              <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaEditar' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModalEditar"><button class="btn btn-primary"> Editar</button></a></td>
+              {% else %}
+              <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-info btn-xs">Detalle</button></a></td>
+              {% endif %} {% else %}
+              <td><a data-backdrop="static" href="{% url 'preguntas:preguntaEvalue' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-warning btn-xs">Evaluar</button></a></td>
+              {% endif %} {% endif %}
+            </tr>
+            {% endif %} {% endfor %}
+          </tbody>
+          {% endif %}
+        </table>
+        {% else %}
+        <h3>Ooops!, creo que se ha perdido algo</h3>
+        <a href="{% url 'inicio' %}" class="btn btn-danger">Salir de aquí</a> {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE DETALLE -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE EDITAR -->
+<div class="modal fade" id="myModalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width: 930px;">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block js %}
+
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+
+<script>
+  $('#detail').on('click', function() {
+    var id = $('td strong');
+    console.log(id)
+  });
+</script>
+{% endblock %}

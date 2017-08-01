@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Eliminar usuario {{ usuario.pk }}</h4>
+</div>
+
+<div class="modal-body">
+	<h5>¿Está seguro que desea eliminar a usuario <strong> {{ usuario.username }} </strong>?</h5>
+	<form action="/usuarios/eliminar/{{ usuario.pk }}/" method="POST"> {% csrf_token %}
+		<input type="submit" value="Eliminar" class="btn btn-default">
+	</form>
+</div>
+
+ <div class="modal-footer">
+   <button  id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+ </div>
+
+{% block js %}
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+</script>
+{% endblock %}

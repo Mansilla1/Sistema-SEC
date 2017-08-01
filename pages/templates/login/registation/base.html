@@ -1,0 +1,102 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Portal SEC :: {% block title %} {% endblock %}</title>
+
+<!-- Bootstrap -->
+  <link href="{% static 'app/js/plugins/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="{% static 'app/js/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+
+  <!-- Custom Theme Style -->
+  <link href="{% static 'app/css/custom.min.css' %}" rel="stylesheet">
+  {% block css %} {% endblock %}
+</head>
+
+<body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+            <a href="#" class="site_title"><i class="fa fa-university"></i> <span>SEC</span></a>
+          </div>
+
+          <div class="clearfix"></div>
+
+          <!-- menu profile quick info -->
+          <div class="profile clearfix">
+            <div class="col-md-12">
+              <h2 id="titulo" style="color: #fff;">Sistema de Evaluación Centralizada</h2>
+            </div>
+          </div>
+          <!-- /menu profile quick info -->
+
+          <br />
+
+          <!-- Sidebar-->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+          </div>
+          <!-- /Sidebar-->
+        </div>
+      </div>
+
+      <!-- Navbar -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav>
+
+
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /Navbar -->
+
+      <!-- Contenido de página -->
+      <div class="right_col" role="main">
+        <div class="">
+          <div class="clearfix"></div>
+          {% block content %}   {% endblock %}
+        </div>
+      </div>
+      <!-- /Contenido de página -->
+
+    </div>
+  </div>
+
+  <footer>
+  	<div class="pull-right">
+  	Sistema de Evaluación Centralizada - SEC <a href="https://colorlib.com">Universidad Andres Bello</a>
+  	</div>
+  	<div class="clearfix"></div>
+  </footer>
+
+
+  <!-- jQuery -->
+  <script src="{% static 'app/js/plugins/jquery/dist/jquery.min.js' %}"></script>
+  <!-- jQuery UI-->
+  <script src="{% static 'app/js/plugins/jquery/dist/jquery-ui.min.js' %}"></script>
+  <!-- Bootstrap -->
+  <script src="{% static 'app/js/plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <!-- Skycons -->
+  <script src="{% static 'app/js/plugins/skycons/skycons.js' %}"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="{% static 'app/js/custom.js' %}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Estudiantes{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <style>
+    .button-default .xlsx {
+      background-color: green;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Estudiantes</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+
+        {% if estudiantes %}
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <a href="{% url 'usuarios:nuevo_estudiante' %}" data-toggle="modal" data-target="#myModal" class="btn btn-success"><i class="fa fa-plus"></i> Agregar estudiante</a>
+            <a href="{% url 'usuarios:upload_estudiante' %}" class="btn btn-info" data-toggle="modal" data-target="#myModalMore">Importar usuarios</a>
+            <br>
+            <br>
+            <table id="datatable" class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>RUN</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for estudiante in estudiantes %}
+                <tr>
+                  <td> <strong>{{ estudiante.rut }}</strong> </td>
+                  <td> {{ estudiante.apellido1 }} {{ estudiante.apellido2 }}, {{ estudiante.nombre1 }} {{ estudiante.nombre2 }} {{ estudiante.nombre3 }}</td>
+                  <td> {{ estudiante.email }}</td>                 
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CREATE-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL, DELETE, UPDATE -->
+<div class="modal fade" id="myModalMore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+
+<script>
+  $('a[title="Agregar asignaturas (Docente)"]').tooltip();
+  $('a[title="Agregar asignaturas (Estudiante)"]').tooltip();
+</script>
+{% endblock %}

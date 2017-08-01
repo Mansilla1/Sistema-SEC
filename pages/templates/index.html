@@ -1,0 +1,401 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Usuarios del sistema{% endblock %}
+
+{% block css %}
+<style>
+  .next-graph{
+   float:right;
+   padding:5px 10px;
+   margin: 8px 0;
+   border:1px solid #636363;
+   border-radius: 3px;
+}
+.next-graph:hover{
+   background-color:#f4f4f4;
+}
+
+#mjs-graph-q4, #mjs-graph-q5, #mjs-graph-q6 {
+   font-family: 'Futura Today', Arial, sans-serif;
+   max-width: 400px;
+   margin: 10px auto;
+   /*background-color: rgba(10, 62, 128, .3);*/
+   border: 3px solid #636363;
+   padding: 20px 30px 50px 20px;
+   border-radius: 3px;
+}
+/*#q4Chart, #q5Chart, #q6Chart{background-color: #f4f4f4; padding: 5px;}*/
+
+.mjs-graph-title {
+   margin-left: 5%;
+   text-align: center;
+}
+</style>
+{% endblock%}
+
+{% block content %}
+<!-- Usuario admin -->
+{% if user.perfilusuario.tipo_usuario == 'Administrador' or user.perfilusuario.tipo_usuario == 'Comite academico' %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+      <div class="panel-heading">Top preguntas</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <th style="text-align:center">Código pregunta</th>
+              <th style="text-align:center">Línea de formación</th>
+              <th style="text-align:center">Cantidad usada</th>
+              <th style="text-align:center">Acciones</th>
+            </thead>
+            <tbody>
+              {% for pregunta in orden_preguntas %}
+                <tr>
+                  <td style="text-align:center">#{{ pregunta.pk }}</td>
+                  <td style="text-align:center">{{ pregunta.asignatura.eje_curricular }}</td>
+                  <td style="text-align:center">{{ pregunta.cant_usada }}</td>
+                  <td style="text-align:center"><a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-primary btn-xs">Detalles</button></a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>  
+    </div>
+    <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Profesores con mayor influencia en agregar preguntas</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <th style="text-align:center">Docente</th>
+              <th style="text-align:center">Cantidad Preguntas</th>
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+            </thead>
+            <tbody>
+              {% for pregunta in user_pregunta %}
+                <tr>
+                  <td style="text-align:center">{{ pregunta.perfilusuario.nombres }} {{ pregunta.perfilusuario.apellido1 }} {{ pregunta.perfilusuario.apellido2 }}</td>
+                  <td style="text-align:center">{{ pregunta.pregunta_set.count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+ </div>
+
+ <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">Profesores que más utilizan la plataforma para generar evaluaciones</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <th style="text-align:center">Docente</th>
+              <th style="text-align:center">Cantidad Evaluaciones</th>
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+              <!-- <th>Evaluaciones</th> -->
+            </thead>
+            <tbody>
+              {% for evaluacion in user_evaluacion %}
+                <tr>
+                  <td style="text-align:center">{{ evaluacion.perfilusuario.nombres }} {{ evaluacion.perfilusuario.apellido1 }} {{ evaluacion.perfilusuario.apellido2 }}</td>
+                  <td style="text-align:center">{{ evaluacion.evaluacion_set.count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+ </div>
+ </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-6">
+    <div class="x_panel">
+      <div class="x_title">
+        <h5>Tasa de rechazo preguntas por línea de formación</h5>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <canvas id="rechazo_preguntas" width="400" height="400">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  
+</div>
+
+{% elif user.perfilusuario.tipo_usuario == 'Directivo' %}
+
+
+{% elif user.perfilusuario.tipo_usuario == 'Docente' %}
+
+{% elif user.perfilusuario.tipo_usuario == 'Estudiante' %}
+<h1>Bienvenido {{ user.first_name }}</h1>
+{% endif %}
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'app/js/plugins/Chart.js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/Chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/Chart.js/utils.js' %}"></script>
+
+<script>
+  var randomScalingFactor = function() {
+    return Math.round(Math.random() * 100);
+  };
+
+  var color = Chart.helpers.color;
+  var config = {
+    type: 'radar',
+    data: {
+      labels: ["Desarrollo de Software", "Arquitectura de Software", "Gestión de Proyectos", "Comunicación en idioma inglés"],
+      datasets: [{
+        label: "My First dataset",
+        backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(),
+        borderColor: window.chartColors.red,
+        pointBackgroundColor: window.chartColors.red,
+        data: [
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor()
+        ]
+      }, {
+        label: "My Second dataset",
+        backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
+        borderColor: window.chartColors.blue,
+        pointBackgroundColor: window.chartColors.blue,
+        data: [
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor(),
+        randomScalingFactor()
+        ]
+      },]
+    },
+  };
+
+  window.onload = function() {
+    window.myRadar = new Chart(document.getElementById("canvas"), config);
+  };
+
+  document.getElementById('randomizeData').addEventListener('click', function() {
+    config.data.datasets.forEach(function(dataset) {
+      dataset.data = dataset.data.map(function() {
+        return randomScalingFactor();
+      });
+    });
+
+    window.myRadar.update();
+  });
+
+  var colorNames = Object.keys(window.chartColors);
+  document.getElementById('addDataset').addEventListener('click', function() {
+    var colorName = colorNames[config.data.datasets.length % colorNames.length];;
+    var newColor = window.chartColors[colorName];
+
+    var newDataset = {
+      label: 'Dataset ' + config.data.datasets.length,
+      borderColor: newColor,
+      backgroundColor: color(newColor).alpha(0.2).rgbString(),
+      pointBorderColor: newColor,
+      data: [],
+    };
+
+    for (var index = 0; index < config.data.labels.length; ++index) {
+      newDataset.data.push(randomScalingFactor());
+    }
+
+    config.data.datasets.push(newDataset);
+    window.myRadar.update();
+  });
+
+  document.getElementById('addData').addEventListener('click', function() {
+    if (config.data.datasets.length > 0) {
+      config.data.labels.push('dataset #' + config.data.labels.length);
+
+      config.data.datasets.forEach(function (dataset) {
+        dataset.data.push(randomScalingFactor());
+      });
+
+      window.myRadar.update();
+    }
+  });
+
+  document.getElementById('removeDataset').addEventListener('click', function() {
+    config.data.datasets.splice(0, 1);
+    window.myRadar.update();
+  });
+
+  document.getElementById('removeData').addEventListener('click', function() {
+config.data.labels.pop(); // remove the label first
+
+config.data.datasets.forEach(function(dataset) {
+  dataset.data.pop();
+});
+
+window.myRadar.update();
+});
+</script>
+</script>
+<script>
+  var get_data = []
+  var get_labels = []
+
+  $.ajax({
+    method: 'GET',
+    url: "{% url 'dashboard:tasa-rechazo' %}",
+    success: function(data){
+      get_data = data.preguntas_total
+      get_labels = data.formacion
+      console.log(get_labels)
+      console.log(get_data)
+      // preguntas = data.preguntas
+      // tipo = 'doughnut'
+      rechazoPreguntas();
+    },
+    error: function(error_data){
+      console.log('error')
+      // console.log(error_data)
+
+    }
+  });
+  var chart4 = document.getElementById("prefil_docente");
+  var q4Chart = new Chart(chart4, {
+      type: 'horizontalBar',
+      data: {
+          labels: ["Desarrollo de Software", "Arquitectura de Software", "Gestión de proyectos", "Comunicación en inglés"],
+          datasets: [{
+             label: "",
+              data: [30, 25.36, 39.12, 43],
+              backgroundColor: [
+                  '#4D648D',
+                  '#4D648D',
+                  '#4D648D',
+                  '#4D648D'
+              ],
+              hoverBackgroundColor: [
+                  'rgba(255, 159, 64, 0.9)',
+                  'rgba(255, 159, 64, 0.9)',
+                  'rgba(255, 159, 64, 0.9)',
+                  'rgba(255, 159, 64, 0.9)'
+              ],
+              borderColor: [
+                  'rgba(255, 159, 64, 2)',
+                  'rgba(255, 159, 64, 2)',
+                  'rgba(255, 159, 64, 2)',
+                  'rgba(255, 159, 64, 2)'
+              ],
+              borderWidth: 2,
+          }]
+      },
+      options: {
+        legend:{
+          display: false
+        },
+          scales: {
+              xAxes: [{
+                  ticks: {
+                      beginAtZero:true,
+                      min:0,
+                      max:100,
+                      stepSize: 10
+                  }
+              }],
+              yAxes: [{
+                  ticks: {
+                      fontSize: 12
+                  },
+                  barThickness: 35
+              }]
+          }
+      }
+  });
+
+
+  function rechazoPreguntas(){
+    var chart4 = document.getElementById("rechazo_preguntas");
+    var q4Chart = new Chart(chart4, {
+        type: 'horizontalBar',
+        data: {
+            labels: get_labels,
+            datasets: [{
+               label: "",
+                data: get_data,
+                backgroundColor: [
+                    '#4D648D',
+                    '#4D648D',
+                    '#4D648D',
+                    '#4D648D'
+                ],
+                hoverBackgroundColor: [
+                    'rgba(255, 159, 64, 0.9)',
+                    'rgba(255, 159, 64, 0.9)',
+                    'rgba(255, 159, 64, 0.9)',
+                    'rgba(255, 159, 64, 0.9)'
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 2)',
+                    'rgba(255, 159, 64, 2)',
+                    'rgba(255, 159, 64, 2)',
+                    'rgba(255, 159, 64, 2)'
+                ],
+                borderWidth: 2,
+            }]
+        },
+        options: {
+          legend:{
+            display: false
+          },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero:true,
+                        min:0,
+                        max:100,
+                        stepSize: 20
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        fontSize: 11
+                    },
+                    barThickness: 35
+                }]
+            }
+        }
+    });
+  };
+</script>
+{% endblock %}

@@ -1,0 +1,444 @@
+{% block css %}
+<style>
+  
+  #input_num {
+  	width: 25%;
+  }
+  h5,h3 {
+  	font-weight: bold;
+  }
+</style>
+{% endblock %}
+
+<div class="modal-header">
+  <button id="cerrar2" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Agregar nueva asignatura al sistema</h4>
+</div>
+
+<form action="{% url 'contenidos:asignaturaCreate' %}" method="POST"> {% csrf_token %}
+<div class="modal-body">
+		<div class="row">
+			<!-- Datos de asignatura -->
+			<div class="col-md-12">  
+				<div class="panel panel-default">
+					<div class="panel-heading main-color-bg" style="background-color: #3498db;">
+						<h3 class="panel-title" style="background-color: #3498db;color: white;">Detalles Asignatura</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-5">
+							<div class="form-group">
+								<label for="">Carrera</label>
+								<select name="carrera" id="carrera" class="form-control"></select>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<label for="">Nombre Asignatura</label>
+								<input type="text" name="nombre" class="form-control" required="">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="">Tipo de programa</label>
+								<select name="tipo_programa" id="tipo_programa" class="form-control">
+									<option value="Regular" selected="selected">Regular</option>
+									<option value="Advance">Advance</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+						<!-- <label for="">Asignatura</label>
+						<select class="form-control" id="#" name="#">
+							<option value="">INS127 - Estructura de Datos</option>
+							<option value="">INS124 - Programacion II</option>
+							<option value="">INS126 - Diseño de algoritmos</option>
+							<option value="">INS125 - Lenguajes de programacion</option>
+							<option value="">INS131 - Teoria de automatas y lenguajes formales</option>
+							<option value="">INS123 - Sistemas Operativos</option>
+						</select> -->
+								<label for="">Código</label>
+								<input type="text" name="codigo" class="form-control" required=""> 
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">Pre Requisito</label>
+								<input type="text" name="pre_requisitos", class="form-control">
+							</div>
+						</div>
+						<!-- <div class="col-md-3">
+							<div class="form-group">
+							<label for="">Requisito</label>
+								<input type="text" name="nombre_requisitos", class="form-control">
+							</div>
+						</div> -->
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">Co Requisito</label>
+								<input type="text" name="co_requisitos", class="form-control">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Coordinador</label>
+								<select name="coordinador" id="coordinador" class="form-control" required=""></select>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading main-color-bg" style="background-color: #3498db;">
+						<h3 class="panel-title" style="background-color: #3498db;color: white;">Detalles Período</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">Período</label>
+								<select class="form-control" name="nivel">
+									<option value="" disabled=""><i>Programa Regular</i></option>
+									<option value="1er Semestre" selected="selected">1er Semestre</option>
+									<option value="2do Semestre">2do Semestre</option>
+									<option value="3er Semestre">3er Semestre</option>
+									<option value="4to Semestre">4to Semestre</option>
+									<option value="5to Semestre">5to Semestre</option>
+									<option value="6to Semestre">6to Semestre</option>
+									<option value="7mo Semestre">7mo Semestre</option>
+									<option value="8vo Semestre">8vo Semestre</option>
+									<!-- <option value="9no Semestre">9no Semestre</option> -->
+									<!-- <option value="10mo Semestre">10mo Semestre</option> -->
+									<option value="" disabled=""><i>Programa Advance</i></option>
+									<option value="Trimestre nivelación">Trimestre nivelación</option>
+									<option value="1er Trimestre">1er Trimestre</option>
+									<option value="2do Trimestre">2do Trimestre</option>
+									<option value="3er Trimestre">3er Trimestre</option>
+									<option value="4to Trimestre">4to Trimestre</option>
+									<option value="5to Trimestre">5to Trimestre</option>
+									<option value="6to Trimestre">6to Trimestre</option>
+									<option value="7mo Trimestre">7mo Trimestre</option>
+									<!-- <option value="8vo Trimestre">8vo Trimestre</option> -->
+								</select>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="">Créditos</label>
+								<input type="number" name="creditos", class="form-control" required="" value="0">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="">Horas teóricas</label>
+								<input type="number" name="horas_teoricas", class="form-control" required="">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="">Horas laboratorio</label>
+								<input type="number" name="horas_laboratorio", class="form-control" required="">
+							</div>
+						</div>
+
+
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="">Línea de formación</label>
+								<select name="eje_curricular" id="" class="form-control">
+									<option value="Desarrollo de software" selected="selected">Desarrollo de software</option>
+									<option value="Gestion de proyectos">Gestión de proyectos</option>
+									<option value="Arquitectura de software">Arquitectura de software</option>
+									<option value="Comprender y comunicarse en idioma ingles">Comprender y comunicarse en idioma inglés</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>	
+			</div>
+			<br>
+			<hr>
+			<!-- Datos complementarios -->
+				<!-- Unidades -->
+			<!-- <div class="col-md-12">
+				<div class="col-md-12">
+					<h3>Unidades</h3>
+					<input id="cantidad_unidad" type="hidden" value="0" name="cantidad_unidad">
+					<button id="unidad_plus" class="btn btn-default"><i class="fa fa-plus"></i> Agregar unidad</button>
+				</div>
+			</div>
+			<div class="col-md-12" id="unidades">
+				<div id="unidad_form">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label for="">Número Unidad</label>
+							<input type="number" name="unidad_0" required="" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="">Nombre Unidad</label>
+							<input type="text" name="nombre_0" required="" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="">Descripción</label>
+							<input type="text" name="descripcion_0" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-1">
+						<br>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr> -->
+				<!-- Información -->
+			<!-- <div class="col-md-12">
+				<div class="col-md-12">
+					<h3>Información complementaria</h3>
+				</div>
+			</div>
+			<div class="col-md-12" id="info">
+				<div id="info_form">
+					<div class="col-md-11">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Objetivos educacionales</label>
+								<textarea  name="objetivos_educacionales" required="" class="form-control" rows="3"></textarea>
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Competencias de egreso</label>
+								<textarea rows="3" name="competencias_egreso" class="form-control"></textarea>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Objetivos de aprendizaje</label>
+								<textarea rows="3" name="aprendizaje" class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Descripcion general</label>
+								<textarea rows="3" name="descripcion" class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Habilidades transversales</label>
+								<textarea rows="3" name="habilidades" class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Procedimientos de evaluaciones</label>
+								<textarea rows="3" name="modalidad" class="form-control"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-1">
+						<br>
+					</div>
+				</div>
+				<hr>	
+			</div>
+			<br>
+			<hr> -->
+
+			<!-- Condiciones de aprobación -->
+			<!-- <div class="col-md-12">
+				<div class="col-md-12">
+					<h3>Condiciones de aprobación</h3>
+					<input id="cantidad_condicion" type="hidden" value="0" name="cantidad_condicion">
+					<button id="condicion_plus" class="btn btn-default"><i class="fa fa-plus"></i> Nueva condición de aprobación</button>
+				</div>
+			</div>
+			<div class="col-md-12" id="condicion">
+				<div id="condicion_form">
+					<div class="col-md-11">
+						<div class="form-group">
+							<label for="">Descripción de condición</label>
+							<textarea name="descripcion_condicion_0" class="form-control"></textarea>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<br>
+					</div>
+				</div>			
+			</div> -->
+
+
+
+
+			<!-- Bibliografía -->
+			<!-- <div class="col-md-12">
+				<div class="col-md-12">
+					<h3>Bibliografía</h3>
+					<input id="cantidad_biblio" type="hidden" value="0" name="cantidad_biblio">
+					<button id="biblio_plus" class="btn btn-default"><i class="fa fa-plus"></i> Nueva bibliografía</button>
+				</div>
+			</div>
+			<div class="col-md-12" id="biblio">
+				<div id="biblio_form">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="">Tipo de bibliografía</label>
+							<select name="tipo_biblio_0" id=""  class="form-control">
+								<option value="Obligatoria">Obligatoria</option>
+								<option value="Complementaria">Complementaria</option>
+								<option value="Linea">Recursos en línea</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="form-group">
+							<label for="">Bibliografía</label>
+							<input type="text" name="bibliografia_0" class="form-control">
+						</div>
+					</div>
+					<div class="col-md-1">
+						<br>
+					</div>
+				</div>			
+			</div> -->
+
+
+		</div>			
+
+		<br>
+</div>
+
+ <div class="modal-footer">
+	<input type="submit" value="Guardar" class="btn btn-success">
+   <button  id="cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+ </div>
+</form>
+
+{% block js %}
+<script>
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'contenidos:get_carrera' %}",
+		success: function(data){
+			var html = '<option value="" disabled="" selected="selected">Seleccione Carrera</option>'
+			// var html5 = ""
+			for (var i = 0; i<data.length; i++){
+			  html += '<option value="'+data[i].pk+'">'+data[i].fields.carrera+'</option>'
+			}
+			$('#carrera').html(html)
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'contenidos:get_usuario' %}",
+		success: function(data){
+			var html = '<option value="" disabled="" selected="selected">Seleccione Coordinador</option>'
+			// var html5 = ""
+			for (var i = 0; i<data.length; i++){
+			  html += '<option value="'+data[i].pk+'">'+data[i].fields.apellido1+' '+data[i].fields.apellido2+', '+data[i].fields.nombres+'</option>'
+			}
+			$('#coordinador').html(html)
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+</script>
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+
+	 // -------------------- Unidades ---------------
+ 	var max_fields = 10;
+
+	var x=0;
+
+	// Unidades
+	$('#unidad_plus').on('click', function(e){
+		e.preventDefault();
+		x++;
+		a = $('#cantidad_unidad').val()
+		a = parseInt(a)
+		a++;
+		console.log(a)
+		$('#unidades').append('<div id="unidad_form"><div class="col-md-2"><div class="form-group"><label for="">Número Unidad</label><input type="number" name="unidad_'+x+'" required="" class="form-control"></div></div><div class="col-md-3"><div class="form-group"><label for="">Nombre Unidad</label><input type="text" name="nombre_'+x+'" required="" class="form-control"></div></div><div class="col-md-6"><div class="form-group"><label for="">Descripción</label><input type="text" name="descripcion_'+x+'"  class="form-control"></div></div><div class="col-md-1"><br><a href="#" id="unidad_remove" style="color:red;"><i class="fa fa-minus-circle"></i></a></div></div>');
+		$('#cantidad_unidad').val(a);
+	});
+	$('#unidades').on('click', '#unidad_remove',function(e){
+		e.preventDefault();
+		// $(this).remove();
+		$(this).parent('div').parent('div').remove();
+		x--;
+		a = $('#cantidad_unidad').val()
+		a = parseInt(a)
+		a--;
+		$('#cantidad_unidad').val(a);
+		console.log(x);
+	});
+
+	// Condiciones de aprobación
+	$('#condicion_plus').on('click', function(e){
+		e.preventDefault();
+		b = $('#cantidad_condicion').val()
+		b = parseInt(b)
+		b++;
+		console.log(b)
+		$('#condicion').append('<div id="condicion_form"><div class="col-md-11"><div class="form-group"><label for="">Descripción de condición</label><textarea name="descripcion_condicion_'+b+'" class="form-control"></textarea></div></div><div class="col-md-1"><br><a href="#" id="condicion_remove" style="color:red;"><i class="fa fa-minus-circle"></i></a></div></div>');
+		$('#cantidad_condicion').val(b);
+	});
+	$('#condicion').on('click', '#condicion_remove',function(e){
+		e.preventDefault();
+		// $(this).remove();
+		$(this).parent('div').parent('div').remove();
+		b = $('#cantidad_condicion').val()
+		b = parseInt(b)
+		b--;
+		$('#cantidad_condicion').val(b);
+		console.log(b);
+	});
+
+
+	// Bibliografía
+	$('#biblio_plus').on('click', function(e){
+		e.preventDefault();
+		c = $('#cantidad_biblio').val()
+		c = parseInt(c)
+		c++;
+		console.log(c);
+		$('#biblio').append('<div id="biblio_form"><div class="col-md-3"><div class="form-group"><label for="">Tipo de bibliografía</label><select name="tipo_biblio_'+c+'" id=""  class="form-control"><option value="Obligatoria">Obligatoria</option><option value="Complementaria">Complementaria</option><option value="Linea">Recursos en línea</option></select></div></div><div class="col-md-8"><div class="form-group"><label for="">Bibliografía</label><input type="text" name="bibliografia_'+c+'" class="form-control"></div></div><div class="col-md-1"><br><a href="#" id="biblio_remove" style="color:red;"><i class="fa fa-minus-circle"></i></a></div></div>');
+		$('#cantidad_biblio').val(c);
+	});
+	$('#biblio').on('click', '#biblio_remove',function(e){
+		e.preventDefault();
+		// $(this).remove();
+		$(this).parent('div').parent('div').remove();
+		c = $('#cantidad_biblio').val()
+		c = parseInt(c)
+		c--;
+		$('#cantidad_biblio').val(c);
+		console.log(c);
+	});
+
+</script>
+{% endblock %}

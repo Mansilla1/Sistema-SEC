@@ -1,0 +1,237 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Nueva Evaluación{% endblock %}
+
+{% block css %}
+<!-- Custom css -->
+<link rel="stylesheet" href="{% static 'app/css/evaluacion.css' %}">
+<style>
+  pre {
+    background-color: #fff;
+    border: none;
+    font-size: 13px;
+    font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+  }
+  #input_num {
+  	width: 25%;
+  }
+  h5,h3 {
+  	font-weight: bold;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>Nueva evaluación automática</h2>
+				<div class="clearfix"></div>
+			</div>
+			<div class="x_content">
+			<form action="" method="POST"> {% csrf_token %}
+				<div class="col-md-12">  
+					<div class="panel panel-default">
+						<div class="panel-heading main-color-bg" style="background-color: #3498db;color: white;">
+							<h3 class="panel-title">Asignatura y Contenidos</h3>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-6">
+								<h4 style="text-align: center;font-weight: bold;">Seleccione Asignatura</h4>
+								<div class="col-md-12">
+									<h5><span>Asignatura</span></h5>
+									<select class="form-control" id="asignatura" name="asignatura">
+									  <option value="">-----------------------</option>
+									    <!-- Aqui van los cursos -->
+									</select>
+								</div>
+								<div class="col-md-4">
+									<h5 for="seccion">Sección <strong>(NRC)</strong></h5>
+									<select type="text" name="curso" class="form-control" id="curso">
+										<option value="">-----------------------</option>
+										<!-- Aqui van los cursos -->
+									</select>
+								</div>  
+							</div>
+							<div class="col-md-4 col-md-offset-2" id="contenidos">  
+								<div class="col-md-12" id="list-contenidos">
+									<h4 style="text-align: center;font-weight: bold;">Seleccione Contenidos</h4>
+									<!-- <select name="contenidos" id="contenidos_id" class="list-group" multiple style="display: none;">
+									</select> -->
+									<div id="contenidos_id">
+										<p style="text-align: center;">Seleccionar asignatura para desplegar contenidos!</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+				</div>
+				<div class="col-md-12">  
+					<div class="panel panel-default">
+						<div class="panel-heading main-color-bg" style="background-color: #3498db;color: white;">
+							<h3 class="panel-title">Contenidos</h3>
+						</div>
+						<div class="panel-body">
+							<div class="col-md-9">
+								<div class="col-md-4">
+									<h5 for="">Preguntas de desarrollo</h5>
+									<input type="number" name="p_desarrollo" value="0" class="form-control" id="input_num">
+								</div>
+								<div class="col-md-4">
+									<h5 for="">Preguntas de selección múltiple</h5>
+									<input type="number" name="p_alternativas" value="0" class="form-control" id="input_num">
+								</div>
+								<div class="col-md-4">
+									<h5 for="">Preguntas de términos pareados</h5>
+									<input type="number" name="p_pareados" value="0" class="form-control" id="input_num">
+								</div>
+								<div class="col-md-4">
+									<h5 for="">Tipo de evaluación</h5>
+									<select name="tipo_evaluacion" id="" class="form-control">
+										<option value="Solemne">Solemne</option>
+										<option value="Control">Control</option>
+										<option value="Examen">Examen</option>
+									</select>
+								</div>
+								<div class="col-md-4">
+									<h5 for="">Fecha de evaluación</h5>
+									<input type="date" name="fecha_evaluacion" class="form-control" required="">
+								</div>
+							</div>
+							<div class="col-md-3">
+								
+								<div class="col-md-12">
+									<!-- <input type="checkbox" name="pje_automatico">
+									<label for="">Puntaje automático por cada pregunta <a href="#" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalE"><i class="fa fa-info-circle"></i></a></label> -->
+									<h4><strong>Asignación de puntaje automático</strong></h4>
+									<input type="checkbox" name="pje_automatico">
+									<br>
+									<small><i><strong>Nota: </strong>Seleccionar esta opción solo si desea una evaluación completamente automática (incluyendo puntaje por pregunta)</i></small>
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+				</div>
+<!-- 				<div class="col-md-12">  
+					<div class="panel panel-default">
+						<div class="panel-heading main-color-bg" style="background-color: #3498db;">
+							<h3 class="panel-title">Contenidos</h3>
+						</div>
+						<div class="panel-body">
+
+						</div>
+						<br>
+					</div>
+				</div> -->
+					
+					<div class="row"><div class="col-md-12" style="text-align: right;"><input type="submit" value="Continuar" class="btn btn-success" disabled=""></div></div>
+				</form>
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- MODAL INFO -->
+<!-- <div class="modal fade" id="myModalE" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		 <div class="modal-content">
+		   <div class="modal-header">
+		       <button type="button" class="close" data-dismiss="modal">&times;</button>
+		       <h4 class="modal-title">Información</h4>
+		     </div>
+		     <div class="modal-body">
+		     	<p>Seleccionar esta opción si se desea una evaluación completamente automática, poniéndole puntaje automático a cada pregunta</p>
+		     </div>
+		     <div class="modal-footer">
+		       <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+		     </div>
+		 </div>
+	</div>
+</div> -->
+
+{% endblock %}
+
+{% block js %}
+<script>
+	// Asignaturas
+	$('#asignatura').on('change', secciones)
+	$('#asignatura').on('change', contenidos)
+	$('#curso').on('change', siguiente)
+
+	  $.ajax({
+	    data: {},
+	    url: '{% url "contenidos:get_asignatura" %}',
+	    type: 'GET',
+	    success: function(data){
+	      var html = "<option selected='selected' disabled>Seleccione Asignatura</option>"
+	      for (var i = 0; i< data.length; i++) {
+	        html += '<option value="' +data[i].pk+ '">'+data[i].fields.codigo+' - '+data[i].fields.nombre+'</option>'
+	      }
+	      $('#asignatura').html(html);
+	    },
+	  });
+
+		function secciones(){
+			var asignatura = $(this).val()
+			asignatura = parseInt(asignatura)
+			$.ajax({
+			  data: {'asignatura':asignatura},
+			  url: '{% url "contenidos:get_curso_asignatura" %}',
+			  type: 'GET',
+			  success: function(data){
+			  	// console.log(datos)
+			  	// console.log(data.datos)
+			    var html = "<option selected='selected' disabled>Seleccione Curso</option>"
+			    for (var i = 0; i< data.length; i++) {
+			      html += '<option value="' +data[i].pk+ '">'+data[i].fields.nrc+'</option>'
+			    }
+			    $('#curso').html(html);
+			  },
+			  error: function(error_data){
+			  		// console.log(error_data)
+			      $('#curso').html("<option selected='selected' disabled>--------------------------</option>");
+		    	},
+			});
+		}
+
+		function siguiente(){
+			$('input[type="submit"]').attr('disabled', false)
+		}
+
+		function contenidos(){
+			var asignatura = $(this).val()
+			asignatura = parseInt(asignatura)
+			$.ajax({
+			  data: {'asignatura':asignatura},
+			  url: '{% url "contenidos:get_contenido_asignatura" %}',
+			  type: 'GET',
+			  success: function(data){
+			    var html = ""
+			    for (var i = 0; i< data.length; i++) {
+			      html += '<div class="form-group"><input type="checkbox" value="' +data[i].pk+ '" name="contenidos" id="contenido' +data[i].pk+ '" autocomplete="off" /><div class="btn-group"><label for="contenido' +data[i].pk+ '" class="btn btn-info"><span class="[ glyphicon glyphicon-plus ]"></span><span class="[ glyphicon glyphicon-minus ]"></span></label><label for="contenido' +data[i].pk+ '" class="btn btn-default active">'+data[i].fields.nombre+'</label></div></div>'
+			    }
+			    $('#contenidos_id').html(html);
+			  },
+			});
+		}
+
+
+
+
+
+		function siguiente(){
+			$('input[type="submit"]').attr('disabled', false)
+		}
+
+
+</script>
+<!-- <script src="{% static 'js/listgroup.min.js' %}"></script> -->
+
+{% endblock %}

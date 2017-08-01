@@ -1,0 +1,120 @@
+{% load staticfiles %}
+{% load thumbnail %}
+{% load humanize %}
+<!DOCTYPE HTML PUBLIC >
+<html lang="es">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>Pauta de corrección {{ evaluacion.title }}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	 <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
+	 <style type="text/css">
+	 *{
+	 	/*border: 1px solid black;*/
+	 }
+	 p {
+	 	font-weight: normal;
+	 	margin-bottom: 20px;
+	 }
+	 
+	 .tg  {border-collapse:collapse;border-spacing:0;}
+	 .tg td{font-family:Arial, sans-serif;font-size:12px;padding:2px 2px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+	 .tg th{font-family:Arial, sans-serif;font-size:12px;font-weight:normal;padding:2px 2px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+	 .tg .tg-8370{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;background-color:#ffffff;color:#000000;text-align:center;}
+	 .tg .tg-lz1j{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:center;}
+	 .tg .tg-e3zv{font-weight:bold;}
+	 .tg .tg-yw4l{vertical-align:top;}
+	 .tg .tg-8fhc{font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:left;vertical-align:top;text-align: right;}
+	 .tg .tg-0qhn{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;}
+	 .tg .tg-9hbo{font-weight:bold;vertical-align:top;}
+	 </style>
+</head>
+<body>
+	<table class="tg">
+	  <tr>
+	    <th class="tg-8370" colspan="5">Pauta de corrección - {{ evaluacion.titulo }}</th>
+	  </tr>
+	  <tr>
+	    <td class="tg-yw4l" colspan="5"></td>
+	  </tr>
+	  <tr>
+	    <td class="tg-lz1j" colspan="2"></td>
+	    <td class="tg-8fhc"></td>
+	    <td class="tg-8fhc" colspan="2"><strong>Profesor(es):</strong> {{ evaluacion.datos }}</td>
+	  </tr>
+	  <tr>
+	    <td class="tg-yw4l" colspan="5"></td>
+	  </tr>
+	  <tr>
+	    <td class="tg-0qhn">Nombre: </td>
+	    <td class="tg-e3zv"></td>
+	    <td class="tg-0qhn"></td>
+	    <td class="tg-0qhn">Run:</td>
+	    <td class="tg-9hbo">Fecha:</td>
+	  </tr>
+	  <tr>
+	    <td class="tg-031e" colspan="5"></td>
+	  </tr>
+	  <tr>
+	    <td class="tg-e3zv" colspan="5">Intrucciones:</td>
+	  </tr>
+	  <tr>
+	    <td class="tg-031e" colspan="5">{{ evaluacion.instrucciones }}</td>
+	  </tr>
+	  <tr>
+	    <td class="tg-yw4l" colspan="5"></td>
+	  </tr>
+		  {% for pregunta in preguntas %}
+		<tr>
+			{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+				{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
+				  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+				{% endthumbnail %}</p>
+				{% for respuesta in pregunta.respuesta_set.all %}
+					<p>{{ respuesta.respuesta }}</p>
+					{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+					  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+					{% endthumbnail %}</p>
+				{% endfor %}
+		    </td>
+			
+			{% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+			    
+				{% for respuesta in pregunta.respuesta_set.all %}
+					{% if respuesta.status_respuesta == True %}
+						<p style="color: green;">{{ respuesta.opcion }}. {{ respuesta.respuesta }}</p>
+						{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+						  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+						{% endthumbnail %}</p>
+					{% else %}
+					<p>{{ respuesta.opcion }}. {{ respuesta.respuesta }}</p>
+					{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+					  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+					{% endthumbnail %}</p>
+					{% endif %}
+				{% endfor %}
+			</td>
+		
+			{% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+				{% for respuesta in pregunta.respuesta_set.all %}
+				
+						{{ respuesta.opcion }}.
+						{{ respuesta.respuesta }}
+				{% endfor %}
+			</td>
+										
+			{% endif %}
+		    <td class="tg-9hbo" >Puntaje: {% for puntaje in pregunta.puntajepregunta_set.all %} {% if puntaje.pregunta == pregunta and puntaje.evaluacion == evaluacion %} {{ puntaje.puntaje|floatformat:0|intcomma }} {% endif %} {% endfor %}pts.</td>
+		    <!-- <td class="tg-9hbo">Puntaje obtenido: </td> -->
+	  	
+		</tr>
+	   	{% endfor %}
+	</table>
+</body>
+</html>

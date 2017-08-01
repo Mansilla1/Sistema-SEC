@@ -1,0 +1,111 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Cursos{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+      <h2>Cursos</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="{% url 'contenidos:cursoCreate' %}" class="btn btn-success" data-toggle="modal" data-target="#myModalCreate"><i class="fa fa-plus"></i> Agregar Cursos</a>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <table id="datatable" class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Asignatura</th>
+                <th>Sección</th>
+                <th>Profesor</th>
+                <th>Alumnos</th>
+                <th>Acciones</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for curso in cursos %}
+              <tr>
+                <td> {{ curso.asignatura.nombre }} - {{ curso.asignatura.codigo }} </td>
+                <td> {{ curso.nrc }} - {{ curso.regimen }} </td>
+                <td> {{ curso.docente.nombres }} {{ curso.docente.apellido1 }} {{ curso.docente.apellido2 }}</td>
+                <td> {{ curso.estudiantes.count }} </td>
+                <td>
+                  <a href="{% url 'contenidos:cursoDetail' curso.pk %}" data-toggle="modal" data-target="#myModal" class="btn btn-success btn-xs"><i class="glyphicon glyphicon-edit"></i> Detalles</a> 
+                	<a href="{% url 'contenidos:cursoUpdate' curso.pk %}" data-toggle="modal" data-target="#myModalCreate" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Editar</a> 
+                	<a href="{% url 'contenidos:cursoDelete' curso.pk %}" data-toggle="modal" data-target="#myModal" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Eliminar</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+ <!-- MODAL CREATE -->
+ <div class="modal fade" id="myModalCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document" style="width: 1030px;">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+
+ <!-- MODAL DE DETALLE -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+ <!-- MODAL DE Sesión -->
+ <div class="modal fade" id="myModalSesion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document" style="width: 1030px;">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+{% endblock %}

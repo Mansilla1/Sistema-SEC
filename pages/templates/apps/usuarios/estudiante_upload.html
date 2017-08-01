@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Estudiantes </h4>
+</div>
+
+<div class="modal-body">
+	<form action="{% url 'usuarios:upload_estudiante' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+		<div class="col-md-6" style="border-right: 1px solid #000000;">
+			<div class="form-group">
+				<label for="">Descargar planilla de estudiantes</label>
+				<a href="{% url 'usuarios:get_planilla_estudiante' %}" class="btn btn-success"><i class="fa fa-file-excel-o"></i> Planilla</a>
+				<p></p>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="">Subir archivo excel</label>
+				<input type="file" name="archivo">
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<input type="submit" value="Guardar" class="btn btn-primary">
+				</div>
+			</div>
+		</div>
+		
+
+	</form>
+</div>
+<div class="modal-footer">
+  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+</div>
+
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+{% endblock %}
+

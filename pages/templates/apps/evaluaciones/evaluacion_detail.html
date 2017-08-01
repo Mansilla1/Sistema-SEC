@@ -1,0 +1,152 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load humanize %}
+{% block title %}Evaluación {{ evaluacion.id }}{% endblock %}
+
+{% block css %}
+<style>
+	pre {
+		background-color: #fff;
+		border: none;
+		font-size: 13px;
+		font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Evaluación {{ evaluacion.id }}</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-10" style="border: solid 1px;">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<img src="{% static 'img/unab.png' %}" alt="Logo-UNAB" width="100">
+							</div>
+							<div class="col-md-3 col-md-offset-6">
+								<h4>Profesor (es):</h4>
+								<p>{% if evaluacion.datos %} {{ evaluacion.datos|capfirst }} {% else %} {{ evaluacion.docente.first_name|capfirst }} {{ evaluacion.docente.last_name|capfirst }} {% endif %}</p>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-12" style="text-align: center;">
+							<h3><strong>{{ evaluacion.titulo }}</strong></h3>
+						</div>
+					</div>
+						<br>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<p>Nombre: ___________________________________________</p>
+							</div>
+							<div class="col-md-4">
+								<p>RUN: __________________________</p>
+							</div>
+							<div class="col-md-2">
+								<p>Fecha: __________</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<h5><strong>Instrucciones</strong></h5>
+								<pre>{{ evaluacion.instrucciones }}</pre>
+							</div>
+						</div>
+					</div>
+
+					<div class="row" id="questions">
+						{% for pregunta in preguntas %}
+							<div class="col-md-10">
+								<div class="row">
+									<div class="col-md-12">
+										<h5><strong>{{ pregunta.pregunta }}</strong></h5>
+									</div>
+									<div class="col-md-12">
+										{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
+										  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+										{% endthumbnail %}</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
+											
+										{% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
+											<h5><strong>Alternativas</strong></h5>
+											{% for respuesta in pregunta.respuesta_set.all %}
+												<p>{{ respuesta.opcion }}. {{ respuesta.respuesta }}</p>
+											{% endfor %}
+										{% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
+											<h5><strong>Términos</strong></h5>
+											<div class="row">
+												<div class="col-md-6">
+													<h4 class="text-center">Fila "A"</h4>
+												</div>
+												<div class="col-md-6">
+													<h4 class="text-center">Fila "B"</h4>
+												</div>
+												{% for respuesta in pregunta.respuesta_set.all %}
+												<div class="col-md-6">
+													<div class="col-md-2">
+														<strong>{{ respuesta.opcion }}.</strong>
+													</div>
+													<div class="col-md-10">
+														<p>{{ respuesta.respuesta }}</p>
+													</div>
+												</div>
+												{% endfor %}
+											</div>
+
+										{% endif %}
+									</div>
+								</div>
+
+							</div>
+							<div class="col-md-2">
+								<div class="row">
+									<div class="col-md-12">
+										<strong>Puntaje</strong>
+										<p> {% for puntaje in pregunta.puntajepregunta_set.all %} {% if puntaje.pregunta == pregunta and puntaje.evaluacion == evaluacion %} {{ puntaje.puntaje|floatformat:0|intcomma }} {% endif %} {% endfor %}pts.</p>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="row">
+						<div class="col-md-12">
+							<a href="{% url 'evaluaciones:evaluacionPDF' evaluacion.pk %}" target="_blank" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Descargar evaluación</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<a href="{% url 'evaluaciones:solucionPDF' evaluacion.pk %}" target="_blank" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Descargar solución</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<a href="{% url 'evaluaciones:calificacion' evaluacion.pk %}" class="btn btn-success"><i class="fa fa-file-excel-o"></i> Planilla de notas</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		
+		</div>
+		
+	</div>
+</div>
+{% endblock %}

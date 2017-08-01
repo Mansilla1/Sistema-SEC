@@ -1,0 +1,117 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Usuarios del sistema{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <style>
+    .button-default .xlsx {
+      background-color: green;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Usuarios</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+
+        {% if usuario %}
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <a href="{% url 'usuarios:registrar' %}" data-toggle="modal" data-target="#myModal" class="btn btn-success"><i class="fa fa-user-plus"></i> Agregar usuario</a>
+            <a href="{% url 'usuarios:upload' %}" class="btn btn-info" data-toggle="modal" data-target="#myModalMore">Importar usuarios</a>
+            <a style="text-align: right;" href="{% url 'usuarios:listar_estudiantes' %}" class="btn btn-primary">Estudiantes</a>
+            <br>
+            <br>
+            <table id="datatable" class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Nombre</th>
+                  <th>Run</th>
+                  <th>Perfil</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for perfilusuario in usuario %}
+                {% if perfilusuario.status == True and perfilusuario.tipo_usuario != 'Estudiante' %}
+                <tr>
+                  <td> <strong>{{ perfilusuario.user.username }}</strong> </td>
+                  <td> {{ perfilusuario.nombres }} {{ perfilusuario.apellido1 }} {{ perfilusuario.apellido2 }}</td>
+                  <td> {{ perfilusuario.rut }}</td>
+                  <td> 
+                    {% if perfilusuario.tipo_usuario == 'Docente' %} <span class="label label-success">Docente</span>
+                    {% elif perfilusuario.tipo_usuario == 'Directivo' %} <span class="label label-primary">Directivo</span>
+                    {% elif perfilusuario.tipo_usuario == 'Administrador' %} <span class="label label-danger">Administrador</span>
+                    {% elif perfilusuario.tipo_usuario == 'Estudiante' %} <span class="label label-default">Estudiante</span>
+                    {% elif perfilusuario.tipo_usuario == 'Comite academico' %} <span class="label label-primary">Comité académico</span>
+                    {% elif perfilusuario.tipo_usuario == 'Otro' %} <span class="label label-primary">{{ perfilusuario.tipo_usuario_otro }}</span>
+
+                    {% endif %}
+                  </td>
+
+                 
+                  <td> 
+                    <a href="{% url 'usuarios:actualizar' perfilusuario.pk %}" data-toggle="modal" data-target="#myModalMore" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Editar</a> 
+                    <a href="{% url 'usuarios:eliminar' perfilusuario.user.pk %}" data-toggle="modal" data-target="#myModalMore" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Elminar</a> 
+                  </td>
+                 
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CREATE-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL, DELETE, UPDATE -->
+<div class="modal fade" id="myModalMore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+
+<script>
+  $('a[title="Agregar asignaturas (Docente)"]').tooltip();
+  $('a[title="Agregar asignaturas (Estudiante)"]').tooltip();
+</script>
+{% endblock %}

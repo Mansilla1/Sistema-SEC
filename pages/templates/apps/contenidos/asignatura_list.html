@@ -1,0 +1,137 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Asignatura{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+      <h2>Asignaturas</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="{% url 'contenidos:asignaturaCreate' %}" class="btn btn-success" data-toggle="modal" data-target="#myModalCreate"><i class="fa fa-plus"></i> Agregar Asignatura</a>
+          </div>
+          <div class="col-md-6" style="text-align: right;">
+            <a href="{% url 'contenidos:cursoList' %}" class="btn btn-primary"><i class="fa fa-address-card-o"></i> Administración Cursos</a>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <table id="datatable" class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Asignatura</th>
+                <!-- <th>Carrera</th> -->
+                <!-- <th>Programa</th> -->
+                <th>Línea de formación</th>
+                <th>Coordinador</th>
+                <th>Cantidad cursos</th>
+                <th>Acciones</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% for asignatura in asignaturas %}
+              {% if asignatura.disponible == True %}
+              <tr>
+                <td> {{ asignatura.codigo }} </td>
+                <td> {{ asignatura.nombre }} </td>
+                <!-- <td> {{ asignatura.carrera }} </td> -->
+                <!-- <td> {{ asignatura.tipo_programa }} </td> -->
+                <td> 
+                  {% if asignatura.eje_curricular == 'Desarrollo de software' %}
+                    <span class="label label-success">Desarrollo de software</span>
+                  {% elif asignatura.eje_curricular == 'Arquitectura de software' %}
+                    <span class="label label-danger">Desarrollo de software</span>
+                  {% elif asignatura.eje_curricular == 'Gestion de proyectos' %}
+                    <span class="label label-warning">Gestión de proyectos</span>
+                  {% elif asignatura.eje_curricular == 'Comprender y comunicarse en idioma ingles' %}
+                    <span class="label label-default" style="background-color: #EA1595;">Comprender y comunicarse en idioma inglés</span>
+                  {% endif %}
+                </td>
+                <td> {{ asignatura.coordinador.nombres }} {{ asignatura.coordinador.apellido1 }} {{ asignatura.coordinador.apellido2 }}</td>
+                <td> {{ asignatura.curso_set.count }} </td>
+                <td>
+                  <p>
+                    <!-- <a href="#" class="btn btn-success btn-xs" type="button" data-toggle="modal" data-target="#myModal" title="Agregar secciones"><i class="glyphicon glyphicon-plus"></i> Agregar cursos</a> -->
+                    <a href="{% url 'contenidos:programaCurso_pdf' asignatura.pk %}" target="_blank" class="btn btn-info btn-xs" type="button"><i class="glyphicon glyphicon-info-sign"></i><small> Programa Curso</small></a>
+                    <a href="{% url 'contenidos:syllabus_pdf' asignatura.pk %}" target="_blank" class="btn btn-warning btn-xs" type="button"><i class="glyphicon glyphicon-info-sign"></i><small> Syllabus</small></a>
+                  </p>
+                  <p>
+                    <a href="{% url 'contenidos:asignaturaUpdate' asignatura.pk %}" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-xs" type="button"><i class="glyphicon glyphicon-edit"></i><small> Editar</small></a>
+                  </p>
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+ <!-- MODAL CREATE -->
+ <div class="modal fade" id="myModalCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document" style="width: 1030px;">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+
+ <!-- MODAL DE DETALLE -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+ <!-- MODAL DE Sesión -->
+ <div class="modal fade" id="myModalSesion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document" style="width: 1030px;">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+{% endblock %}

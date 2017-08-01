@@ -1,0 +1,270 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block css %}
+	<!-- C3 css-->
+	<!-- <link href="{% static 'app/js/plugins/c3/css/c3.min.css' %}" rel="stylesheet">
+	<link href="{% static 'app/css/styles_graph.css' %}" rel="stylesheet"> -->
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-xs-12 col-sm-6 col-md-6">
+	  <div class="x_panel">
+	    <div class="x_title">
+	      <h2>Preguntas por Perfil de Egreso</h2>
+	      <div class="clearfix"></div>
+	    </div>
+	    <div class="x_content">
+  			<canvas id="chart-area" />
+	    </div>
+	  </div>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-6">
+	  <div class="x_panel">
+	    <div class="x_title">
+	      <h2>Evaluaciones por Perfil de Egreso</h2>
+	      <div class="clearfix"></div>
+	    </div>
+	    <div class="x_content">
+  			<canvas id="chart-evaluacion" />
+	    </div>
+	  </div>
+	</div>
+	<div class="col-md-12 col-sm-12 col-xs-12">
+	  <div class="x_panel">
+	    <div class="x_title">
+	      <h2>Preguntas/Evaluaciones por Mes</h2>
+	      <div class="clearfix"></div>
+	    </div>
+	    <div class="x_content">
+  			<canvas id="evaluacion-pregunta"></canvas>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'app/js/plugins/Chart.js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/Chart.js/Chart.min.js' %}"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="{% static 'app/js/plugins/Chart.js/utils.js' %}"></script>
+
+<script>
+	var randomScalingFactor = function() {
+		return Math.round(Math.random() * 100);
+	};
+
+	var get_data = []
+	var get_data2 = []
+	var get_labels = []
+
+
+
+	// PREGUNTAS
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'dashboard:api-data' %}",
+		success: function(data){
+			get_data = data.preguntas_total
+			get_labels = data.formacion
+			console.log(get_labels)
+			console.log(get_data)
+			// preguntas = data.preguntas
+			// tipo = 'doughnut'
+			preguntasChart();
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	function preguntasChart() {
+		var ctx = document.getElementById("chart-area").getContext("2d");
+		// window.myDoughnut = new Chart(ctx, config);
+		window.myDoughnut = new Chart(ctx, {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: [
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					get_data[0],
+					get_data[1],
+					get_data[2],
+					get_data[3],
+					],
+					backgroundColor: [
+					window.chartColors.red,
+					window.chartColors.orange,
+					window.chartColors.yellow,
+					window.chartColors.green,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+				// "Comunicacion en Inglés",
+				// "Gestión de Proyectos",
+				// "Arquitectura de Software",
+				// "Desarrollo de Software",
+				get_labels[0],
+				get_labels[1],
+				get_labels[2],
+				get_labels[3],
+				]
+			},
+		});
+	};
+
+	// EVALUACIONES
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'dashboard:api-data-evaluacion' %}",
+		success: function(data){
+			get_data = data.evaluaciones_total
+			get_labels = data.formacion
+			console.log(get_labels)
+			console.log(get_data)
+			// preguntas = data.preguntas
+			// tipo = 'doughnut'
+			evaluacionesChart();
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	function evaluacionesChart() {
+		var ctx = document.getElementById("chart-evaluacion").getContext("2d");
+		// window.myDoughnut = new Chart(ctx, config);
+		window.myDoughnut = new Chart(ctx, {
+			type: 'doughnut',
+			data: {
+				datasets: [{
+					data: [
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					// randomScalingFactor(),
+					get_data[0],
+					get_data[1],
+					get_data[2],
+					get_data[3],
+					],
+					backgroundColor: [
+					window.chartColors.red,
+					window.chartColors.orange,
+					window.chartColors.yellow,
+					window.chartColors.green,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+				// "Comunicacion en Inglés",
+				// "Gestión de Proyectos",
+				// "Arquitectura de Software",
+				// "Desarrollo de Software",
+				get_labels[0],
+				get_labels[1],
+				get_labels[2],
+				get_labels[3],
+				]
+			},
+		});
+	};
+
+	// EVALUACIONES-PREGUNTAS(TIEMPO)
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'dashboard:api-data-evaluacion-pregunta' %}",
+		success: function(data){
+			get_data = data.preguntas
+			get_data2 = data.evaluaciones
+			get_labels = data.meses
+			console.log(get_labels)
+			// preguntas = data.preguntas
+			// tipo = 'doughnut'
+			pregunta_evaluacionChart();
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	function pregunta_evaluacionChart() {
+		var ctx = document.getElementById("evaluacion-pregunta");
+			var myChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: get_labels,
+					datasets: [{
+						label: 'Preguntas',
+						backgroundColor: [
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB",
+								"#3498DB"
+						],
+						borderColor: [
+								"#3498DB"
+						],
+						data: [12, 19, 3, 17, 28, 24, 7, 9, 4, 6, 13, 25]
+					}, {
+						label: 'Evaluaciones',
+						backgroundColor: [
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff",
+								"#fc00ff"
+						],
+						borderColor: [
+								"#fc00ff"
+						],
+						data: [25, 29, 5, 5, 20, 3, 10, 45, 34, 58, 27, 31]
+					}]
+				},
+			});
+	};
+</script>
+
+<script>
+	
+</script>
+{% endblock %}

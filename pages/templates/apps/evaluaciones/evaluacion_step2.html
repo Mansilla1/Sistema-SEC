@@ -1,0 +1,347 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Nueva Evaluación{% endblock %}
+
+{% block css %}
+<!-- Custom css -->
+<link rel="stylesheet" href="{% static 'app/css/evaluacion.css' %}">
+<style>
+  pre {
+    background-color: #fff;
+    border: none;
+    font-size: 13px;
+    font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Nueva evaluación</h2>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<div class="wizard1 pasado">
+						<h3>
+							Paso 1 <br>
+							<h2><small style="color: #fff;">Seleccionar asignatura</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2 active">
+						<h3>
+							Paso 2 <br>
+							<h2><small style="color: #fff;">Agregar preguntas</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2">
+						<h3>
+							Paso 3 <br>
+							<h2><small style="color: #fff;">Cabeceras</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard3">
+						<h3>
+							Paso 4 <br>
+							<h2><small style="color: #fff;">Previsualización</small></h2>
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<hr>
+		<!-- Filtros -->
+		<div class="row">
+			<div class="col-md-3">
+				<h5 for=""><strong>Tipo de respuesta</strong></h5>
+				<select name="" id="tipo_filtro" class="form-control">
+					<option value="" selected="" disabled="">-------------------------------------------</option>
+					<option value="Pregunta de desarrollo">Respuesta de desarrollo</option>
+					<option value="Seleccion multiple">Selección múltiple</option>
+					<option value="Terminos pareados">Términos pareados</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<h5 for=""><strong>Nivel de dificultad</strong></h5>
+				<select name="" id="dificultad_filtro" class="form-control">
+					<option value="" selected="" disabled="">----------------------</option>
+					<option value="Basica">Básica</option>
+					<option value="Intermedia">Intermedia</option>
+					<option value="Avanzada">Avanzada</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<h5 for=""><strong>Contenidos</strong></h5>
+				<select name="" id="contents_id" class="form-control">
+					<!-- <option value="" selected="" disabled=""></option> -->
+
+				</select>
+			</div>
+			<div class="col-md-4">
+				<h5 for=""><strong>Palabras clave</strong></h5>
+				<input type="text" class="form-control" placeholder="Ingrese palabra..." id="filtro_palabra">
+			</div>
+		</div>
+		<br>
+		<div class="row"><div class="col-md-12" style="text-align: right;"><button class="btn btn-primary" id="btnfiltro">Filtrar</button></div></div>
+		<br>
+		<hr>
+
+		<div class="col-md-12">
+			<div class="col-md-9" id="preguntas">
+				{% for pregunta in preguntas %}
+					<div>
+						<div class="col-md-10" style="border: solid 1px;margin-bottom: 10px;border-radius: 10px">
+							<!-- <div class="col-md-12">
+								<p><strong>Contenido: </strong>Unidad {{ pregunta.contenido.unidad }}: {{ pregunta.contenido.nombre }}</p>
+								<h5><strong>Tipo de pregunta: </strong>{{ pregunta.tipo_pregunta }}</h5>
+								<h5><strong>Nivel de dificultad: </strong>{% if pregunta.dificultad == 10 %} Básica {% elif preguntas.dificultad == 20 %} Intermedia {% else %} Avanzada {% endif %}</h5>
+							</div> -->
+
+							<div class="col-md-12">
+								<h5><strong>{{ pregunta.pregunta }}</strong></h5>
+								<p>{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
+								  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+								{% endthumbnail %}</p>
+							</div>
+
+							<div class="col-md-12">
+								{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
+
+									<p>{% for respuesta in pregunta.respuesta_set.all %} {{ respuesta.respuesta }}</p>
+
+									<p>{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+									  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+									{% endthumbnail %} {% endfor %}</p>
+
+								{% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
+
+									<p>{% for respuesta in pregunta.respuesta_set.all %}</p>
+									  {% if respuesta.status_respuesta == True %}
+									  <p><strong> {{ respuesta.opcion }}. {{ respuesta.respuesta }}</strong></p> {% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+									  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+									{% endthumbnail %}
+									  {% else %}
+									  <p><strong> {{ respuesta.opcion }}.</strong> {{ respuesta.respuesta }}</p>
+									  {% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
+									  	<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+										{% endthumbnail %}
+
+									  {% endif %}
+									{% endfor %}
+
+								{% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
+
+									<div class="row">
+										<div class="col-md-6">
+											<h4 class="text-center">Fila "A"</h4>
+										</div>
+										<div class="col-md-6">
+											<h4 class="text-center">Fila "B"</h4>
+										</div>
+										{% for respuesta in pregunta.respuesta_set.all %}
+										<div class="col-md-6">
+											<div class="col-md-2">
+												<strong>{{ respuesta.opcion }}.</strong>
+											</div>
+											<div class="col-md-10">
+												<p>{{ respuesta.respuesta }}</p>
+											</div>
+										</div>
+										{% endfor %}
+									</div>
+								{% endif %}
+							</div>
+						</div>
+						<div class="col-md-2">
+							<button class="btn-xs btn-primary" id="add_pregunta" value="{{ pregunta.id }}"><i class="fa fa-plus"></i> Agregar</button>
+							<button class="btn-xs btn-warning" id="info_pregunta" value="{{ pregunta.id }}" data-toggle="modal" data-target="#myModal"><i class="fa fa-info-circle"></i> Más</button>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="col-md-3">
+				<form action="" method="POST"> {% csrf_token %}
+					<div id="formulario" style="display: none !important;">{{ form }}</div>
+					<div class="row">
+						<div class="col-md-4 col-md-offset-2"><a href="{% url 'evaluaciones:evaluacion_step1_back' evaluacion.pk %}" class="btn btn-info">Volver</a></div>
+						<div class="col-md-6"><input type="submit" class="btn btn-success" value="Siguiente"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" id="almacen">
+							<select multiple name="preguntas" style="display: none;">
+
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- MODAL DE DETALLE -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-h5ledby="myModalh5">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-h5="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalh5">Información pregunta</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+	$('#formulario').hide()
+	x = 1
+	$('#preguntas').on('click', '#add_pregunta', function(e){
+		e.preventDefault();
+		pregunta = $(this).val();
+		pregunta = parseInt(pregunta)
+		console.log(pregunta);
+		$('#almacen select').append('<option value="'+pregunta+'">'+pregunta+'</option>')
+		$(this).parent('div').parent('div').remove();
+		$('#almacen').append('<a class="col-md-3 btn btn-info" title="click para eliminar" id="delete_pregunta" value="'+pregunta+'">'+x+'</a>')
+		x++;
+	});
+	$('input[type=submit]').on('click', function(){
+		$('#almacen select option').attr('selected', 'selected');
+	});
+
+	$('#almacen').on('click', '#delete_pregunta', function(e){
+		e.preventDefault();
+		$(this).remove();
+		$('#almacen select option[value="'+pregunta+'"]').remove()
+	});
+
+	// Select de contenidos
+	$.ajax({
+		data: {'asignatura': {{ evaluacion.curso.asignatura.pk }}},
+		url: '{% url "evaluaciones:ContenidoFiltroAjax" %}',
+		type: 'GET',
+		success: function(data){
+			var html = '<option value"" selected="" disabled="">----------------------------</option>'
+			for (var i = 0; i<data.length; i++){
+			html += '<option value="'+data[i].pk+'">'+ data[i].fields.nombre +'</option>'
+			}
+			$('#contents_id').append(html)
+		},
+		error: function(){
+			console.log('nope')
+		},
+	});
+
+	// Detalle pregunta
+	$('#preguntas').on('click', '#info_pregunta',function(){
+		var id_pregunta = $(this).val()
+		id_pregunta = parseInt(id_pregunta)
+		console.log(id_pregunta)
+		$.ajax({
+			data: {'id_pregunta': id_pregunta},
+			url: '{% url "evaluaciones:PreguntaObjAjax" %}',
+			type: 'GET',
+			success: function(data){
+			  var html = ""
+			  for (var i = 0; i<data.length; i++){
+		    	html += '<h4>Contenidos cubiertos</h4><pre>'+data[i].fields.contenido+'</pre><h4>Objetivos de aprendizaje</h4><pre>'+data[i].fields.aprendizaje_esperado+'</pre>'
+			  }
+			  $('.modal-body').html(html)
+
+			  console.log('pasa')
+
+			},
+			error: function(){
+			  // $('#detalleContenido').hide();
+			  console.log('no pasa na')
+			}
+		});
+	});
+</script>
+
+<!-- filtros de búsqueda -->
+<script>
+	// // Filtro palabras clave
+	// $('#filtro_palabra').keyup(function(e){
+	// 	consulta = $("#filtro_palabra").val();
+	// 	$.ajax({
+	// 		data: {'consulta': consulta},
+	// 		url: "{% url 'evaluaciones:busqueda_palabra' %}",
+	// 		type: 'GET',
+	// 		success : function(data) {
+	// 		     console.log(data[0].pregunta);
+	// 		},
+	// 		error : function(message) {
+	// 		     console.log(message);
+	// 		  }
+	// 	});
+	// });
+
+	$('#btnfiltro').on('click', function(e){
+		e.preventDefault()
+		var tipo_respuesta = $('#tipo_filtro').val(); //tipo de pregunta
+		var dificultad_filtro = $('#dificultad_filtro').val(); //dificultad pregunta
+		var contenido_filtro = $('#contents_id').val(); //contenido pregunta
+		var get_palabras = $('#filtro_palabra').val(); //get palabra clave
+
+		if(tipo_respuesta == null){
+			tipo_respuesta = ''
+		}
+		if(dificultad_filtro == null){
+			dificultad_filtro = ''
+		}
+		if(contenido_filtro == null){
+			contenido_filtro = ''
+		}
+		console.log(tipo_respuesta)
+		console.log(dificultad_filtro)
+		console.log(contenido_filtro)
+		console.log(get_palabras)
+
+		$.ajax({
+			data: {'tipo_respuesta': tipo_respuesta, 'dificultad_filtro':dificultad_filtro, 'contenido_filtro': contenido_filtro, 'get_palabras': get_palabras, 'asignatura': {{ evaluacion.curso.asignatura.pk }}},
+			url: "{% url 'evaluaciones:PreguntaBusquedaAjax' %}",
+			type: 'GET',
+			success : function(data) {
+				if (tipo_respuesta != '' || dificultad_filtro != '' || contenido_filtro != ''){
+					var html = ''
+					var html2 = ''
+					for (var i = 0; i<data.length; i++){
+						html += '<div><div class="col-md-10" style="border: solid 1px;"><div class="col-md-12"><h5><strong>Pregunta</strong></h5><p>'+ data[i].fields.pregunta +'</p></div></div><div class="col-md-2"><button class="btn btn-primary" id="add_pregunta" value="'+ data[i].pk +'"><i class="fa fa-plus"></i> Agregar</button><button class="btn btn-warning" id="info_pregunta" value="'+ data[i].pk +'" data-toggle="modal" data-target="#myModal"><i class="fa fa-info-circle"></i> Más</button></div></div>'
+						html2 += ''
+					}
+					$('#preguntas').html('<div>' +html+ '</div>')
+				}
+			},
+			error : function(message) {
+			     console.log(message);
+			  }
+		});
+	});
+
+</script>
+{% endblock %}

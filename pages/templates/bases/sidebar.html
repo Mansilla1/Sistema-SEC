@@ -1,0 +1,33 @@
+{% url 'inicio' as inicio %}
+{% url 'usuarios:listar' as usuarios %}
+{% url 'contenidos:asignaturaList' as asignatura %}
+{% url 'contenidos:cursoList' as cursos %}
+{% url 'preguntas:PreguntaCreate' as nuevaPregunta %}
+{% url 'preguntas:list_preguntas' as listPregunta %}
+{% url 'evaluaciones:EvaluacionPrueba' as nuevaEvaluacion %}
+{% url 'evaluaciones:listar_evaluacion' as EvaluacionList %}
+{% url 'eventos:Calendario' as calendario %}
+{% url 'dashboard:Dashboard' as dashboard %}
+
+{% url 'contenidos:prueba_api' as prueba_api %}
+
+<div class="menu_section">
+	<ul class="nav side-menu">
+		<li><a href="{{ inicio }}" {% if request.path == inicio %} {% else %} {% endif %}><i class="fa fa-home"></i> Inicio</a></li>
+		{% if user.perfilusuario.tipo_usuario == 'Administrador' %}
+		<li><a href="{{ usuarios }}" {% if request.path == usuarios %} {% else %} {% endif %}><i class="fa fa-users"></i> Usuarios</a></li>
+		{% endif %}
+		{% if user.perfilusuario.tipo_usuario == 'Administrador' or user.perfilusuario.tipo_usuario == 'Comite academico' %}
+		<li><a href="{{ asignatura }}" {% if request.path == asignatura %} {% else %} {% endif %}><i class="fa fa-paperclip"></i> Asignaturas</a></li>
+		{% endif %}
+<!-- 		<li><a href="{{ SyllabusCurso }}" {% if request.path == SyllabusCurso %} {% else %} {% endif %}><i class="fa fa-book"></i> Documentos</a></li>
+		<li><a href="{{ contenidos }}" {% if request.path == contenidos %} {% else %} {% endif %}><i class="fa fa-check-square-o"></i> Contenidos</a></li> -->
+		<li><a href="{{ listPregunta }}" {% if request.path == listPregunta %}  {% else %} {% endif %}><i class="fa fa-list-alt"></i> Preguntas</a></li>
+		<li><a href="{{ EvaluacionList }}" {% if request.path == EvaluacionList %}  {% else %} {% endif %}><i class="fa fa-file-text-o"></i> Evaluaciones</a></li>
+		{% if user.perfilusuario.tipo_usuario != 'Docente' or user.perfilusuario.tipo_usuario == 'Estudiante' %}
+		<li><a href="{{ dashboard }}" {% if request.path == dashboard %} {% else %} {% endif %}><i class="fa fa-pie-chart"></i> Dashboard</a></li>
+
+		<!-- <li><a href="{{ prueba_api }}" {% if request.path == prueba_api %} {% else %} {% endif %}><i class="fa fa-pie-chart"></i> API Prueba</a></li> -->
+		{% endif %}
+	</ul>
+</div>

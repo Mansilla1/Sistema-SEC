@@ -1,0 +1,52 @@
+{% load static %}
+{% load humanize %}
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Calificaciones de {{ evaluacion.titulo }} - {{evaluacion.curso.asignatura.nombre}}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-8">
+			<h5><strong>Promedio curso: </strong> {{ evaluacion.promedio_set.get.promedio|floatformat:2|intcomma }}</h5>
+			<p><small><strong>Puntaje total calificación: </strong>{{ evaluacion.puntaje_total }}</small></p>
+		</div>
+		<div class="col-md-4" style="text-align: right;">
+			<!-- <a title="Detalle completo calificaciones" href="#" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt"></i> Detalle</a> -->
+		</div>
+	</div>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Alumno</th>
+				<th>RUN</th>
+				<th>Puntaje obtenido</th>
+				<th>Nota</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for estudiante in estudiantes|dictsort:"estudiante.apellido1" %}
+			<tr>
+				<td>{{ estudiante.estudiante.apellido1 }} {{ estudiante.estudiante.apellido2 }}, {{ estudiante.estudiante.nombre1 }} {{ estudiante.nombre2 }} {{ estudiante.nombre3 }}</td>
+				<td>{{ estudiante.estudiante.rut }} </td>
+				<td style="text-align: center;">{{ estudiante.calificacion.puntaje_obtenido|floatformat:0|intcomma }}</td>
+				<td>{% if estudiante.calificacion.calificacion < 3.94 %} <p style="color: red;">{{ estudiante.calificacion.calificacion|floatformat:2|intcomma }}</p> {% else %} <p>{{ estudiante.calificacion.calificacion|floatformat:2|intcomma }}</p> {% endif %}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+</div>
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+
+{% endblock %}

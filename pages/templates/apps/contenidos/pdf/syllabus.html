@@ -1,0 +1,143 @@
+{% load static %}
+{% block css %}
+  <link href="{% static 'app/css/bootstrap-2.1.css' %}" rel="stylesheet">
+  <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+<div  id="syllabus">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <img src="{% static 'img/logo-icinf.png' %}" alt="" width="300">
+        </div>
+        <div class="span9" id="">
+            <div class="row">
+                <h5>
+                    1. Identificación de la asignatura.
+                </h5>
+            </div>
+        </div>
+        <div class="span9" id="">
+            <h5>Curso: Ingeniería en Computación e Informática</h5>
+            <h5>Código: {{ asignatura.nombre }} </h5>
+            <h5>Periódo: {{ asignatura.codigo }} </h5>
+            <h5>Coordinador del curso: {{ asignatura.coordinador.nombres }} {{ asignatura.coordinador.apellido1 }} {{ asignatura.coordinador.apellido2 }}</h5>
+            <div class="list-group">
+                <h5>Profesor (es): </h5>
+                <ul>
+                    {% for curso in asignatura.curso_set.all %}
+                    <li>{{ curso.docente.nombres }} {{ curso.docente.apellido1 }} {{ curso.docente.apellido2 }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span9" id="">
+            <div class="row" id="">
+                <h5>
+                    2.  Descripción General (prrequisitos, Co-requisitos y Horas Pedagógicas.
+                </h5>
+            </div>
+        </div>
+        <div class="span9" id="">
+            <h5>Requisitos: {{ asignatura.pre_requisitos }}</h5>
+            <h5>Co-requisitos: {{ asignatura.co_requisito }} </h5>
+            <h5>Horas Teóricas: {{ asignatura.horas_teoricas }} </h5>
+            <h5>Horas laboratorio: {{ asignatura.horas_laboratorio }} </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span9" id="">
+            <div class="row">
+                <h5>
+                    3.  Apndizajes Esperados y Unidades de Contenidos.
+                </h5>
+            </div>
+        </div>
+        {% for informacion in asignatura.informacion_set.all %}
+        <div class="span9" id="">
+            <h5 class="subtl">Objetivos educacionales:</h5>
+            <ul>
+                <p> {{ informacion.objetivos_educacionales }} </p>
+            </ul>
+            <h5 class="subtl">Eje curricular: {{ informacion.eje_curricular }}</h5>
+            <h5 class="subtl">Competencias de egreso:</h5>
+            <ul>
+                <p> {{ informacion.competencias_egreso }} </p>
+            </ul>
+        </div>
+        <div class="span9" id="">
+            <h5 class="subtl">Resultados de apndizaje (RA):</h5>
+            <ul>
+                <p> {{ informacion.apndizaje }} </p>
+            </ul>
+            <p><strong>Descripción general:</strong> {{ informacion.descripcion }} </p>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-6" id="">
+            <div class="row">
+                <h5>
+                    4.  Clase a Clase (Calendario).
+                </h5>
+            </div>
+        </div>
+        <div class="col-md-6" id="">
+            <div class="row">
+                <h5>
+                    5.  Evaluación.
+                </h5>
+            </div>
+        </div>
+        <div class="span9">
+            {% for unidad in asignatura.unidad_set.all %}
+            <div class="col-md-6">
+                {% for sesion in unidad.sesion_set.all %}
+                <p>{{ sesion.apndizaje }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-6">
+                <p><strong>UNIDAD {{ unidad.unidad }}: </strong>{% if unidad.titulo %} {{ unidad.titulo }} {% else %} {{ unidad.nombre }} {% endif %}</p>
+                <ul type="square">
+                    {% for sesion in unidad.sesion_set.all|dictsort:"sesion" %}
+                    <li>{{ sesion.contenido }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% for informacion in asignatura.informacion_set.all %}
+    <div class="row">
+        <div class="span9" id="">
+            <div class="row">
+                <h5>
+                    6.  Condiciones de Aprobación.
+                </h5>
+            </div>
+        </div>
+        <div class="span9" id="">
+            <ol type="A">
+                <p> {{ informacion.habilidades }} </p>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span9" id="">
+            <div class="row">
+                <h5>
+                    7.  Bibliografía.
+                </h5>
+            </div>
+        </div>
+        <div class="span9" id="">
+            <p> {{ informacion.modalidad }} </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>

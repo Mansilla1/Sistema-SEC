@@ -1,0 +1,143 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Nueva Evaluación{% endblock %}
+
+{% block css %}
+<!-- Custom css -->
+<link rel="stylesheet" href="{% static 'app/css/evaluacion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Nueva evaluación</h2>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="x_content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<div class="wizard1 pasado">
+						<h3>
+							Paso 1 <br>
+							<h2><small style="color: #fff;">Seleccionar asignatura</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2 pasado">
+						<h3>
+							Paso 2 <br>
+							<h2><small style="color: #fff;">Agregar preguntas</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard2 active">
+						<h3>
+							Paso 3 <br>
+							<h2><small style="color: #fff;">Cabeceras</small></h2>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="wizard3">
+						<h3>
+							Paso 4 <br>
+							<h2><small style="color: #fff;">Previsualización</small></h2>
+						</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<hr>
+
+		<form action="" method="POST"> {% csrf_token %}
+			<div id="formulario"  style="display: none !important;">{{ form }}</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-3">
+						<label for="">Tipo de evaluación</label>
+						<select name="tipo_evaluacion" id="tipo_evaluacion" class="form-control">
+							<option value="Solemne">Solemne</option>
+							<option value="Control">Control</option>
+							<option value="Examen">Examen</option>
+							<option value="Otro">Otro</option>
+						</select>
+						<br>
+						<input type="text" id="Totro" name="tipo_evaluacion_otro" class="form-control" placeholder="Nombre de evaluación">
+					</div>
+					<div class="col-md-1 col-md-offset-6"><a href="{% url 'evaluaciones:evaluacion_step2' evaluacion.pk %}" class="btn btn-info">Volver</a></div>
+					<div class="col-md-2"><input type="submit" class="btn btn-success" value="Siguiente"></div>
+				</div>
+			</div>
+			<br>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-3">
+						<img src="{% static 'img/unab.png' %}" alt="Logo-UNAB" width="100">
+					</div>
+					<div class="col-md-3 col-md-offset-6">
+						<label for="">Profesor (es):</label>
+						<input type="text" name="datos" value="{{ evaluacion.docente.perfilusuario.nombres }} {{ evaluacion.docente.perfilusuario.apellido1 }} {{ evaluacion.docente.perfilusuario.apellido2 }}" class="form-control">
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-5 col-md-offset-4" style="text-align: center;">
+					<label for="">Título</label>
+					<input type="text" name="titulo" class="form-control" placeholder="Nombre evaluación">
+				</div>
+			</div>
+				<br>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<p>Nombre: _____________________________________________________________</p>
+					</div>
+					<div class="col-md-4">
+						<p>RUN: __________________________</p>
+					</div>
+					<div class="col-md-2">
+						<p>Fecha: _____________</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<label for="">Instrucciones</label>
+						<textarea name="instrucciones" id="" rows="4" class="form-control">{{ instrucciones }}</textarea>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+	$('#formulario').hide()
+	$('#Totro').hide()
+
+	$('#tipo_evaluacion').on('change', function(){
+		valor = $(this).val();
+		console.log(valor)
+		if (valor == 'Otro'){
+			$('#Totro').show()
+			$('#Totro').attr('required', true)
+		}else{
+			$('#Totro').hide()
+			$('#Totro').attr('required', false)
+		}
+	})
+
+</script>
+{% endblock %}

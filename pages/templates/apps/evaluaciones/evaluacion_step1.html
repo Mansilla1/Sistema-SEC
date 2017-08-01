@@ -1,0 +1,142 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Nueva Evaluación{% endblock %}
+
+{% block css %}
+<!-- Custom css -->
+<link rel="stylesheet" href="{% static 'app/css/evaluacion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<div class="x_panel">
+			<div class="x_title">
+				<h2>Nueva evaluación</h2>
+				<div class="clearfix"></div>
+			</div>
+
+			<div class="x_content">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-3">
+							<div class="wizard1 active">
+								<h3>
+									Paso 1 <br>
+									<h2><small style="color: #fff;">Seleccionar asignatura</small></h2>
+								</h3>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="wizard2">
+								<h3>
+									Paso 2 <br>
+									<h2><small style="color: #fff;">Agregar preguntas</small></h2>
+								</h3>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="wizard2">
+								<h3>
+									Paso 3 <br>
+									<h2><small style="color: #fff;">Cabeceras</small></h2>
+								</h3>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="wizard3">
+								<h3>
+									Paso 4 <br>
+									<h2><small style="color: #fff;">Previsualización</small></h2>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<hr>
+
+				<form action="" method="POST"> {% csrf_token %}
+					<div class="row">
+						<div class="col-md-6" style="text-align: center;">
+							<label><span>Asignatura</span></label>
+							<select class="form-control" id="asignatura">
+							  <option value="">-----------------------</option>
+							    <!-- Aqui van los cursos -->
+							</select>
+						</div>
+
+						<div class="col-md-6" style="text-align: center;">
+							<label for="curso">Curso <strong>(NRC)</strong></label>
+					        <select type="text" name="curso" class="form-control" id="curso">
+					          <option value="">-----------------------</option>
+					            <!-- Aqui van los cursos -->
+					        </select>
+						</div>
+					</div>
+
+					<br>
+					<hr>
+					<div class="col-md-12" style="text-align: right;"><input type="submit" value="Continuar" class="btn btn-success" disabled=""></div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+ 	<!-- jQuery -->
+    <script src="{% static 'app/js/plugins/jquery/dist/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'app/js/plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	<!-- jQuery Smart Wizard -->
+    <script src="{% static 'app/js/plugins/jQuery-Smart-Wizard/js/jquery.smartWizard.js' %}"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'app/js/custom.js' %}"></script>
+
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+<script>
+// Asignaturas
+// $('#tipo_programa').on('change', asignaturas)
+$('#asignatura').on('change', secciones)
+$('#curso').on('change', siguiente)
+
+  $.ajax({
+    data: {},
+    url: '{% url "contenidos:get_asignatura" %}',
+    type: 'GET',
+    success: function(data){
+      var html = "<option selected='selected' disabled>Seleccione Asignatura</option>"
+      for (var i = 0; i< data.length; i++) {
+        html += '<option value="' +data[i].pk+ '">'+data[i].fields.codigo+' - '+data[i].fields.nombre+'</option>'
+      }
+      $('#asignatura').html(html);
+    },
+  });
+
+	function secciones(){
+		var asignatura = $(this).val()
+		asignatura = parseInt(asignatura)
+		$.ajax({
+		  data: {'asignatura':asignatura},
+		  url: '{% url "contenidos:get_curso_asignatura" %}',
+		  type: 'GET',
+		  success: function(data){
+		    var html = "<option selected='selected' disabled>Seleccione Curso</option>"
+		    for (var i = 0; i< data.length; i++) {
+		      html += '<option value="' +data[i].pk+ '">'+data[i].fields.nrc+'</option>'
+		    }
+		    $('#curso').html(html);
+		  },
+		});
+	}
+
+	function siguiente(){
+		$('input[type="submit"]').attr('disabled', false)
+	}
+
+
+</script>
+{% endblock %}

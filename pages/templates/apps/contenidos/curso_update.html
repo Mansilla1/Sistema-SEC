@@ -1,0 +1,90 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+
+<div class="modal-header">
+  <button  id="cerrar2" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Actualizar curso {{ curso.nrc }} - {{ curso.regimen }}</h4>
+</div>
+
+<form action="/contenidos/actualizar-curso/{{ curso.pk }}/" method="POST"> {% csrf_token %}
+<div class="modal-body">
+		<div class="row">{% bootstrap_form form %}</div>
+		<!-- <div class="row">{{ form }}</div> -->	
+</div>
+
+ <div class="modal-footer">
+   <input type="submit" value="Guardar" class="btn btn-success">
+   <button  id="cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+ </div>
+</form>
+
+
+{% block js %}
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+</script>
+<!-- <script>
+	// Get asignaturas
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'contenidos:get_asignatura' %}",
+		success: function(data){
+			var html = '<option value="" disabled="" selected="selected">Seleccione Asignatura</option>'
+			// var html5 = ""
+			for (var i = 0; i<data.length; i++){
+			  html += '<option value="'+data[i].pk+'">'+data[i].fields.nombre+' - '+data[i].fields.codigo+'</option>'
+			}
+			$('#asignatura').html(html)
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	// Get Docentes
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'contenidos:get_usuario' %}",
+		success: function(data){
+			var html = '<option value="" disabled="" selected="selected">Seleccione Docente</option>'
+			// var html5 = ""
+			for (var i = 0; i<data.length; i++){
+			  html += '<option value="'+data[i].pk+'">'+data[i].fields.apellido1+' '+data[i].fields.apellido2+', '+data[i].fields.nombres+'</option>'
+			}
+			$('#docente').html(html)
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+
+	// Get Estudiantes
+	$.ajax({
+		method: 'GET',
+		url: "{% url 'usuarios:get_estudiantes' %}",
+		success: function(data){
+			var html = ''
+			// var html5 = ""
+			for (var i = 0; i<data.length; i++){
+			  html += '<option value="'+data[i].pk+'">'+data[i].fields.rut+' - '+data[i].fields.apellido1+' '+data[i].fields.apellido2+', '+data[i].fields.nombre1+' '+data[i].fields.nombre2+''+data[i].fields.nombre3+'</option>'
+			}
+			$('#estudiantes').html(html)
+		},
+		error: function(error_data){
+			console.log('error')
+			// console.log(error_data)
+
+		}
+	});
+</script> -->
+{% endblock %}

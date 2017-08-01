@@ -1,0 +1,660 @@
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
+{% endblock %}
+<!-- <div class="document">
+    <div  id="programaCurso">
+    <div class="row">
+        <div class="span12">
+            <h5>
+                I. IDENTIFICACIÓN.
+            </h5>
+        </div>
+        <div class="span12">
+            <h5>Carrera: Ingeniería en Computación e Informática</h5>
+            <h5>Nombre: {{ asignatura.nombre }} </h5>
+            <h5>Código: {{ asignatura.codigo }} </h5>
+            <h5>Periódo: {{ asignatura.nivel }} </h5>
+        </div>
+        <div class="span4">
+            <h5>Requisito para cursar:</h5>
+            <p>{{ asignatura.p_requisitos }} {% if asignatura.nombre_requisito %} ({{ asignatura.nombre_requisito }}) {% endif %}</p>
+        </div>
+        <div class="span4">
+            <h5>Requisitos pvios:</h5>
+            <p></p>
+        </div>
+        <div class="span4">
+            <h5>Co-requisitos:</h5>
+            <p>{% if asignatua.co_requisitos %} {{ asignatura.co_requisito }} {% else %} No tiene {% endif %}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span9">
+            <h5>
+                II. CARGA ACADÉMICA.
+            </h5>
+            <p>Desglosar el número de horas cronológicas que el estudiante dedica a la asignatura, tanto psencial como personal. </p>
+        </div>
+        <div class="span12">
+            <table class="table-bordered tg">
+                <tbody>
+                    <tr>
+                        <th class="tg-hgcj" rowspan="2">Tipo de Actividad</th>
+                        <th class="tg-hgcj" colspan="2">SCT (Horas cronológicas)</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-hgcj">Directas</td>
+                        <td class="tg-amwm">Personal</td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Teórico</td>
+                        <td class="tg-s6z2"> {{ asignatura.horas_teoricas }} Semanales</td>
+                        <td class="tg-s6z2"> {{ asignatura.horas_teoricas_personal }} Semanales</td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Ayudantía</td>
+                        <td class="tg-s6z2"></td>
+                        <td class="tg-s6z2"></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Laboratorio</td>
+                        <td class="tg-s6z2"> {{ asignatura.horas_laboratorio }} Semanales</td>
+                        <td class="tg-s6z2"> {{ asignatura.horas_laboratorio_personal }} Semanales</td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Taller</td>
+                        <td class="tg-s6z2"></td>
+                        <td class="tg-s6z2"></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Terreno</td>
+                        <td class="tg-s6z2"></td>
+                        <td class="tg-s6z2"></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-s6z2">Clínico</td>
+                        <td class="tg-s6z2"></td>
+                        <td class="tg-s6z2"></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-9hbo">Total horas semanales</td>
+                        <td class="tg-s6z2" colspan="2"> {{ asignatura.horas_dedicadas }} horas semanales </td>
+                    </tr>
+                    <tr>
+                        <td class="tg-9hbo">Créditos</td>
+                        <td class="tg-s6z2" colspan="2"> {{ asignatura.creditos }} Créditos </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <h5>
+                III. DESCRIPCIÓN.
+            </h5>
+        </div>
+        {% for informacion in asignatura.informacion_set.all %}
+        <div class="span9">
+            <h5>Objetivos educacionales:</h5>
+            <ul>
+                <p> {{ informacion.objetivos_educacionales }} </p>
+            </ul>
+            <h5>Eje curricular: {{ asignatura.eje_curricular }}</h5>
+            <h5>Competencias de egreso:</h5>
+            <ul>
+                <p> {{ informacion.competencias_egreso }} </p>
+            </ul>
+        </div>
+        <div class="span9">
+            <h5>Resultados de apndizaje (RA):</h5>
+            <ul>
+                <p> {{ informacion.apndizaje }} </p>
+            </ul>
+            <p><strong>Descripción general:</strong> {{ informacion.descripcion }} </p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="span6">
+            <h5>
+                IV. APRENDIZAJES ESPERADOS.
+            </h5>
+        </div>
+        <div class="span6">
+            <h5>
+                V. CONTENIDOS.
+            </h5>
+        </div>
+        <div class="span12">
+            {% for unidad in asignatura.unidad_set.all %}
+            <div class="span6">
+                {% for sesion in unidad.sesion_set.all %}
+                <p>{{ sesion.apndizaje }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="span6">
+                <p><strong>UNIDAD {{ unidad.unidad }}: </strong>{% if unidad.titulo %} {{ unidad.titulo }} {% else %} {{ unidad.nombre }} {% endif %}</p>
+                <ul type="square">
+                    {% for sesion in unidad.sesion_set.all|dictsort:"sesion" %}
+                    <li>{{ sesion.contenido }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% for informacion in asignatura.informacion_set.all %}
+    <div class="row">
+        <div class="span12">
+            <h5>
+                VI. HABILIDADES TRANSVERSALES.
+            </h5>
+        </div>
+        <div class="span12">
+            <ol type="A">
+                <p> {{ informacion.habilidades }} </p>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <h5>
+                VII. MODALIDAD DIDÁCTICA Y PROCEDIMIENTOS DE EVALUACIÓN .
+            </h5>
+        </div>
+        <div class="span12">
+            <p> {{ informacion.modalidad }} </p>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row">
+        <div class="span12">
+            <h5>
+                VIII. CONDICIONES DE APROBACIÓN.
+            </h5>
+        </div>
+        <div class="span12">
+            <ol>
+            {% for condicion in asignatura.condicionesaprobacion_set.all %}
+                <li> {{ condicion.descripcion_condicion }} </li>
+            {% endfor %}
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <h5>
+                IX. BIBLIOGRAFÍA.
+            </h5>
+        </div>
+        <div class="span12">
+            <h5>Obligatoria:</h5>
+            {% for bibliografia in asignatura.bibliografia_set.all %}
+            <ul>
+                {% if bibliografia.tipo_biblio == 'Obligatoria' %}<li> {{ bibliografia.bibliografia }} </li>{% endif %}
+            </ul>
+            {% endfor %}
+            <h5>Complementaria:</h5>
+            {% for bibliografia in asignatura.bibliografia_set.all %}
+            <ul>
+                {% if bibliografia.tipo_biblio == 'Complementaria' %}<li> {{ bibliografia.bibliografia }} </li>{% endif %}
+            </ul>
+            {% endfor %}
+            <h5>Recursos en línea:</h5>
+            {% for bibliografia in asignatura.bibliografia_set.all %}
+            <ul>
+                {% if bibliografia.tipo_biblio == 'Linea' %}<li> {{ bibliografia.bibliografia }} </li>{% endif %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <h5>
+                IX. CORRESPONDENCIA CRÉDITOS UNAB.
+            </h5>
+        </div>
+        <div class="span12">
+            <div class="table-responsive">
+                <table class="table-bordered tg">
+                    <tbody>
+                        <tr>
+                            <td class="tg-s6z2">Teórico</td>
+                            <td class="tg-s6z2">Ayudantía</td>
+                            <td class="tg-s6z2">Laboratorio</td>
+                            <td class="tg-s6z2">Taller</td>
+                            <td class="tg-s6z2">Terreno</td>
+                            <td class="tg-s6z2">Clínico</td>
+                            <td class="tg-s6z2">Online</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-s6z2">{{ asignatura.horas_teoricas }}</td>
+                            <td class="tg-s6z2"></td>
+                            <td class="tg-s6z2">{{ asignatura.horas_laboratorio }}</td>
+                            <td class="tg-s6z2"></td>
+                            <td class="tg-s6z2"></td>
+                            <td class="tg-s6z2"></td>
+                            <td class="tg-s6z2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+</div> -->
+<div class="doc_programa">
+    <div class="col-md-12 scroller" id="programaCurso">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">I. IDENTIFICACIÓN </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <h3>Carrera: 
+                            {{ asignatura.carrera.carrera }} 
+                        </h3>
+                        <h3>Unidad Responsable: </h3>
+                        <h3>Nombre: {{ asignatura.nombre }}</h3>
+                        <h3>Código: {{ asignatura.codigo }}</h3>
+                        <h3>Periodo: </h3>
+                        <h3>Área de conocimiento unesco: </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h3>Requisito para cursar: <br>{{ asignatura.pre_requisitos }}</h3><br>
+                    </td>
+                    <td colspan="2">
+                        <h3>Requisitos previos: <br>{{ asignatura.nombre_requisito }} </h3><br>
+                    </td>
+                    <td colspan="2">
+                        <h3>Co - Requisitos: <br>{{ asignatura.co_requisito }} </h3><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">II. CARGA ACADÉMICA</h3>
+                        <h5>Desglosar el número de horas cronológicas que el estudiante dedica a la asignautra, tanto presencial como personal.</h5>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2" colspan="4" style="font-weight: bold;vertical-align:middle" class="text-center">Tipo de Actividad</td>
+                    <td colspan="2" style="font-weight: bold;" class="text-center">SCT (horas cronológicas)</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;" class="text-center">Directas</td>
+                    <td style="font-weight: bold;" class="text-center">Personal</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Teórico</td>
+                    <td class="text-center">{{ asignatura.horas_teoricas }}</td>
+                    <td class="text-center">{{ asignatura.horas_teoricas_personal }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Ayudantía</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Laboratorio</td>
+                    <td class="text-center">{{ asignatura.horas_laboratorio }}</td>
+                    <td class="text-center">{{ asignatura.horas_laboratorio_personal }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Taller</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Terreno</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Clínico</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-weight: bold;">Total Horas dedicación semanal</td>
+                    <td colspan="2" class="text-center">{{ asignatura.horas_dedicadas }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="font-weight: bold;">Créditos</td>
+                    <td colspan="2" class="text-center">{{ asignatura.creditos }}</td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">III. DESCRIPCIÓN</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <p>
+                            <strong>Objetivos Educacionales:</strong>
+                        </p>
+                        <p>
+                            · Aplicar de manera metódica, integrada y contextualizadalos conocimientos de la ciencia y tecnologías para la gestión, administración y diseño de sistemas de información.
+                        </p>
+                        <p>
+                            · Desempeñarse en diversos ámbitos de la Ingeniería, evaluando sistemática e integradamente el impacto de un problema, sobre la base de ciencias básicas y fundamentos de la Ingeniería.
+                        </p>
+                        <p>
+                            <strong>Eje Curricular:</strong>
+                            {{ asignatura.eje_curricular }}
+                        </p>
+                        <p>
+                            <strong>Competencias de Egreso:</strong>
+                        </p>
+                        <p>
+                            · Desarrollar y mantener sistemas de software, aplicando principios de las ciencias básicas, de la ingeniería y de la computación.
+                        </p>
+                        <p>
+                            · Comprender y analizar un problema en Ingeniería, identificando de manera independiente sus partes, su proceso de entrada y salida, demostrando abstracción frente a los detalles del problema y dominio en varias áreas de la ingeniería.
+                        </p>
+                        <p>
+                            <strong>Resultados de Aprendizaje (RA)</strong>
+                            :
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>RA1:</strong>
+                                Construir un programa computacional utilizando los
+                                conceptos fundamentales de la programación estructurada
+                                con el uso de sentencias simples y de iteración.
+                            </li>
+                            <li>
+                                <strong>RA2:</strong>
+                                Construir funciones y módulos en un programa
+                                computacional bajo el concepto de programación
+                                estructurada usando estructuras de datos simples.
+                            </li>
+                            <li>
+                                <strong>RA3:</strong>
+                                Construir un programa computacional bajo el concepto de
+                                programación estructurada usando estructuras de datos
+                                complejas tales como arreglos, matrices y archivos.
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Descripción general:</strong> El estudiante aprenderá a analizar un problema y plantear una solución racionalmente, utilizando programación estructurada y procedural. Además, será capaz de describir y entender el proceso de interpretación y ejecución de un programa.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="3">
+                        <h3 class="title">IV. APRENDIZAJES ESPERADOS</h3>
+                    </td>
+                    <td class="encabezado" colspan="3">
+                        <h3 class="title">V. CONTENIDOS</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir algoritmos básicos usando lenguaje en pseudocódigo.<br><br>
+
+                        -AE2 Construir programas estructurados con lenguaje Python usando sentencias simples de secuencias, selección y de repetición.<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 1: Algoritmos y Programación Estructurada</h4>
+
+                        - - Datos vs información 
+                        <br>
+
+                        - - Definición de problemas 
+                        <br>
+
+                        - - Modelos de programación
+                        <br>
+
+                        - - Licencias de software
+                        <br>
+
+                        - - Algoritmos y partes que lo conforman.
+                        <br>
+
+                        - - Psedocodigo.
+                        <br>
+
+                        - - Técnicas de Programación Estructurada utilizando las estructuras de secuencias, selección e iteración.
+                        <br>
+
+                        - - Programación estructurada utilizando las estructuras de secuencias, selección e iteración.
+                        <br>
+
+                        - - Uso de contadores, acumuladores 
+                        <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir funciones en programas estructurados con lenguaje Python, que permitan agrupar módulos reutilizables usando estructuras de datos simples<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 2: Funciones y módulos con estructuras de datos simples </h4>
+
+                        - - Funciones y módulos para construir programas
+                        <br>
+
+                        - - Listas y Tuplas
+                        <br>
+
+                        - - Diccionarios y conjuntos
+                        <br>
+
+                        - - Estructuras de datos anidadas
+                        <br>
+
+                        - Estructuras de datos complejas: Arreglos y Archivos de texto<br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir programa computacional en Python para resolver problemas usando arreglos unidimensionales y bidimensionales (vectores y matrices).<br><br>
+
+                        -AE2 Aplicar herramientas para el uso de procesamientos de texto.<br><br>
+
+                        -AE3 Construir programa computacional en Python para resolver problemas usando archivos de texto.<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 3: Estructuras de datos complejas: Arreglos y Archivos de texto</h4>
+
+                        - - Array en Python con módulo Numpy
+                        <br>
+
+                        - - Salto de línea, búsqueda de string, reemplazo, transformar mayúscula –minúscula
+                        <br>
+
+                        - - Leer archivos. 
+                        <br>
+
+                        - - Escribir archivos
+                        <br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">VI. HABILIDADES TRANSVERSALES</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        A.  Pensamiento analítico
+                        <br>
+
+                        B.  Trabajo en equipo
+                        <br>
+
+                        C. Manejo de recursos de información <br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">VII. MODALIDAD DIDÁCTICA Y PROCEDIMIENTOS DE EVALUACIÓN</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <p>
+                            La modalidad presencial de la clase teórica incluye la exposición de los contenidos, actividades de colaboración y metodologías activas. La clase de laboratorio se realiza mediante aprendizaje colaborativo grupal e individual con el uso de un computador.
+                        </p>
+                        <p>
+                            La modalidad de trabajo autónomo consiste en fomentar el autoaprendizaje a través de las herramientas y directrices entregadas en las actividades presenciales.
+                        </p>
+                        <p>
+                            Se utilizarán metodologías activas de aprendizaje como por ejemplo instrucción por pares, aprendizaje basado en equipo, resolución de problemas y aprendizaje basado en proyectos.
+                        </p>
+                        <p>
+                            Las evaluaciones se dividen en:
+                        </p>
+                        <p>
+                            - Evaluaciones formativas a través de ejecución de procedimientos (prácticos de laboratorios), actividades de participación en clases y desarrollo de tareas fuera del
+                            aula.
+                        </p>
+                        <p>
+                            - Evaluaciones sumativas, a través de pruebas teórico-prácticas de tipo objetiva y de ejecución de procedimientos (problemas de desarrollo).
+                        </p>
+                        <p>
+                            - Desarrollo de un proyecto práctico que integra los aprendizajes logrados durante el semestre y que fomentará el trabajo grupal colaborativo (trabajo en equipo), desarrollo de habilidades para analizar, resolver, corregir y replantear el trabajo realizado incorporando nuevos conocimientos y manejo de recursos de información. Máximo 3 estudiantes por grupo.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">VIII. CONDICIONES DE APROBACIÓN</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <p>
+                            A. La asistencia requerida para aprobar el curso es 75%, de forma contraria se reprobará el curso con nota final igual a: min (nota final, 3.9). En el caso de ausencias programadas, el estudiante debe presentar los antecedentes con anticipación en la oficina de coordinación, no posteriormente.
+                        </p>
+                        <p>
+                            B. La nota de presentación a examen se calculará como sigue:
+                        </p>
+                        <div align="center">
+                            <table class="tabla_ev">
+                                <tr>
+                                    <th class="resource" colspan="3">Recurso evaluativo</th>
+                                    <th class="porcnt">Porcentaje</th>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list" colspan="3">Diagnóstico</td>
+                                    <td class="rsrc_list">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list" colspan="3">Pruebas formativas en catedra y/o laboratorio (controles, tareas, <br>actividades en aula/laboratorio, etc.)</td>
+                                    <td class="rsrc_list">20 %</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list2" colspan="3">Proyecto</td>
+                                    <td class="rsrc_list2">20%</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list2" colspan="3">Pruebas sumativas (solemnes)</td>
+                                    <td class="rsrc_list2">60%</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p>
+                            La evaluación de la asignatura debe considerar un máximo de 20% grupal y debe ser establecida por el docente al inicio del cada semestre.
+                        </p>
+                        <p>
+                            C. Los alumnos que no asistan a una calificación, ésta será evaluada con nota mínima (1.0). Para reemplazar esta nota, el alumno debe presentar al Coordinador respectivo en cada Campus una justificación mediante un documento válido (certificado médico, laboral, etc.) timbrado por la institución que lo emite, en un plazo no mayor a tres días (72 horas) ocurrida la inasistencia; de lo contrario no es válido. Sólo el Coordinador es la persona facultada para recibir, aprobar o rechazar justificativos. El profesor no recibe estos documentos, tampoco las escuelas.
+                        </p>
+                        <p>
+                            D. Si la nota de presentación a examen es igual o superior a 5.0, el alumno o alumna podrá eximirse de la rendición del examen de la asignatura, siempre y cuando no presente notas parciales bajo 4.0. En este caso su nota de examen es igual a la nota de presentación.
+                        </p>
+                        <p>
+                            E. La calificación final de la asignatura se calcula de la siguiente forma:
+                        </p>
+                        <p style="font-weight: bold;text-align: center;">
+                            Nota Final = Nota de Presentación*0,7 + Nota de Examen*0.3
+                        </p>
+                        <p>
+                            El alumno reprobará si su Nota Final es menor a 3.95.
+                            Aprobará si su nota final es &gt;= 4.0.
+                        </p>
+                        <p>
+                            F. Las fechas de evaluaciones serán informadas oportunamente.
+                        </p>
+                        <p>
+                            G. La asignatura cuenta con actividades de laboratorio, que se regulan según condiciones establecidas por el docente al inicio del semestre.
+                        </p>
+                        <p>
+                            H. El curso está regulado, además, por el Reglamento del Alumno de Pregrado Vigente
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">IX. BIBLIOGRAFÍA</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        {% for bibliografia in asignatura.bibliogra_set.all %}
+                        <br>
+                        <p>{{ bibliografia.bibliografia }}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">X. CORRESPONDENCIA CRÉDITOS UNAB</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <table class="tbl">
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-center" style="text-align:middle">Presencial</td>
+                                    <td class="text-center" style="vertical-align:middle" rowspan="2">Personal</td>
+                                    <td class="text-center" style="vertical-align:middle" rowspan="2">Creditos UNAB</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Teórico</td>
+                                    <td class="text-center">Ayudantia</td>
+                                    <td class="text-center">Laboratorio</td>
+                                    <td class="text-center">Taller</td>
+                                    <td class="text-center">Terreno</td>
+                                    <td class="text-center">Clínico</td>
+                                    <td class="text-center">Online</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

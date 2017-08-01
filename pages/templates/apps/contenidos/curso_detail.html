@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <button  id="cerrar2" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Detalle curso {{ curso.nrc }}-{{ curso.regimen }}</h4>
+</div>
+
+<div class="modal-body">
+	<h5>Docente de la asignatura: {{ curso.docente.nombres }} {{ curso.docente.apellido1 }} {{ curso.docente.apellido2 }}</h5>
+	<br>
+	<h5>Listado de estudiantes</h5>
+	<table class="table table-hover table-bordered">
+	  <thead>
+	    <tr>
+	      <th>Nombre</th>
+	      <th>RUN</th>
+	      <th>Email</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {% for estudiante in curso.estudiantes.all %}
+		    <tr>
+		      <td>{{ estudiante.apellido1 }} {{ estudiante.apellido2 }}, {{ estudiante.nombre1 }} {{ estudiante.nombre2 }} {{ estudiante.nombre3 }} </td>
+		      <td> {{ estudiante.rut }} </td>
+		      <td> <i>{{ estudiante.email }}</i> </td>
+		    </tr>
+	    {% endfor %}
+	  </tbody>
+
+	</table>
+</div>
+
+ <div class="modal-footer">
+   <button  id="cerrar" type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+ </div>
+
+
+{% block js %}
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+</script>
+{% endblock %}

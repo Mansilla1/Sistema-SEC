@@ -1,0 +1,73 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Asignatura{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+      <h2>Usuario-NRC</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          <div class="col-md-2">
+            <div class="form-group">
+              <input type="text" name="nrc" placeholder="Ingrese NRC" class="form-control" id="post_nrc">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <a href="#" id="buscar_nrc" class="btn btn-success">Filtrar</a>
+          </div>
+        </div>
+          
+        <div class="row">
+          <div id="contenido">
+              <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script>
+$('#buscar_nrc').on('click', function(){
+  var nrc = $('#post_nrc').val();
+  $('#contenido').html('<p>Buscando...</p>')
+
+  $.ajax({
+    data: {'nrc':nrc},
+    method: 'GET',
+    url: "{% url 'contenidos:GetAlumnosNRC' %}",
+    success: function(data){
+      var html = ''
+      // var html5 = ""
+      for (var i = 0; i<data.length; i++){
+        html += '<p>'+data[i]+'</p>'
+      }
+      $('#contenido').html(html)
+    },
+    error: function(error_data){
+      console.log('error')
+      $('#contenido').html('<h5>No se ha podido establecer conexión</h5>')
+
+    }
+  });
+  
+});
+
+</script>
+{% endblock %}

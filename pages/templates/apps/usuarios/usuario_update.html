@@ -1,0 +1,79 @@
+
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Actualizar datos usuario <strong>{{ perfil.user.username }}</strong></h4>
+</div>
+
+<form action="/usuarios/actualizar/{{ perfil.pk }}/" method="POST"> {% csrf_token %} 
+  <div class="modal-body">
+      <div class="box-body">
+        <div class="form-group">
+          <label>Rut</label>
+          {{ form.rut }}
+        </div>
+        <div class="form-group">
+          <label>Nombres</label>
+          {{ form.nombres }}
+        </div>
+        <div class="form-group">
+          <label>Apellido Paterno</label>
+          {{ form.apellido1 }}
+        </div>
+        <div class="form-group">
+          <label>Apellido Materno</label>
+          {{ form.apellido2 }}
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          {{ form.email }}
+        </div>
+        <div class="form-group">
+          <label>Privilegios</label>
+          <select id="grupos" name="tipo_usuario" class="select2_group form-control">
+            <option value="Directivo">Directivo</option>
+            <option value="Comite academico">Comité académico</option>
+            <option value="Docente">Docente</option>
+            <option value="Estudiante">Estudiante</option>
+            <option value="Administrador">Administrador</option>
+            <!-- <option value="Otro">Otro</option> -->
+          </select>
+        </div>
+      </div>
+  </div>
+
+  <div class="modal-footer">
+    <input type="submit" value="Guardar" class="btn btn-success">
+    <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+  </div>
+</form>
+
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+<!-- <script>
+  $('#tipo_usuario_otro').hide();
+  tipo = $('#id_tipo_usuario').val();
+
+  $('#id_tipo_usuario').on('change', function(){
+    tipo = $('#id_tipo_usuario').val();
+    if (tipo == 'Otro'){
+      $('#tipo_usuario_otro').show();
+    }else{
+      $('#tipo_usuario_otro').hide();
+    }
+  });
+
+    if (tipo == 'Otro'){
+      $('#tipo_usuario_otro').show();
+    }else{
+      $('#tipo_usuario_otro').hide();
+    }
+</script> -->
+{% endblock %}
