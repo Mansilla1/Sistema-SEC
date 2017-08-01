@@ -3,8 +3,8 @@
 Aplicación Web desarrollada en [Django](https://www.djangoproject.com) para [Universidad Andrés Bello](http://www.unab.cl).
 
 ## Autores
-* [Daniel Mansilla Cañoles] (https://github.com/Mansilla1)
-* [Manuel Olmos Soto] (https://github.com/mmolsoto)
+* [Daniel Mansilla Cañoles](https://github.com/Mansilla1)
+* [Manuel Olmos Soto](https://github.com/mmolsoto)
 
 # Instalación
 
