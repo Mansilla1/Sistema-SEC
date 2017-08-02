@@ -1,11 +1,44 @@
 {% load static %}
 {% block css %}
-  <link href="{% static 'app/css/bootstrap-2.1.css' %}" rel="stylesheet">
-  <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
+    <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
 
+    <style>
+    * {
+        /*border: 1px solid black;*/
+    }
+    td {
+        padding: 5px 2px 2px 2px;
+        border: 1px solid #4E4E4E;
+    }
+    .title {
+        
+        color: white;
+        font-weight: bold;
+    }
+    .subtitle {
+        text-align: center;
+        font-weight: bold;
+        color: white;
+    }
+    .encabezado {
+        background-color: grey;
+    }
+    .tbl {
+        margin: 0 20px 20px 5px;
+    }
+    .resource {
+        font-weight: bold;
+        color: white;
+        background-color: grey;
+    }
+    .tabla_ev {
+        margin-left:30px;
+        margin-right: 30px;
+    }
+</style>
 {% endblock %}
 
-<div  id="syllabus">
+<!-- <div  id="syllabus">
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
@@ -140,4 +173,378 @@
     </div>
     {% endfor %}
 </div>
+</div> -->
+
+<div class="doc_programa">
+    <div class="col-md-12 scroller" id="programaCurso">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">I. IDENTIFICACIÓN DE LA ASIGNATURA </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <h3>Curso: {{ asignatura.carrera.carrera }} </h3>
+                        <h3>Código: </h3>
+                        <h3>Período: {{ asignatura.nombre }}</h3>
+                        <h3>Coordinador del curso: {{ asignatura.codigo }}</h3>
+                        <h3>Profesor: </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">II. DESCRIPCIÓN GENERAL (PRE-REQUISITOS, CO-REQUISITOS Y HORAS PEDAGÓGICAS)  </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <h3>Requisitos: {{ asignatura.carrera.carrera }} </h3>
+                        <h3>Co-Requisitos: </h3>
+                        <h3>Horas Teóricas: {{ asignatura.nombre }}</h3>
+                        <h3>Horas Laboratorio: {{ asignatura.codigo }}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">III. APRENDIZAJES ESPERADOS Y UNIDADES DE CONTENIDO</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="3">
+                        <h3 class="subtitle">APRENDIZAJES ESPERADOS</h3>
+                    </td>
+                    <td class="encabezado" colspan="3">
+                        <h3 class="subtitle">CONTENIDOS</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir algoritmos básicos usando lenguaje en pseudocódigo.<br><br>
+
+                        -AE2 Construir programas estructurados con lenguaje Python usando sentencias simples de secuencias, selección y de repetición.<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 1: Algoritmos y Programación Estructurada</h4>
+
+                        - - Datos vs información 
+                        <br>
+
+                        - - Definición de problemas 
+                        <br>
+
+                        - - Modelos de programación
+                        <br>
+
+                        - - Licencias de software
+                        <br>
+
+                        - - Algoritmos y partes que lo conforman.
+                        <br>
+
+                        - - Psedocodigo.
+                        <br>
+
+                        - - Técnicas de Programación Estructurada utilizando las estructuras de secuencias, selección e iteración.
+                        <br>
+
+                        - - Programación estructurada utilizando las estructuras de secuencias, selección e iteración.
+                        <br>
+
+                        - - Uso de contadores, acumuladores 
+                        <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir funciones en programas estructurados con lenguaje Python, que permitan agrupar módulos reutilizables usando estructuras de datos simples<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 2: Funciones y módulos con estructuras de datos simples </h4>
+
+                        - - Funciones y módulos para construir programas
+                        <br>
+
+                        - - Listas y Tuplas
+                        <br>
+
+                        - - Diccionarios y conjuntos
+                        <br>
+
+                        - - Estructuras de datos anidadas
+                        <br>
+
+                        - Estructuras de datos complejas: Arreglos y Archivos de texto<br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+
+                        -AE1 Construir programa computacional en Python para resolver problemas usando arreglos unidimensionales y bidimensionales (vectores y matrices).<br><br>
+
+                        -AE2 Aplicar herramientas para el uso de procesamientos de texto.<br><br>
+
+                        -AE3 Construir programa computacional en Python para resolver problemas usando archivos de texto.<br><br>
+
+                    </td>
+                    <td colspan="3">
+                        <h4>Unidad 3: Estructuras de datos complejas: Arreglos y Archivos de texto</h4>
+
+                        - - Array en Python con módulo Numpy
+                        <br>
+
+                        - - Salto de línea, búsqueda de string, reemplazo, transformar mayúscula –minúscula
+                        <br>
+
+                        - - Leer archivos. 
+                        <br>
+
+                        - - Escribir archivos
+                        <br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">IV. CLASE A CLASE</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <table class="tg1">
+                          <tr>
+                            <th class="tg1-hgcj">Sesión</th>
+                            <th class="tg1-hgcj">Unidad</th>
+                            <th class="tg1-hgcj">Aprendizaje esperado/ Logro esperado</th>
+                            <th class="tg1-hgcj">Actividad Aprendizaje Cátedra/ Evaluación</th>
+                            <th class="tg1-hgcj">Contenido</th>
+                            <th class="tg1-amwm">Actividad de laboratorio/ Evaluación</th>
+                        </tr>
+                        <tr>
+                            <td class="tg1-hgcj">1</td>
+                            <td class="tg1-031e">UNIDAD 1</td>
+                            <td class="tg1-031e">AE1:,Construir algoritmos básicos <br>usando lenguaje en pseudocódigo,<br><br>LA1: Describir los pasos<br>para <br>desarrollar un algoritmo</td>
+                            <td class="tg1-031e">Explicación a través de diapositivas</td>
+                            <td class="tg1-031e">Computación vs informática,<br>Datos vs información <br>Definición de problemas <br>Pseudo-código<br></td>
+                            <td class="tg1-yw4l"></td>
+                        </tr>
+                        <tr>
+                            <td class="tg1-hgcj">2</td>
+                            <td class="tg1-031e">UNIDAD 1</td>
+                            <td class="tg1-031e">LA2: Desarrollar algoritmos cotidianos.</td>
+                            <td class="tg1-031e">Explicación a través de diapositivas</td>
+                            <td class="tg1-031e">Modelos de programación,<br>Licencias de software,<br>Pseudo-código</td>
+                            <td class="tg1-yw4l"></td>
+                        </tr>
+                        <tr>
+                            <td class="tg1-hgcj">3</td>
+                            <td class="tg1-031e">UNIDAD 2</td>
+                            <td class="tg1-031e">LA2: Agrupar funciones en módulos <br>re-utilizables</td>
+                            <td class="tg1-031e">Explicación a través de diapositivas</td>
+                            <td class="tg1-031e">Funciones y módulos para <br>construir programas</td>
+                            <td class="tg1-yw4l"></td>
+                        </tr>
+                        <tr>
+                            <td class="tg1-hgcj">4</td>
+                            <td class="tg1-031e">UNIDAD 2</td>
+                            <td class="tg1-031e">LA3: Construir programas usando los <br>recursos de<br>Listas.</td>
+                            <td class="tg1-031e">Explicación a través de diapositivas</td>
+                            <td class="tg1-031e">Listas</td>
+                            <td class="tg1-yw4l"></td>
+                        </tr>
+                        <tr>
+                            <td class="tg1-hgcj">5</td>
+                            <td class="tg1-031e">UNIDAD 3</td>
+                            <td class="tg1-031e">LA1: Resuelve problemas usando array <br>de una dimensión</td>
+                            <td class="tg1-031e">Explicación a través de diapositivas <br>y ejemplos<br>prácticos</td>
+                            <td class="tg1-031e">Array en Python con módulo <br>Numpy</td>
+                            <td class="tg1-yw4l"></td>
+                        </tr>
+                    </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">V. EVALUACIÓN</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <p>Las evaluaciones se establecen de acuerdo a las definiciones del programa donde contempla un máximo de 20% grupal. Éstas son:</p>
+                        <table class="tg2">
+                          <tr>
+                            <th class="tg2-snm7">N°<br>Evaluación</th>
+                            <th class="tg2-snm7">Tipo de<br>Evaluación</th>
+                            <th class="tg2-snm7">Grupo</th>
+                            <th class="tg2-snm7">Ponderación</th>
+                            <th class="tg2-snm7">N° de Sesión</th>
+                            <th class="tg2-snm7">Descripción de Logro</th>
+                            <th class="tg2-snm7">Aprendizaje<br>Esperado</th>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">1</td>
+                            <td class="tg2-s6z2">Taller 1</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">5%</td>
+                            <td class="tg2-s6z2">8</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE1, AE2</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">2</td>
+                            <td class="tg2-s6z2">Solemne 1</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">20%</td>
+                            <td class="tg2-s6z2">11</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE1, AE2</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">3</td>
+                            <td class="tg2-s6z2">Taller 2</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">5%</td>
+                            <td class="tg2-s6z2">16</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">4</td>
+                            <td class="tg2-s6z2">Solemne 2</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">20%</td>
+                            <td class="tg2-s6z2">21</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">5</td>
+                            <td class="tg2-s6z2">Taller 3</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">5%</td>
+                            <td class="tg2-s6z2">25</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE4</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">6</td>
+                            <td class="tg2-s6z2">Taller 4</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">5%</td>
+                            <td class="tg2-s6z2">30</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE5, AE6</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">7</td>
+                            <td class="tg2-s6z2">Solemne 3</td>
+                            <td class="tg2-s6z2">No</td>
+                            <td class="tg2-s6z2">20%</td>
+                            <td class="tg2-s6z2">31</td>
+                            <td class="tg2-s6z2"></td>
+                            <td class="tg2-s6z2">AE4, AE5, AE6</td>
+                        </tr>
+                        <tr>
+                            <td class="tg2-hgcj">8</td>
+                            <td class="tg2-s6z2">Proyecto</td>
+                            <td class="tg2-s6z2">Si</td>
+                            <td class="tg2-s6z2">20%</td>
+                            <td class="tg2-s6z2">32</td>
+                            <td class="tg2-s6z2">A través de un enunciado que <br>simula un proyecto de desarrollo, <br>los estudiantes deben construir <br>los programas solicitados en el <br>periodo de tiempo definido</td>
+                            <td class="tg2-s6z2">Todos</td>
+                        </tr>
+                    </table>
+                        <p>El Proyecto, tiene por objetivo aplicar e integrar los contenidos tratados en el semestre en trabajo grupal colaborativo, desarrollar las habilidades para analizar, resolver, corregir y replantear el trabajo realizado con el fin de solucionar el problema planteado incorporando nuevos conocimientos. Cantidad máxima de alumnos por grupo es 3.</p>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">VI. CONDICIONES DE APROBACIÓN</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <p>
+                            A. La asistencia requerida para aprobar el curso es 75%, de forma contraria se reprobará el curso con nota final igual a: min (nota final, 3.9). En el caso de ausencias programadas, el estudiante debe presentar los antecedentes con anticipación en la oficina de coordinación, no posteriormente.
+                        </p>
+                        <p>
+                            B. La nota de presentación a examen se calculará como sigue:
+                        </p>
+                        <div align="center">
+                            <table class="tabla_ev">
+                                <tr>
+                                    <th class="resource" colspan="3">Recurso evaluativo</th>
+                                    <th class="resource">Porcentaje</th>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list" colspan="3">Diagnóstico</td>
+                                    <td class="rsrc_list">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list" colspan="3">Pruebas formativas en catedra y/o laboratorio (controles, tareas, <br>actividades en aula/laboratorio, etc.)</td>
+                                    <td class="rsrc_list">20 %</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list2" colspan="3">Proyecto</td>
+                                    <td class="rsrc_list2">20%</td>
+                                </tr>
+                                <tr>
+                                    <td class="rsrc_list2" colspan="3">Pruebas sumativas (solemnes)</td>
+                                    <td class="rsrc_list2">60%</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <p>
+                            La evaluación de la asignatura debe considerar un máximo de 20% grupal y debe ser establecida por el docente al inicio del cada semestre.
+                        </p>
+                        <p>
+                            C. Los alumnos que no asistan a una calificación, ésta será evaluada con nota mínima (1.0). Para reemplazar esta nota, el alumno debe presentar al Coordinador respectivo en cada Campus una justificación mediante un documento válido (certificado médico, laboral, etc.) timbrado por la institución que lo emite, en un plazo no mayor a tres días (72 horas) ocurrida la inasistencia; de lo contrario no es válido. Sólo el Coordinador es la persona facultada para recibir, aprobar o rechazar justificativos. El profesor no recibe estos documentos, tampoco las escuelas.
+                        </p>
+                        <p>
+                            D. Si la nota de presentación a examen es igual o superior a 5.0, el alumno o alumna podrá eximirse de la rendición del examen de la asignatura, siempre y cuando no presente notas parciales bajo 4.0. En este caso su nota de examen es igual a la nota de presentación.
+                        </p>
+                        <p>
+                            E. La calificación final de la asignatura se calcula de la siguiente forma:
+                        </p>
+                        <p style="font-weight: bold;text-align: center;">
+                            Nota Final = Nota de Presentación*0,7 + Nota de Examen*0.3
+                        </p>
+                        <p>
+                            El alumno reprobará si su Nota Final es menor a 3.95.
+                            Aprobará si su nota final es &gt;= 4.0.
+                        </p>
+                        <p>
+                            F. Las fechas de evaluaciones serán informadas oportunamente.
+                        </p>
+                        <p>
+                            G. La asignatura cuenta con actividades de laboratorio, que se regulan según condiciones establecidas por el docente al inicio del semestre.
+                        </p>
+                        <p>
+                            H. El curso está regulado, además, por el Reglamento del Alumno de Pregrado Vigente
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="encabezado" colspan="6">
+                        <h3 class="title">VII. BIBLIOGRAFÍA</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        {% for bibliografia in asignatura.bibliogra_set.all %}
+                        <br>
+                        <p>{{ bibliografia.bibliografia }}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

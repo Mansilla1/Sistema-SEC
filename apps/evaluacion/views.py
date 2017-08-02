@@ -235,24 +235,42 @@ def evaluacion_rapida_step1(request):
 			contents += [c]
 
 
-		desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
-			asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p1]
-		alternativas = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', 
-			asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p2]
-		pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
-			asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p3]
+		for i in range(p1): #	preguntas de desarrollo
+			p_desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
+				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+			desarrollo += list(p_desarrollo)
+
+
+		for i in range(p2): #	preguntas de alternativas
+			p_alternativas = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', 
+				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+			p_alternativas = list(p_alternativas)
+			alternativas += p_alternativas
+
+		for i in range(p3): #	preguntas de terminos pareados
+			p_pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
+				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+			p_pareados = list(p_pareados)
+			pareados += p_pareados
+
+
+		# desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
+		# 	asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p1]
+		# alternativas = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', 
+		# 	asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p2]
+		# pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
+		# 	asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p3]
 
 		desarrollo = list(desarrollo)
 		print desarrollo
 		alternativas = list(alternativas)
-		print alternativas
 		pareados = list(pareados)
-		print pareados
 
 		#generar lista con todas las preguntas 
 		pregunta = desarrollo, alternativas, pareados
 		pregunta = list(pregunta)
 		print pregunta
+		# print pregunta
 		# ========================== #
 		tipo_evaluacion = request.POST.get('tipo_evaluacion') # get tipo de evaluación
 		a = Asignatura.objects.get(id=asignatura)
@@ -261,6 +279,7 @@ def evaluacion_rapida_step1(request):
 
 		instucciones = "No se permite el uso de smartphones, tablets u otro dispositivo tecnológico.\nUse lápiz pasta para responder las preguntas.\nEl uso de lapiz grafito no tendrá derecho a reclamos."
 		puntajes = request.POST.get('pje_automatico')
+
 
 		nombre_usuario = "%s %s %s" %(request.user.perfilusuario.nombres, request.user.perfilusuario.apellido1, request.user.perfilusuario.apellido2)
 		if form.is_valid():
@@ -274,23 +293,25 @@ def evaluacion_rapida_step1(request):
 			form.save()
 
 			for p in pregunta:
-				print "-" * 100
-				form.preguntas.add(*p)
-				print p
+				# print "-" * 100
+				# print p
+				# form.preguntas.add(*p)
 				# ---------------------------
 				# Sumale contador a pregunta 
 				if type(p) == list:
-					print "es lista"
+					# print "es lista"
 					for i in p:
 						print i.pk
 						obj_pregunta =  Pregunta.objects.get(id=int(i.pk))
 						obj_pregunta.cant_usada = obj_pregunta.cant_usada + 1
 						obj_pregunta.save()
+						form.preguntas.add(i)
 				else:
 					print "no es lista"
 					obj_pregunta =  Pregunta.objects.get(id=int(p.pk))
 					obj_pregunta.cant_usada = obj_pregunta.cant_usada + 1
 					obj_pregunta.save()
+					form.preguntas.add(p)
 				# ---------------------------
 
 		preguntas = form.preguntas.all()

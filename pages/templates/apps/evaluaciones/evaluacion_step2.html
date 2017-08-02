@@ -268,7 +268,7 @@
 			success: function(data){
 			  var html = ""
 			  for (var i = 0; i<data.length; i++){
-		    	html += '<h4>Contenidos cubiertos</h4><pre>'+data[i].fields.contenido+'</pre><h4>Objetivos de aprendizaje</h4><pre>'+data[i].fields.aprendizaje_esperado+'</pre>'
+		    	html += '<h4>Contenidos</h4><pre>'+data[i].fields.contenido+'</pre><h4>Objetivos de aprendizaje</h4><pre>'+data[i].fields.aprendizaje_esperado+'</pre>'
 			  }
 			  $('.modal-body').html(html)
 
