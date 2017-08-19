@@ -9,6 +9,7 @@ urlpatterns = [
 	url(r'^pregunta-add/', login_required(pregunta_create), name='preguntaCreate'),
 	url(r'^pregunta-evaluar/(?P<pregunta_id>\d+)/$', login_required(pregunta_evalue), name='preguntaEvalue'),
 	url(r'^pregunta-detalle/(?P<pregunta_id>\d+)/$', login_required(pregunta_detail), name='PreguntaDetail'),
+	url(r'^pregunta-editar/(?P<pregunta_id>\d+)/$', login_required(pregunta_edit), name='PreguntaEditar'),
 
 	#AJAX
 	url(r'^get_unidades/$', login_required(GetUnidad.as_view()), name='get_unidad'),

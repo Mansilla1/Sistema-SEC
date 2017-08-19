@@ -7,6 +7,11 @@ urlpatterns = [
 	url(r'^asignaturas/', login_required(asignatura_list), name='asignaturaList'),
 	url(r'^nueva-asignatura/', login_required(asignatura_create), name='asignaturaCreate'),
 	url(r'^actualizar-asignatura/(?P<asignatura_id>\d+)/$', login_required(asignatura_update), name='asignaturaUpdate'),
+
+	#	contenidos
+	url(r'^contenidos/asignatura/(?P<asignatura_id>\d+)/$', login_required(contenidos_form), name='contenidos_form'),
+	url(r'^contenidos/actualizar-unidad/(?P<unidad_id>\d+)/$', login_required(unidad_edit), name='unidad_edit'),
+	url(r'^contenidos/eliminar-unidad/(?P<unidad_id>\d+)/$', login_required(unidad_delete), name='unidad_delete'),
 	# url(r'^elimina-asignatura/(?P<asignatura_id>\d+)/$', login_required(asignatura_delete), name='asignaturaDelete'),
 	# url(r'^detalle-asignatura/(?P<asignatura_id>\d+)/$', login_required(asignatura_detail), name='asignaturaDetail'),
 	
@@ -18,6 +23,14 @@ urlpatterns = [
 	url(r'^eliminar-curso/(?P<curso_id>\d+)/$', login_required(curso_delete), name='cursoDelete'),
 	url(r'^actualizar-curso/(?P<curso_id>\d+)/$', login_required(curso_update), name='cursoUpdate'),
 
+		#	Curso-API
+	# url(r'^detalle-cursoAPI/(?P<curso_id>\d+)/$', login_required(students), name='students'),
+
+	#	Carreras
+	url(r'^carreras/', login_required(carrera_list), name='carreraList'),
+	url(r'^nueva-carrera/', login_required(carrera_create), name='carreraCreate'),
+	url(r'^actualizar-carrera/(?P<carrera_id>\d+)/$', login_required(carrera_update), name='carreraUpdate'),
+	url(r'^eliminar-carrera/(?P<carrera_id>\d+)/$', login_required(carrera_delete), name='carreraDelete'),
 
 
 

@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="row">
-	<div class="col-xs-12 col-sm-6 col-md-6">
+	<div class="col-xs-12 col-sm-4 col-md-4">
 	  <div class="x_panel">
 	    <div class="x_title">
 	      <h2>Preguntas por Perfil de Egreso</h2>
@@ -22,7 +22,7 @@
 	    </div>
 	  </div>
 	</div>
-	<div class="col-xs-12 col-sm-6 col-md-6">
+	<div class="col-xs-12 col-sm-4 col-md-4">
 	  <div class="x_panel">
 	    <div class="x_title">
 	      <h2>Evaluaciones por Perfil de Egreso</h2>
@@ -33,6 +33,30 @@
 	    </div>
 	  </div>
 	</div>
+
+	<div class="col-xs-12 col-sm-4 col-md-4">
+	  <div class="x_panel">
+	    <div class="x_title">
+	      <h2>Objetivos de aprendizaje cubiertos</h2>
+	      <div class="clearfix"></div>
+	    </div>
+	    <div class="x_content">
+	      	<div class="row">
+	      		<div class="col-md-6">
+	      			<select name="asignatura" id="asignaturas" class="form-control"></select>
+	      		</div>
+	      		<div class="col-md-6">
+	      			<select name="curso" id="cursos" class="form-control">
+	      				<option value="">---------------</option>
+	      			</select>
+	      		</div>
+	      	</div>
+  			<canvas id="evaluacion_aprendizaje" />
+	    </div>
+	  </div>
+	</div>
+
+
 	<div class="col-md-12 col-sm-12 col-xs-12">
 	  <div class="x_panel">
 	    <div class="x_title">
@@ -62,6 +86,114 @@
 <script src="{% static 'app/js/plugins/Chart.js/Chart.min.js' %}"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script src="{% static 'app/js/plugins/Chart.js/utils.js' %}"></script>
+
+<!-- select de asignaturas y cursos -->
+<script>
+	$.ajax({
+	  data: {},
+	  url: '{% url "contenidos:get_asignatura" %}',
+	  type: 'GET',
+	  success: function(data){
+	    var html = "<option selected='selected' disabled>Seleccione Asignatura</option>"
+	    for (var i = 0; i< data.length; i++) {
+	      html += '<option value="' +data[i].pk+ '">'+data[i].fields.codigo+' - '+data[i].fields.nombre+'</option>'
+	    }
+	    $('#asignaturas').html(html);
+	  },
+	});
+
+	$('#asignaturas').on('change', secciones)
+
+	function secciones(){
+		var asignatura = $(this).val()
+		asignatura = parseInt(asignatura)
+		$.ajax({
+		  data: {'asignatura':asignatura},
+		  url: '{% url "contenidos:get_curso_asignatura" %}',
+		  type: 'GET',
+		  success: function(data){
+		    var html = "<option selected='selected' disabled>Seleccione Curso</option>"
+		    for (var i = 0; i< data.length; i++) {
+		      html += '<option value="' +data[i].pk+ '">'+data[i].fields.nrc+'</option>'
+		    }
+		    $('#cursos').html(html);
+		  },
+		});
+	}
+
+
+	// EVALUACIONES
+	var get_data = []
+	var get_data2 = []
+	var get_labels = []
+	$('#cursos').on('change', function(){
+		var curso = $(this).val()
+		curso = parseInt(curso)
+		$.ajax({
+			data: {'curso': curso},
+			method: 'GET',
+			url: "{% url 'dashboard:get_obj_evaluacion' %}",
+			success: function(data){
+				get_labels = data.ev
+				get_data = data.obj_cumplidos
+				get_data2 = data.obj_propuestos
+				console.log(get_labels)
+				objEvaluaciones();
+			},
+			error: function(error_data){
+				console.log('error')
+			}
+		});
+	})
+
+	function objEvaluaciones() {
+		var ctx = document.getElementById("evaluacion_aprendizaje");
+		// window.myDoughnut = new Chart(ctx, config);
+		window.myDoughnut = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: get_labels,
+				datasets: [{
+					label: "Logros cumplidos",
+					borderColor: window.chartColors.red,
+					// backgroundColor: window.chartColors.red,
+					data: get_data,
+				}, 
+				{
+					label: "Logros propuestos",
+					borderColor: window.chartColors.blue,
+					// backgroundColor: window.chartColors.blue,
+					data: get_data2,
+				}
+				]
+			},
+			options: {
+				responsive: true,
+				tooltips: {
+					mode: 'index',
+				},
+				hover: {
+					mode: 'index'
+				},
+				scales: {
+					xAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Evaluaciones'
+						}
+					}],
+					yAxes: [{
+						stacked: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Cant. Objetivos de aprendizaje'
+						}
+					}]
+				}
+			}
+		});
+	};
+</script>
 
 <script>
 	var randomScalingFactor = function() {
@@ -237,7 +369,7 @@
 						borderColor: [
 								"#3498DB"
 						],
-						data: [12, 19, 3, 17, 28, 24, 7, 9, 4, 6, 13, 25]
+						data: get_data
 					}, {
 						label: 'Evaluaciones',
 						backgroundColor: [
@@ -257,7 +389,7 @@
 						borderColor: [
 								"#fc00ff"
 						],
-						data: [25, 29, 5, 5, 20, 3, 10, 45, 34, 58, 27, 31]
+						data: get_data2
 					}]
 				},
 			});

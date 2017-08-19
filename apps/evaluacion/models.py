@@ -29,6 +29,8 @@ class Evaluacion(models.Model):
 	creado_en = models.DateTimeField(auto_now_add=True)
 	ultima_modificacion = models.DateTimeField(auto_now=True)
 	disponible = models.BooleanField(default=False)
+	descartada = models.BooleanField(default=False)
+	cronometro_inicio = models.DateTimeField(blank=True, null=True, editable=False)
 
 
 class Calificacion(models.Model):

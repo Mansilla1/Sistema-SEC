@@ -44,7 +44,6 @@ def asignatura_create(request):
 		# unidades = request.POST.get('cantidad_unidad') #cantidad de unidades
 		# condicion = request.POST.get('cantidad_condicion') #cantidad de unidades
 		# biblio = request.POST.get('cantidad_biblio') #cantidad de unidades		
-		# unidades = request.POST.get('cantidad_unidad') #info asignatura
 
 
 		#para agregar la asignatura
@@ -117,7 +116,6 @@ def asignatura_create(request):
 		# 		form4 = form4.save(commit=False)
 		# 		form4.asignatura = form
 		# 		form4.save()
-		# 		print "todo good"
 
 		return redirect('contenidos:asignaturaList')
 	else:
@@ -130,6 +128,71 @@ def asignatura_create(request):
 	}
 	return render(request, 'apps/contenidos/asignatura_create.html', context)
 
+def contenidos_form(request, asignatura_id):	#	formulario de contenidos
+	#	Obtener datos 
+	asignatura = Asignatura.objects.get(id=asignatura_id)
+	unidades = Unidad.objects.filter(asignatura=asignatura)
+	contenidos = Contenido.objects.filter(unidad=unidades)
+
+
+	if request.POST:
+		form = UnidadForm(request.POST)
+		form2 = ContenidoForm(request.POST)
+
+		unidad = request.POST.get('unidad')
+		try:
+			unidad = Unidad.objects.get(id=unidad)
+		except:
+			pass
+		print unidad
+
+		if form.is_valid():
+			form = form.save(commit=False)
+			form.asignatura = asignatura
+			form.save()
+		elif form2.is_valid():
+			form2 = form2.save(commit=False)
+			form2.unidad = unidad
+			form2.save()
+
+		return redirect('contenidos:contenidos_form', asignatura.pk)
+
+	context = {
+		'asignatura': asignatura,
+		'unidades': unidades,
+	}
+
+	return render(request, 'apps/contenidos/contenidos_form.html', context)
+
+	#eliminar/editar contenidos/unidades
+def unidad_edit(request, unidad_id):
+	unidad = Unidad.objects.get(id=unidad_id)
+	asignatura = unidad.asignatura
+	if request.method == 'GET':
+		form = UnidadForm(instance=unidad)
+	else:
+		form = UnidadForm(request.POST, instance=unidad)
+		if form.is_valid():
+			form.save()
+			return redirect('contenidos:contenidos_form', asignatura.pk)
+	context = {
+		'form': form,
+		'unidad': unidad,
+	}
+
+	return render(request, 'apps/contenidos/unidad_edit.html', context)
+
+def unidad_delete(request, unidad_id):
+	unidad = Unidad.objects.get(id=unidad_id)
+	asignatura = unidad.asignatura
+	if request.POST:
+		unidad.delete()
+		return redirect('contenidos:contenidos_form', asignatura.pk)
+	context = {
+		'unidad': unidad,
+	}
+
+	return render(request, 'apps/contenidos/unidad_delete.html', context)
 
 def asignatura_update(request, asignatura_id):
 	asignatura = Asignatura.objects.get(id=asignatura_id)
@@ -211,6 +274,7 @@ def curso_update(request, curso_id):
 def curso_detail(request, curso_id):
 	curso = Curso.objects.get(id=curso_id)
 	return render(request, 'apps/contenidos/curso_detail.html', {'curso':curso})
+
 
 def curso_delete(request, curso_id):
 	curso = Curso.objects.get(id=curso_id)
@@ -311,6 +375,63 @@ def syllabus_pdf(request, asignatura_id, *args, **kwargs):
 # 	return render(request, 'apps/contenidos/asignatura_delete.html', {'asignatura':asignatura})
 
 
+#	CARRERA
+def carrera_list(request):
+	carreras = Carrera.objects.all()
+
+	context = {
+		'carreras': carreras,
+	}
+
+	return render(request, 'apps/contenidos/carrera_list.html', context)
+
+def carrera_create(request):
+	if request.POST:
+		form = CarreraForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('contenidos:carreraList')
+
+	else:
+		form = CarreraForm()
+
+	context = {
+		'form': form,
+	}
+
+	return render(request, 'apps/contenidos/carrera_create.html', context)
+
+def carrera_update(request, carrera_id):
+	carrera = Carrera.objects.get(id=carrera_id)
+	if request.POST:
+		form = CarreraForm(request.POST, instance=carrera)
+		if form.is_valid():
+			form.save()
+			return redirect('contenidos:carreraList')
+
+	else:
+		form = CarreraForm(instance=carrera)
+
+	context = {
+		'form': form,
+		'carrera': carrera,
+	}
+
+	return render(request, 'apps/contenidos/carrera_update.html', context)
+
+def carrera_delete(request, carrera_id):
+	carrera = Carrera.objects.get(id=carrera_id)
+	if request.POST:
+		carrera.delete()	
+		return redirect('contenidos:carreraList')
+
+	context = {
+		'carrera': carrera,
+	}
+
+	return render(request, 'apps/contenidos/carrera_delete.html', context)
+
+
 #	AJAX
 class GetCarrera(TemplateView):
 	def get(self, request, *args, **kwargs):
@@ -320,7 +441,7 @@ class GetCarrera(TemplateView):
 
 class GetAsignatura(TemplateView):
 	def get(self, request, *args, **kwargs):
-		asignatura = Asignatura.objects.all()
+		asignatura = Asignatura.objects.all().order_by('nivel')
 		data = serializers.serialize('json', asignatura)
 		return HttpResponse(data, content_type="application/json")
 
@@ -354,6 +475,8 @@ class GetCursoAsignaturaProfe(TemplateView):
 
 		print data
 		return HttpResponse(data, content_type="application/json")
+
+
 
 class GetUsuario(TemplateView):
 	def get(self, request, *args, **kwargs):
@@ -389,6 +512,15 @@ class GetAlumnosNRC(TemplateView):
 		response = requests.request("POST", url, data=payload, headers=headers)
 		content = response.content 
 		content = ast.literal_eval(content)
+		print "ES DICCIONARIO PAPU:"
+		print content
+		print "-" * 100
+		print type(content)
+		content = content["students"]
+
+		for i in content:
+			print i
+		# contenido = 
 		
 
 		# url = "http://cubesoa.asuscomm.com:90/get/get_user_info/"
@@ -405,10 +537,42 @@ class GetAlumnosNRC(TemplateView):
 
 
 
-		data = JSONRenderer().render(response)
+		data = JSONRenderer().render(content)
+
+
 		print "-" * 100
 		# print data
 		return HttpResponse(data, content_type="application/json")
+
+def students(request, curso_id):
+	curso = Curso.objects.get(id=curso_id)
+	nrc = int(curso.nrc)
+	# nrc = 7220
+
+	url = "http://cubesoa.asuscomm.com:90/get/ListCourse/"
+
+	payload = "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"nrc\"\r\n\r\n%s\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--" % (nrc)
+	headers = {
+	    'content-type': "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+	    'authorization': "Token b74c12bac948c49b06e15229abfcd11498ed3dbb",
+	    'cache-control': "no-cache",
+	    'postman-token': "de770d1a-ff87-90c4-ca96-98359e612a2c"
+	    }
+
+	response = requests.request("POST", url, data=payload, headers=headers)
+	content = response.content 
+	content = ast.literal_eval(content)
+	students = content["students"]
+	# print students
+	for i in students:
+		print i
+
+	context = {
+		'curso': curso,
+		'students': students,
+	}
+
+	return render(request, 'apps/contenidos/curso_detail2.html', context)
 
 def prueba_api(request):
 	return render(request, 'apps/contenidos/API/prueba.html', {})

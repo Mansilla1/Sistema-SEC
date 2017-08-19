@@ -6,42 +6,56 @@
 <form action="{% url 'contenidos:cursoCreate' %}" method="POST"> {% csrf_token %}
 <div class="modal-body">
 		<div class="row">
-			<div class="col-md-6">
-				<div class="form-group">
-					<label for="">Asignatura</label>
-					<select name="asignatura" id="asignatura" class="form-control"></select>
+			<div class="col-md-7">  
+				<div class="panel panel-default">
+					<div class="panel-heading main-color-bg" style="background-color: #3498db;">
+						<h3 class="panel-title" style="background-color: #3498db;color: white;">Detalle curso</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label for="">Asignatura</label>
+								<select name="asignatura" id="asignatura" class="form-control"></select>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="">NRC</label>
+								<input type="text" name="nrc" class="form-control" required="">					
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="form-group">
+								<label for="">Docente</label>
+								<select name="docente" id="docente" class="form-control"></select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="">Regimen</label>
+								<select name="regimen" class="form-control">
+									<option value="Diurno">Diurno</option>
+									<option value="Vespertino">Vespertino</option>
+								</select>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="col-md-1">
-				<div class="form-group">
-					<label for="">NRC</label>
-					<input type="text" name="nrc" class="form-control" required="">					
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label for="">Docente</label>
-					<select name="docente" id="docente" class="form-control"></select>
-				</div>
-			</div>
-			<div class="col-md-2">
-				<div class="form-group">
-					<label for="">Regimen</label>
-					<select name="regimen" class="form-control">
-						<option value="Diurno">Diurno</option>
-						<option value="Vespertino">Vespertino</option>
-					</select>
+			<div class="col-md-5">  
+				<div class="panel panel-default">
+					<div class="panel-heading main-color-bg" style="background-color: #3498db;">
+						<h3 class="panel-title" style="background-color: #3498db;color: white;">Estudiantes</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-12">
+							<label>Listado de estudiantes</label>
+							<select multiple name="estudiantes" id="estudiantes" class="form-control" style="height: 112px;"></select>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-5">
-				<label>Estudiantes</label>
-				<select multiple name="estudiantes" id="estudiantes" class="form-control"></select>
-			</div>
-		</div>
-		
-		<br>
 </div>
 
  <div class="modal-footer">

@@ -1,0 +1,107 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Carreras{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+      <h2>Carreras</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="{% url 'contenidos:carreraCreate' %}" class="btn btn-success" data-toggle="modal" data-target="#myModalCreate"><i class="fa fa-plus"></i> Nueva Carrera</a>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <table id="datatable" class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Carrera Universitaria</th>
+                <th>Asignaturas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for carrera in carreras %}
+              <tr>
+                <td> {{ carrera.codigo_carrera }} </td>
+                <td> {{ carrera.carrera }} </td>
+                <td> {{ carrera.asignatura_set.all.count }} </td>
+                <td>
+                  <a href="{% url 'contenidos:carreraUpdate' carrera.pk %}" class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#myModalCreate"><i class="glyphicon glyphicon-edit"></i><small> Editar</small></a>
+                  <a href="{% url 'contenidos:carreraDelete' carrera.pk %}" class="btn btn-danger btn-xs" type="button" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-trash"></i><small> Eliminar</small></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+ <!-- MODAL CREATE -->
+ <div class="modal fade" id="myModalCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+
+ <!-- MODAL DE DETALLE -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+ <!-- MODAL DE Sesión -->
+ <div class="modal fade" id="myModalSesion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document" style="width: 1030px;">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+
+{% endblock %}
+
+{% block js %}
+<!-- Datatables -->
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+{% endblock %}

@@ -26,8 +26,8 @@
         {% if usuario %}
           <div class="col-md-12 col-sm-12 col-xs-12">
             <a href="{% url 'usuarios:registrar' %}" data-toggle="modal" data-target="#myModal" class="btn btn-success"><i class="fa fa-user-plus"></i> Agregar usuario</a>
-            <a href="{% url 'usuarios:upload' %}" class="btn btn-info" data-toggle="modal" data-target="#myModalMore">Importar usuarios</a>
-            <a style="text-align: right;" href="{% url 'usuarios:listar_estudiantes' %}" class="btn btn-primary">Estudiantes</a>
+            <a href="{% url 'usuarios:upload' %}" class="btn btn-info" data-toggle="modal" data-target="#myModalMore"><i class="fa fa-upload"></i> Importar usuarios</a>
+            <a style="text-align: right;" href="{% url 'usuarios:listar_estudiantes' %}" class="btn btn-primary"><i class="fa fa-user-md"></i> Estudiantes</a>
             <br>
             <br>
             <table id="datatable" class="table table-hover table-bordered">

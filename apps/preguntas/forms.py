@@ -25,7 +25,7 @@ class PreguntaForm(forms.ModelForm):
 		widgets = {
 			'asignatura': forms.Select(attrs={'class': 'form-control'}),
 			# 'contenido': forms.Select(attrs={'class': 'form-control'}),
-			'dificultad': forms.TextInput(attrs={'class': 'form-control'}),
+			'dificultad': forms.Select(attrs={'class': 'form-control'}),
 			'tipo_pregunta': forms.Select(attrs={'class': 'form-control'}),
 			'pregunta': forms.Textarea(attrs={'class': 'form-control'}),
 			'imagen_pregunta': forms.FileInput(attrs={'class': 'form-control'}),

@@ -1,0 +1,28 @@
+{% load bootstrap3 %}
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cerrar"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Actualizar carrera {{ carrera.codigo_carrera }}</h4>
+</div>
+
+<form action="/contenidos/actualizar-carrera/{{ carrera.pk }}/" method="POST"> {% csrf_token %}
+			<form role="form">
+	<div class="modal-body">
+		
+		<div class="row">{% bootstrap_form form %}</div>
+	<div class="modal-footer">
+	  <input type="submit" value="Guardar" class="btn btn-primary" >
+	  <button type="button" class="btn btn-danger" data-dismiss="modal" id="cerrar1">Cerrar</button>
+	</div>
+</form>
+
+
+{% block js %}
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+</script>
+{% endblock %}

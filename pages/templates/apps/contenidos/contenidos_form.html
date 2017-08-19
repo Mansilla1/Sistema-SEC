@@ -1,0 +1,248 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Asignatura{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+      <h2>Contenidos - {{ asignatura.nombre }}</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="row">
+          
+          <div class="col-md-12" id="formulario">
+            <div class="col-md-12">
+              <div class="col-md-6">  
+                <div class="panel panel-default">
+                  <div class="panel-heading main-color-bg" style="background-color: #3498db;">
+                    <h3 class="panel-title" style="background-color: #3498db;color: white;text-align: center;">Unidades</h3>
+                  </div>
+                  <div class="panel-body text-center">
+                    <button class="btn btn-primary" id="add_unidad"><i class="fa fa-plus"></i> Agregar Unidad</button>
+                    <!-- <button class="btn" id="add_unidad" style="background-color: #fcb045; color: white"><i class="fa fa-plus"></i> Editar Unidad</button> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">  
+                <div class="panel panel-default">
+                  <div class="panel-heading main-color-bg" style="background-color: #3498db;">
+                    <h3 class="panel-title" style="background-color: #3498db;color: white;text-align: center;">Contenidos</h3>
+                  </div>
+                  <div class="panel-body text-center">
+                    <button class="btn btn-primary" id="add_contenido"><i class="fa fa-plus"></i> Agregar Contenido</button>
+                    <!-- <button class="btn" id="add_contenido" style="background-color: #fcb045; color: white"><i class="fa fa-plus"></i> Editar Contenido</button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12" id="form_unidad" style="display: none">
+              <!-- <form action="" method="POST"> {% csrf_token %}
+                <input type="number" name="unidad" class="form-control" placeholder="1">
+                <input type="text" name="nombre" class="form-control" placeholder="Nombre unidad">
+                <input type="text" name="aprendizaje" class="form-control" placeholder="Objetivo de aprendizaje">
+
+                <input type="submit" class="btn btn-success" value="Guardar">
+                <button class="btn btn-danger" id="unidad_cancelar">Cancelar</button>
+              </form> -->
+              <form class="form-horizontal" role="form" action="" method="POST">{% csrf_token %}
+                <fieldset>
+                  <!-- Form Name -->
+                  <legend>Agregar Contenido</legend>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-2">
+                      <label>Numero unidad</label>
+                      <input type="number" name="unidad" class="form-control" placeholder="1" required="">
+                    </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label>Nombre unidad</label>
+                      <input type="text" name="nombre" class="form-control" placeholder="Nombre unidad" required="">
+                    </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label>Objetivo de aprendizaje</label>
+                      <input type="text" name="aprendizaje" class="form-control" placeholder="Objetivo de aprendizaje" required="">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="pull-right">
+                        <button class="btn btn-danger" id="unidad_cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            </div>
+            <div class="col-md-12" id="form_contenido" style="display: none;">
+              <!-- <form action="" method="POST">{% csrf_token %}
+                <select name="unidad" id="unidad_asignatura" class="form-control"></select>
+                <input type="text" name="contenido" class="form-control" placeholder="Nombre contenido">
+                <input type="text" name="aprendizaje_esperado" class="form-control" placeholder="Objetivo de aprendizaje">
+                
+                <input type="submit" class="btn btn-success" value="Guardar">
+                <button class="btn btn-danger" id="contenido_cancelar">Cancelar</button>
+              </form> -->
+              <form class="form-horizontal" role="form" action="" method="POST">{% csrf_token %}
+                <fieldset>
+                  <!-- Form Name -->
+                  <legend>Agregar Contenido</legend>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label>Seleccione unidad</label>
+                      <select name="unidad" id="unidad_asignatura" class="form-control"></select>
+                    </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-6">
+                      <label>Nombre contenido</label>
+                      <input type="text" name="contenido" class="form-control" placeholder="Nombre contenido">
+                    </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <label>Objetivo de aprendizaje</label>
+                      <input type="text" name="aprendizaje_esperado" class="form-control" placeholder="Objetivo de aprendizaje">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="pull-right">
+                        <button class="btn btn-danger" id="contenido_cancelar">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12">
+            {% if unidades %}
+              {% for unidad in unidades|dictsort:'unidad' %}
+              <div class="row">
+                <div class="col-md-6">
+                  <h5 style="font-weight: bold;">
+                    <a href="{% url 'contenidos:unidad_edit' unidad.pk %}" class="btn btn-primary btn-xs glyphicon glyphicon-edit" data-toggle="modal" data-target="#myModal" title="Editar unidad"></a>
+                    <a href="{% url 'contenidos:unidad_delete' unidad.pk %}" class="btn btn-danger btn-xs glyphicon glyphicon-minus-sign" data-toggle="modal" data-target="#myModal" title="Eliminar unidad"></a>
+                    Unidad {{ unidad.unidad }}: {{ unidad.nombre }}
+                  </h5>
+                  <ul>  
+                  {% for contenido in unidad.contenido_set.all %}
+                    <li>{{ contenido.contenido }}</li>
+                  {% endfor %}
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h5 style="font-weight: bold;">Resultado de aprendizaje</h5>
+                  <h5>{{ unidad.aprendizaje }}</h5>
+                  <ul>  
+                    <label for="">Aprendizaje(s) esperados</label>
+                  {% for contenido in unidad.contenido_set.all %}
+                    {% if contenido.aprendizaje_esperado %} <li>{{ contenido.aprendizaje_esperado }}</li> {% endif %}
+                  {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <p>No hay unidades en la asignatura</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+
+
+     </div>
+   </div>
+ </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $('#add_unidad').on('click', function(e){
+    e.preventDefault();
+    $('#add_contenido').attr('disabled', 'disabled')
+    $('#form_unidad').css({'display': ''})
+  });
+
+  $('#add_contenido').on('click', function(e){
+    e.preventDefault();
+    $('#add_unidad').attr('disabled', 'disabled')
+    $('#form_unidad').css({})
+    $('#form_contenido').css({'display': ''})
+  });
+
+  $('#unidad_cancelar').on('click', function(e){
+    e.preventDefault();
+    $('#add_contenido').attr('disabled', false)
+    $('#form_unidad').css({'display': 'none'})
+
+
+  });
+
+  $('#contenido_cancelar').on('click', function(e){
+    e.preventDefault();
+    $('#add_unidad').attr('disabled', false)
+    $('#form_contenido').css({'display': 'none'})
+
+
+  });
+</script>
+
+<script>
+  // Select de contenidos
+  $.ajax({
+    data: {'asignatura': {{ asignatura.pk }}},
+    url: '{% url "evaluaciones:ContenidoFiltroAjax" %}',
+    type: 'GET',
+    success: function(data){
+      var html = '<option value"" selected="" disabled="">Nombre unidad</option>'
+      for (var i = 0; i<data.length; i++){
+      html += '<option value="'+data[i].pk+'">'+ data[i].fields.nombre +'</option>'
+      }
+      $('#unidad_asignatura').append(html)
+    },
+    error: function(){
+      console.log('nope')
+    },
+  });
+</script>
+{% endblock %}

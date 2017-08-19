@@ -23,7 +23,8 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, cm
 import random
-
+import datetime
+from django.utils import timezone
 
 from .models import *
 from .forms import *
@@ -45,11 +46,13 @@ def evaluacion_list(request):
 
 
 def evaluacion_step1(request):
+	now = datetime.datetime.now()
 	if request.POST:
 		form = EvaluacionForm(request.POST)
 		if form.is_valid():
 			form = form.save(commit=False)
 			form.docente = request.user
+			form.cronometro_inicio = now
 			form.save()
 
 		return redirect('evaluaciones:evaluacion_step2', form.pk)
@@ -96,6 +99,9 @@ def evaluacion_step2(request, evaluacion_id):
 	evaluacion = Evaluacion.objects.get(id=evaluacion_id)
 	preguntas = Pregunta.objects.filter(asignatura=evaluacion.curso.asignatura.id, status=True).order_by('?')
 
+	evaluacion.preguntas = ''
+	evaluacion.contenidos = ''
+
 	if request.method == 'GET':
 		form = EvaluacionForm(instance=evaluacion)
 	else:
@@ -115,9 +121,8 @@ def evaluacion_step2(request, evaluacion_id):
 					obj_pregunta.cant_usada = obj_pregunta.cant_usada + 1
 					obj_pregunta.save()
 					# ---------------------------
-
-					# contenidos = Unidad.objects.filter()
-					# evaluacion.contenidos.add
+					form.contenidos.add(obj_pregunta.unidad)
+				
 				except:
 					pass
 			form = form.save()
@@ -207,6 +212,7 @@ def evaluacion_step4(request, evaluacion_id):
 	return render(request, 'apps/evaluaciones/evaluacion_step4.html', context)
 
 def evaluacion_rapida_step1(request):
+	now = timezone.now()
 	if request.POST:
 		form = EvaluacionForm(request.POST)
 
@@ -234,25 +240,69 @@ def evaluacion_rapida_step1(request):
 		for c in contenidos:
 			contents += [c]
 
+		pregunta = []
 
-		for i in range(p1): #	preguntas de desarrollo
-			p_desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
-				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
-			desarrollo += list(p_desarrollo)
+		# while (len(desarrollo)+len(alternativas)+len(pareados)) <= (p1+p2+p3):
+
+		while len(desarrollo) < p1:
+			for i in range(p1): #	preguntas de desarrollo
+				p_desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
+					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+				desarrollo += list(p_desarrollo)
+
+			if p1 == 0:
+				break
 
 
-		for i in range(p2): #	preguntas de alternativas
-			p_alternativas = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', 
-				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
-			p_alternativas = list(p_alternativas)
-			alternativas += p_alternativas
+		while len(alternativas) < p2:
+			for i in range(p2): #	preguntas de alternativas
+				p_alternativas = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', 
+					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+				p_alternativas = list(p_alternativas)
+				alternativas += p_alternativas
 
-		for i in range(p3): #	preguntas de terminos pareados
-			p_pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
-				asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
-			p_pareados = list(p_pareados)
-			pareados += p_pareados
+			if p2 == 0:
+				break
 
+				
+		while len(pareados) < p3:
+			for i in range(p3): #	preguntas de terminos pareados
+				p_pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
+					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
+				p_pareados = list(p_pareados)
+				pareados += p_pareados
+
+			if p3 == 0:
+				break
+
+
+		desarrollo = list(desarrollo)
+		alternativas = list(alternativas)
+		pareados = list(pareados)
+
+		#generar lista con todas las preguntas 
+		pregunta = desarrollo, alternativas, pareados
+		pregunta = list(pregunta)
+		print pregunta
+		# # cortar el loop
+		# if len(desarrollo) == 0 and len(alternativas) == 0 and len(pareados) == 0:
+		# 	break
+
+		# len_d = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', asignatura=asignatura, status=True,).count()
+		# len_a = Pregunta.objects.filter(tipo_pregunta='Seleccion multiple', asignatura=asignatura, status=True,).count()
+		# len_p = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', asignatura=asignatura, status=True,).count()
+		# if p1 > len_d:
+		# 	p1 = len_d
+		# 	if p1 == 0:
+		# 		break
+		# if p2 > len_a:
+		# 	p2 = len_a
+		# 	if p2 == 0:
+		# 		break
+		# if p3 > len_p:
+		# 	p3 = len_p
+		# 	if p3 == 0:
+		# 		break
 
 		# desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
 		# 	asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p1]
@@ -261,16 +311,6 @@ def evaluacion_rapida_step1(request):
 		# pareados = Pregunta.objects.filter(tipo_pregunta='Terminos pareados', 
 		# 	asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:p3]
 
-		desarrollo = list(desarrollo)
-		print desarrollo
-		alternativas = list(alternativas)
-		pareados = list(pareados)
-
-		#generar lista con todas las preguntas 
-		pregunta = desarrollo, alternativas, pareados
-		pregunta = list(pregunta)
-		print pregunta
-		# print pregunta
 		# ========================== #
 		tipo_evaluacion = request.POST.get('tipo_evaluacion') # get tipo de evaluación
 		a = Asignatura.objects.get(id=asignatura)
@@ -288,6 +328,7 @@ def evaluacion_rapida_step1(request):
 			form.titulo = titulo
 			form.instrucciones = instucciones
 			form.datos = nombre_usuario
+			form.cronometro_inicio = now
 			# if not puntajes:
 			# 	form.puntaje_total = 100
 			form.save()
@@ -313,6 +354,12 @@ def evaluacion_rapida_step1(request):
 					obj_pregunta.save()
 					form.preguntas.add(p)
 				# ---------------------------
+
+				for unidad in contenidos:
+					try: 
+						form.contenidos.add(unidad)
+					except:
+						pass
 
 		preguntas = form.preguntas.all()
 
@@ -414,13 +461,39 @@ def evaluacion_detail(request, evaluacion_id):
 	preguntas = evaluacion.preguntas.all()
 	puntaje = PuntajePregunta.objects.filter(evaluacion=evaluacion.id)
 
+	# tiempos
+	t1 = evaluacion.creado_en
+	t2 = evaluacion.ultima_modificacion
+	tiempo = t2-t1
+	minutos = tiempo.seconds%3600 // 60
+	print t1
+	print t2
+	print tiempo
+
+
 	context = {
 		'evaluacion': evaluacion,
 		'preguntas': preguntas,
 		'puntaje': puntaje,
+		'tiempo': tiempo,
+		'minutos': minutos
 	}
 
 	return render(request, 'apps/evaluaciones/evaluacion_detail.html', context)
+
+def descartar_evaluacion(request, evaluacion_id):
+	evaluacion = Evaluacion.objects.get(id=evaluacion_id)
+
+	if request.POST:
+		evaluacion.descartada = True
+		evaluacion.save()
+		return redirect('evaluaciones:listar_evaluacion')
+
+	context = {
+		'evaluacion': evaluacion,
+	}
+
+	return render(request, 'apps/evaluaciones/descartar_evaluacion.html', context)
 
 #	Excel
 def calificaciones(request, evaluacion_id):
@@ -564,14 +637,19 @@ def get_calificaciones(request, evaluacion_id):
 			
 
 			# CALIFICACION POR ALUMNO
-			form3 = EstudianteCalificacionForm()
-			form3 = form3.save(commit=False)
-			form3.evaluacion = evaluacion
-			form3.calificacion = form
-			get_estudiante = Estudiante.objects.get(rut=estudiantes[j])
-			form3.estudiante = get_estudiante
-			print "-" * 100
-			form3.save()
+			try:
+				estudiante_existe = EstudianteCalificacion.objects.get(evaluacion=evaluacion, estudiante__rut=estudiantes[j])
+				estudiante_existe.calificacion = form
+				estudiante_existe.save()
+			except:
+				form3 = EstudianteCalificacionForm()
+				form3 = form3.save(commit=False)
+				form3.evaluacion = evaluacion
+				form3.calificacion = form
+				get_estudiante = Estudiante.objects.get(rut=estudiantes[j])
+				form3.estudiante = get_estudiante
+				print "-" * 100
+				form3.save()
 			# estudiantes[j].evaluaciones.add(evaluacion)
 			# estudiantes[j].calificaciones.add(form)
 			j+=1

@@ -1,133 +1,369 @@
-{% load static %}
+{% extends 'bases/base.html' %}
+{% load staticfiles %}
+{% block title %}Editar pregunta{% endblock %}
 {% load thumbnail %}
-{% load crispy_forms_tags %}
-<div class="modal-header">
-  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  <h4 class="modal-title" id="myModalLabel">Editar pregunta {{ pregunta.pk }}</h4>
-</div>
-<div class="modal-body">
-	<h4>
-		Se le ha encontrado una <strong>observación</strong> a su pregunta <br>
-		<small><strong>Favor de corregir la pregunta propuesta</strong></small>
-	</h4>
-	<p><strong>Observación:</strong> <i>{{ pregunta.observacion }}</i> </p>
-  
-  <form action="/preguntas/pregunta-editar/{{ pregunta.pk }}/" method="POST" enctype="multipart/form-data"> {% csrf_token %}
-    <div id="formulario" style="display: none !important">{{ form }}</div>
-    <div class="row">
-      <div class="col-md-6">
-        <label for="">Asignatura</label>
-        {{ form.asignatura }}
-      </div>
-      <div class="col-md-6">
-        <label for="">Contenido</label>
-        {{ form.contenido }}
-      </div>
-    </div>
-    <br>
-    
-    <div class="row">
-      <div class="col-md-6">
-        <label for="">Dificultad</label>
-        <select name="dificultad" id="id_dificultad" class="form-control">
-          <option value="10">Básico</option>
-          <option value="20">Intermedio</option>
-          <option value="30">Avanzado</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <label for="">Tipo de respuesta</label>
-        {{ form.tipo_pregunta }}
-      </div>
-    </div>
-    <br>
 
-    <div class="row">
-      <div class="col-md-8">
-        <label for="">Pregunta</label>
-        {{ form.pregunta }}
-      </div>
-      <div class="col-md-4">
-        <label for="">Imagen</label>
-        {{ form.imagen_pregunta }}
-      </div>
-    </div>
-    <br>
+{% block css %}
+<style>
+  pre {
+    background-color: #fff;
+    border: none;
+    font-size: 13px;
+    font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+  }
+  .form-control {
+    font-size: 12px;
+  }
+</style>
+{% endblock %}
 
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading main-color-bg">
+    <h3 class="panel-title">Editar pregunta {{ pregunta.pk }}</h3>
+  </div>
+  <div class="panel-body">
+    <h4>
+      Se le ha encontrado una <strong>observación</strong> a su pregunta <br>
+      <small><strong>Favor de corregir la pregunta propuesta</strong></small>
+    </h4>
+    <p><strong>Observación:</strong> <i>{{ pregunta.observacion }}</i> </p>
+    <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+    <!-- <div id="formulario" style="display: none !important">{{ form }}</div> -->
+      <div class="col-md-12">  
+        <div class="panel panel-default">
+          <div class="panel-heading main-color-bg" style="background-color: #3498db;">
+            <h3 class="panel-title" style="background-color: #3498db;color: white;">Contenidos</h3>
+          </div>
+          <div class="panel-body">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="">Asignatura</label>
+                  <select id="id_asignatura" name="asignatura" class="form-control" readonly>
+                    <option value="{{ pregunta.asignatura.pk }}">{{ pregunta.asignatura.codigo }} - {{ pregunta.asignatura.nombre }}</option>
+                  </select>
+                </div>
+              </div>
 
-    {% if pregunta.tipo_pregunta == 'Desarrollo' %}
-      <div class="row">
-        {% for respuesta in respuestas %}
-            <div class="col-md-8">
-              <label for="">Respuesta</label>
-              <textarea name="" id="" cols="30" rows="10" class="form-control">{{ respuesta.respuesta }}</textarea>
+              <div class="col-md-4">
+                <!-- EL SELECT DE CONTENIDOS -->
+                <div id="contenidos" class="form-group">
+                  <label>Unidad</label>
+                  <select id="unidad" name="unidad" class="form-control" required="" readonly>
+                    <option selected="{{ pregunta.unidad.pk }}" disabled>{{ pregunta.unidad.nombre }}</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="id_dificultad">Nivel de dificultad</label>
+                  <select name="dificultad" id="id_dificultad" class="form-control">
+                    <option value="Basica">Básica</option>
+                    <option value="Intermedia">Intermedia</option>
+                    <option value="Avanzada">Avanzada</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="id_tipo_pregunta">Tipo Pregunta</label>
+                  <select id="id_tipo_pregunta" name="tipo_pregunta" required="" class="form-control" readonly>
+                    <option value="Pregunta de desarrollo">Desarrollo</option>
+                    <option value="Seleccion multiple">Selección múltiple</option>
+                    <option value="Terminos pareados">Términos pareados</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label>Contenidos</label>
+                  <select multiple="" name="contenido" id="sesionesList" class="form-control" readonly>
+                    {% for contenido in pregunta.contenido.all %}
+                      <option value="{{ pregunta.contenido.pk }}">{{ contenido.contenido }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+          </div>
+          <br>
+        </div>
+      </div>
+      <div class="col-md-12">  
+        <div class="panel panel-default">
+          <div class="panel-heading main-color-bg" style="background-color: #3498db;">
+            <h3 class="panel-title" style="background-color: #3498db;color: white;">Pregunta</h3>
+          </div>
+          <div class="panel-body">
+            <div class="col-md-12">
+              <!-- Pregunta -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <h5><label for="">Pregunta:</label></h5>
+                    <textarea cols="40" id="id_pregunta" name="pregunta" required="" rows="4" class="form-control">{{ pregunta.pregunta|linebreaksbr }}</textarea>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="col-md-6">
+                    {% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
+                      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+                    {% endthumbnail %}
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <h5><strong>Adjuntar imagen</strong></h5>
+                      <input id="id_imagen_pregunta" name="imagen_pregunta" type="file">
+                    </div>
+                  </div>
+                </div>
+              <!-- Fin Pregunta -->
+
+              <!-- Respuestas -->
+              <div id="respuesta">
+                <input type="hidden" name="cantidad_respuestas" value="40">
+                <!-- <input type="hidden" value="2" id="pivote"> -->
+                <!-- Respuesta Desarrollo -->
+                {% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
+                  <div id="desarrollo">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <h5><label>Respuesta:</label></h5>
+                            <textarea cols="40" name="respuesta_0" rows="4" class="form-control" >{{ respuestas.respuesta|linebreaksbr }}</textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="col-md-6">
+                            {% thumbnail respuestas.imagen_respuesta "350x260" crop="center" as im %}
+                              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
+                            {% endthumbnail %}
+                          </div>
+                          <div class="col-md-6">
+                            <h5><strong>Adjuntar imagen</strong></h5>
+                            <input name="imagen_respuesta_0" type="file">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <!-- Fin Respuesta Desarrollo -->
+
+                <!-- Respuesta Alternativas -->
+                {% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
+                  <div id="alternativas">
+                    <!-- 1 -->
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="col-md-12">
+                          <button id="respuesta_plus" class="btn btn-default"><i class="fa fa-plus"></i> Agregar Alternativas</button>
+                        </div>
+                      </div>
+                      <div class="col-md-12" id="alternativas_respuestas">
+                        <div class="col-md-12">
+                          <div class="col-md-1">
+                            <div class="form-group">
+                              <h5><label>Correcta:</label></h5>
+                              <input name="status_respuesta_1" type="checkbox">
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <h5><label>Respuesta:</label></h5>
+                              <input type="text" name="respuesta_1" class="form-control">
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <br>
+                            <br>
+                              <input name="imagen_respuesta_1" type="file">
+                            <!-- <label class="btn btn-success"><i class="fa fa-file-image-o"></i>
+                              <br><br>
+                              <input name="imagen_respuesta_1" type="file" style="display: none;">
+                            </label> -->
+                          </div>
+                          <div class="col-md-1">
+                            <br>
+                            <br>
+                            <a href="#" id="respuesta_remove" style="color:red;"><i class="fa fa-close"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <!-- Fin Respuesta Alternativas -->
+
+                <!-- Respuesta Términos Pareados -->
+                {% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
+                  <div id="pareados">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="col-md-12">
+                          <button id="respuesta_plus2" class="btn btn-default"><i class="fa fa-plus"></i> Agregar Fila</button>
+                        </div>
+                      </div>
+                      <div class="col md-12">
+                        <div class="col-md-5"><h4 class="text-center">Fila "A"</h4></div>
+                        <div class="col-md-7"><h4 class="text-center">Fila "B"</h4></div>
+                      </div>
+
+                      <div class="col-md-12" id="pareados_respuesta">
+                        <div id="resps">
+                          <div class="col-md-5">
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                <br><br>
+                                <h5 class="text-center"><strong>a.</strong></h5>
+                              </div>
+                            </div>
+
+                            <div class="col-md-11">
+                              <div class="form-group">
+                                <h5><label>Respuesta:</label></h5>
+                                <input type="text" name="respuesta_11" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-md-7">
+                            <div class="col-md-2">
+                              <div class="form-group">
+                                <h5><label>Opción</label></h5>
+                                <input type="text" name="opcion_12" class="form-control" maxlength="1">
+                              </div>
+                            </div>
+
+                            <div class="col-md-9">
+                              <div class="form-group">
+                                <h5><label>Respuesta:</label></h5>
+                                <input type="text" name="respuesta_12" class="form-control">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <br><br>
+                              <!-- <a title="Eliminar" href="#" id="respuesta_remove2" style="color:red;"><i class="fa fa-close"></i></a> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                {% endif %}
+                <!-- Fin Respuesta Términos Pareados -->
+              </div>
+              <!-- Fin Respuestas -->
+              <br>
             </div>
-            <div class="col-md-4">
-              <label for="">Imagen respuesta</label>
-              <input type="file" class="form-control">
-            </div>
-        {% endfor %}
-      </div>
-
-    {% elif pregunta.tipo_pregunta == 'Alternativas' %}
-      <div class="row">
-        <div class="col-md-12">
-          <label for="">Alternativas</label>
-          {% for respuesta in respuestas %}
-              <input type="text" value="{{ respuesta.respuesta }}">
-          {% endfor %}
+          </div>
+          <br>
         </div>
       </div>
 
-    {% elif pregunta.tipo_pregunta == 'Pareados' %}
-        <div class="row">
-          <div class="col-md-12">
-            <h5><strong>Respuestas:</strong></h5>
-          </div>
-          <div class="col-md-6">
-            <h4 class="text-center">Fila "A"</h4>
-          </div>
-          <div class="col-md-6">
-            <h4 class="text-center">Fila "B"</h4>
-          </div>
-          {% for respuesta in respuestas %}
-          <div class="col-md-6">
-            <div class="col-md-2">
-              <strong>{{ respuesta.opcion }}.</strong>
-            </div>
-            <div class="col-md-10">
-              <p>{{ respuesta.respuesta }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-    {% endif %}
-    
-    <br>
-    <br>
-    <div class="row">
-      <div class="col-md-12">
-        <input type="submit" value="Guardar" class="btn btn-success">
+      <!-- Botón Finalizar -->
+      <div class="col-md-12 text-right">
+        <input type="submit" value="Finalizar" id="submit" class="btn btn-success">
       </div>
-    </div>
-  </form>
-
-	
-	<br>
+    </form>
+  </div>
+  <br>
 </div>
 
-<div class="modal-footer">
-  <button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-</div>
+{% endblock %}
 
 {% block js %}
+
+<!-- Get data -->
 <script>
-  $('#cerrar').on('click', function(){
-    location.reload();
-  });
-  $('#cerrar2').on('click', function(){
-    location.reload();
+  $(document).ready(function(){
+    // obtener data
+    var dificultad = '{{ pregunta.dificultad }}'
+    var tipo_pregunta = '{{ pregunta.tipo_pregunta }}'
+    console.log(asignatura)
+
+
+    // Seleccionar data
+    $('#id_dificultad option[value="'+dificultad+'"]').attr("selected",true)
+    $('#id_tipo_pregunta option[value="'+tipo_pregunta+'"]').attr("selected",true)
+
   });
 </script>
 
+<!-- Tipo de preguntas -->
+<!-- <script>
+  $('#desarrollo').show();
+  $('#alternativas').hide();
+  $('#pareados').hide();
+
+  var x = 2
+  var y1 = 13
+  var y2 = 14
+  var abecedario = ['a','b','c','d','e','f','g','h','i','j','k']
+  var pivote = 0
+
+  $('#id_tipo_pregunta').on('change', function() {
+    var tipoPregunta = $('#id_tipo_pregunta option[value]:selected').val();
+    // var value = $('[name=cantidad_respuestas]').val();
+    // value = parseInt(value);
+
+    if (tipoPregunta == 'Pregunta de desarrollo') {
+      $('#desarrollo').show();
+      $('#alternativas').hide();
+      $('#pareados').hide();
+    }else if (tipoPregunta == 'Seleccion multiple') {
+      $('#desarrollo').hide();
+      $('#alternativas').show();
+      $('#pareados').hide();
+
+      $('#respuesta_plus').on('click', function(e){
+        e.preventDefault();
+        if(x<11){
+          $('#alternativas_respuestas').append('<div id="resps"><div class="col-md-12"><div class="col-md-1"><div class="form-group"><h5><label>Correcta:</label></h5><input name="status_respuesta_'+x+'" type="checkbox"></div></div><div class="col-md-6"><div class="form-group"><h5><label>Respuesta:</label></h5><input type="text" name="respuesta_'+x+'" class="form-control"></div></div><div class="col-md-4"><br><br><input name="imagen_respuesta_'+x+'" type="file"></div><div class="col-md-1"><br><br><a title="Eliminar" href="#" id="respuesta_remove" style="color:red;"><i class="fa fa-close"></i></a></div></div></div>')
+
+        }else{
+          alert("no se permite agregar más alternativas")
+        }
+        x++;
+      });
+
+      $('#alternativas_respuestas').on('click', '#respuesta_remove',function(e){
+        e.preventDefault();
+        // $(this).remove();
+        $(this).parent('div').parent('div div div').remove();
+        x--;
+        console.log(x);
+      });
+
+    }else if (tipoPregunta == 'Terminos pareados') {
+      $('#desarrollo').hide();
+      $('#alternativas').hide();
+      $('#pareados').show();
+
+      $('#respuesta_plus2').on('click', function(e){
+        e.preventDefault();
+        if(y1<24){
+          $('#pareados_respuesta').append('<div class="col-md-5"><div class="col-md-1"><div class="form-group"><br><br><h5 class="text-center"><strong>'+abecedario[pivote+1]+'.</strong></h5></div></div><div class="col-md-11"><div class="form-group"><h5><label>Respuesta:</label></h5><input type="text" name="respuesta_'+y1+'" class="form-control"></div></div></div><div class="col-md-7"><div class="col-md-2"><div class="form-group"><h5><label>Opción</label></h5><input type="text" name="opcion_'+y2+'" class="form-control" maxlength="1"></div></div><div class="col-md-9"><div class="form-group"><h5><label>Respuesta:</label></h5><input type="text" name="respuesta_'+y2+'" class="form-control"></div></div><div class="col-md-1"><br><br><a href="#" id="respuesta_remove2" style="color:red;"><i class="fa fa-close"></i></a></div></div>');
+
+          pivote++;
+          y1 = y1+2;
+          y2 = y2+2;
+        }else{
+          alert("no se permite agregar más filas")
+        }
+      });
+      $('#pareados_respuesta').on('click', '#respuesta_remove2',function(e){
+        e.preventDefault();
+        $(this).parent('div').parent("div").remove();
+        pivote--;
+        y1 = y1-2;
+        y2 = y2-2;
+      });
+    }
+
+  });
+</script> -->
 {% endblock %}

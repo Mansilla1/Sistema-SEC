@@ -12,9 +12,7 @@
 	<meta name="author" content="">
 	 <link href="{% static 'app/css/styles_pdf.css' %}" rel="stylesheet">
 	 <style type="text/css">
-	 *{
-	 	/*border: 1px solid black;*/
-	 }
+
 	 p {
 	 	font-weight: normal;
 	 	margin-bottom: 20px;
@@ -30,30 +28,31 @@
 	 .tg .tg-8fhc{font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:left;vertical-align:top;text-align: right;}
 	 .tg .tg-0qhn{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;}
 	 .tg .tg-9hbo{font-weight:bold;vertical-align:top;}
+	 .tg .tg-s6z2{vertical-align: top;width: 30%;}
 	 </style>
 </head>
 <body>
 	<table class="tg">
 	  <tr>
-	    <th class="tg-8370" colspan="5">Pauta de corrección - {{ evaluacion.titulo }}</th>
-	  </tr>
-	  <tr>
-	    <td class="tg-yw4l" colspan="5"></td>
-	  </tr>
-	  <tr>
-	    <td class="tg-lz1j" colspan="2"></td>
+	  	<td class="tg-lz1j" colspan="2" style="text-align: left;"><img src="{% static 'img/unab.png' %}" alt="" width="70"></td>
 	    <td class="tg-8fhc"></td>
-	    <td class="tg-8fhc" colspan="2"><strong>Profesor(es):</strong> {{ evaluacion.datos }}</td>
+	    <td class="tg-8fhc" colspan="2" style="vertical-align: middle;"><strong>Profesor(es):</strong> {{ evaluacion.datos }}</td>
 	  </tr>
 	  <tr>
 	    <td class="tg-yw4l" colspan="5"></td>
 	  </tr>
 	  <tr>
-	    <td class="tg-0qhn">Nombre: </td>
+	    <th class="tg-8370" colspan="5" style="font-size:14px;">Pauta de corrección {{ evaluacion.titulo }}</th>
+	  </tr>
+	  <tr>
+	    <td class="tg-yw4l" colspan="5"></td>
+	  </tr>
+	  <tr>
+	    <td class="tg-0qhn">Nombre:________________________________________________________ </td>
 	    <td class="tg-e3zv"></td>
 	    <td class="tg-0qhn"></td>
-	    <td class="tg-0qhn">Run:</td>
-	    <td class="tg-9hbo">Fecha:</td>
+	    <td class="tg-0qhn">Run:________________</td>
+	    <td class="tg-9hbo">Fecha:______________</td>
 	  </tr>
 	  <tr>
 	    <td class="tg-031e" colspan="5"></td>
@@ -70,12 +69,12 @@
 		  {% for pregunta in preguntas %}
 		<tr>
 			{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
-		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
 				{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
 				  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
 				{% endthumbnail %}</p>
 				{% for respuesta in pregunta.respuesta_set.all %}
-					<p>{{ respuesta.respuesta }}</p>
+					<p>{{ respuesta.respuesta|linebreaksbr }}</p>
 					{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
 					  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
 					{% endthumbnail %}</p>
@@ -83,7 +82,7 @@
 		    </td>
 			
 			{% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
-		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
 			    
 				{% for respuesta in pregunta.respuesta_set.all %}
 					{% if respuesta.status_respuesta == True %}
@@ -101,12 +100,24 @@
 			</td>
 		
 			{% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
-		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+		    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
+				<table>
+		    		<tr>
+		    			<th class="tg-yvvu" colspan="2"><h4>Fila A</h4></th>
+		    			<th class="tg-o4ll" colspan="2"><h4>Fila B</h4></th>
+		    		</tr>
+		    		<tr>
 				{% for respuesta in pregunta.respuesta_set.all %}
-				
-						{{ respuesta.opcion }}.
-						{{ respuesta.respuesta }}
-				{% endfor %}
+	    			{% if respuesta.status_respuesta == False %}
+		    			<td class="tg-s6z2" style="text-align: right;">{{ respuesta.opcion}}.</td>
+		    			<td class="tg-s6z2" style="font-weight: normal;">{{ respuesta.respuesta }}</td>
+	    			{% else %}
+		    			<td class="tg-s6z2" style="text-align: right;">{{ respuesta.opcion}}.</td>
+		    			<td class="tg-yw4l" style="font-weight: normal;">{{ respuesta.respuesta }}</td>
+		    			</tr>
+	    			{% endif %}
+		    	{% endfor %}
+		    	</table>
 			</td>
 										
 			{% endif %}

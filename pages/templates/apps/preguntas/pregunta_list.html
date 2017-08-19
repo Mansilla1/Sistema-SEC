@@ -72,7 +72,7 @@
                   <p>Corregida</p>
                 </td>
               {% endif %} {% if usuario == 'Docente' and pregunta.usuario == user %} {% if pregunta.observacion %}
-              <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaEditar' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModalEditar"><button class="btn btn-primary"> Editar</button></a></td>
+              <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaEditar' pregunta.pk %}" type="button"><button class="btn btn-primary"> Editar</button></a></td>
               {% else %}
               <td><a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-info btn-xs">Detalle</button></a></td>
               {% endif %} {% else %}

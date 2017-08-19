@@ -18,7 +18,7 @@
 			<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-		        <button class="btn btn-success" data-toggle="modal" data-target="#myModalE">Nueva evaluación</button>
+		        <button class="btn btn-success" data-toggle="modal" data-target="#myModalE"><i class=" glyphicon glyphicon-plus"></i> Nueva evaluación</button>
 		        <br>
 		        <br>
 		        <table id="datatable" class="table table-hover table-bordered">
@@ -36,7 +36,7 @@
 					{% if evaluaciones %}
 					<tbody>
 						{% for evaluacion in evaluaciones|dictsort:"id" %}
-						{% if evaluacion.disponible == True %}
+						{% if evaluacion.disponible == True and evaluacion.descartada == False %}
 							<tr>
 								<td> {{ evaluacion.id }} </td>
 								<td>{% if evaluacion.titulo %} {{ evaluacion.titulo }} {% else %} {% if evaluacion.tipo_evaluacion == 'Otro' %} {{ evaluacion.tipo_evaluacion_otro }} {% else %} {{ evaluacion.tipo_evaluacion }} {% endif %}  {% endif %}</td>

@@ -1,0 +1,90 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% block title %}Configuración preguntas{% endblock %}
+
+{% block css %}
+<!-- Datatables -->
+  <link href="{% static 'app/js/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app/js/plugins/TableExport/tableexport.min.css' %}">
+  <style>
+    .button-default .xlsx {
+      background-color: green;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Configuración preguntas</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <h5>Cantidad máxima que debe ser utilizada una pregunta antes de ser reciclada</h5>
+          <form action="" method="GET">{% csrf_token %}
+            <div class="form-inline">
+              <input type="number" class="form-control" name="cant_utilizar" value="{{ contador }}">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            <h4>Preguntas recicladas</h4>
+            <table id="datatable" class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th># Código</th>
+                  <th>Línea de formación</th>
+                  <th># Cant. usada</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pregunta in preguntas %}
+                <tr>
+                  <td>#{{ pregunta.id }}</td>
+                  <td> {{ pregunta.asignatura.eje_curricular }}</td>
+                  <td> {{ pregunta.cant_usada }}</td>
+                  <td> <a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-primary btn-xs">Detalles</button></a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{% static 'app/js/plugins/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'app/js/plugins/TableExport/FileSaver.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/Blob.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/xlsx.core.min.js' %}"></script>
+<script src="{% static 'app/js/plugins/TableExport/tableexport.min.js' %}"></script>
+
+<script>
+$("table").tableExport({formats: ["xlsx"],    });
+</script>
+
+<script>
+  $('a[title="Agregar asignaturas (Docente)"]').tooltip();
+  $('a[title="Agregar asignaturas (Estudiante)"]').tooltip();
+</script>
+{% endblock %}

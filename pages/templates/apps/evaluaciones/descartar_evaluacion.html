@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <button id="cerrar" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Descartar evaluación</h4>
+</div>
+
+<form action="/evaluaciones/descartar/{{ evaluacion.pk }}/" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+	<div class="modal-body">
+		<div class="row">
+			¿Está seguro que desea descartar la evaluación?, tenga en consideración de que si descarta la evaluación, <b>no podrá</b> acceder nuevamente a ella.
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="submit" value="Descartar" name="descartar" class="btn btn-default">
+	  	<button id="cerrar2" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+	</div>
+</form>
+
+
+{% block js %}
+<script>
+  $('#cerrar').on('click', function(){
+    location.reload();
+  });
+  $('#cerrar2').on('click', function(){
+    location.reload();
+  });
+</script>
+{% endblock %}
+

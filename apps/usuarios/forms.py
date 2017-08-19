@@ -22,7 +22,7 @@ class RegistroForm(UserCreationForm):
 			'password2',
 		]
 		widgets = {
-			'username': forms.TextInput(attrs={'class': 'form-control'}),
+			'username': forms.TextInput(attrs={'class': 'form-control', 'readonly': ''}),
 			# 'first_name': forms.TextInput(attrs={'class': 'form-control'}),
 			# 'last_name': forms.TextInput(attrs={'class': 'form-control'}),
 			# 'email': forms.TextInput(attrs={'class': 'form-control'}),

@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 
 class EvaluacionAdmin(admin.ModelAdmin):
-	list_display = ('id', 'curso', 'fecha_evaluacion', 'docente', 'creado_en', 'ultima_modificacion', 'disponible')
+	list_display = ('id', 'curso', 'fecha_evaluacion', 'docente', 'creado_en', 'ultima_modificacion', 'disponible', 'cronometro_inicio')
 	list_editable = ('disponible',)
 	list_filter = ('disponible','curso__asignatura__nombre')
 	search_fields = ('curso__asignatura__nombre', 'docente__username')

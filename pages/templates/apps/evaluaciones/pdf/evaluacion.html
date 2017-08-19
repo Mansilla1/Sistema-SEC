@@ -18,57 +18,65 @@
 	 p {
 	 	font-weight: normal;
 	 }
-	 .tg  {border-collapse:collapse;border-spacing:0;}
-	 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:2px 2px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-	 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:2px 2px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-	 .tg .tg-8370{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;background-color:#ffffff;color:#000000;text-align:center;}
-	 .tg .tg-lz1j{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:center;}
-	 .tg .tg-e3zv{font-weight:bold;}
-	 .tg .tg-yw4l{vertical-align:top;}
-	 .tg .tg-8fhc{font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:left;vertical-align:top;text-align: right;}
-	 .tg .tg-0qhn{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;}
-	 .tg .tg-9hbo{font-weight:bold;vertical-align:top;}
+	 .tga  {border-collapse:collapse;border-spacing:0;}
+	 .tga td{font-family:Arial, sans-serif;font-size:12px;padding:2px 2px;overflow:hidden;word-break:normal;}
+	 .tga th{font-family:Arial, sans-serif;font-size:12px;font-weight:normal;padding:2px 2px;overflow:hidden;word-break:normal;}
+	 .tga .tga-8370{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;background-color:#ffffff;color:#000000;text-align:center;}
+	 .tga .tga-lz1j{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:center;}
+	 .tga .tga-e3zv{font-weight:bold;}
+	 .tga .tga-yw4l{vertical-align:top;}
+	 .tga .tga-8fhc{font-family:"Trebuchet MS", Helvetica, sans-serif !important;text-align:left;vertical-align:top;text-align: right;}
+	 .tga .tga-0qhn{font-weight:bold;font-family:"Trebuchet MS", Helvetica, sans-serif !important;}
+	 .tga .tga-9hbo{font-weight:bold;vertical-align:top;}
+
+	 .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+	 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:2px 4px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+	 .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:2px 4px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+	 .tg .tg-s6z2{text-align:center;vertical-align: top;text-align: left;width: 30%;}
+	 .tg .tg-yvvu{font-weight:bold;background-color:#ffffff;color:#000000;text-align:center}
+	 .tg .tg-o4ll{font-weight:bold;background-color:#ffffff;vertical-align:top}
+	 .tg .tg-yw4l{vertical-align:top}
 	 </style>
 </head>
 <body>
-	<table class="tg">
+	<table class="tga">
 	  <tr>
-	    <th class="tg-8370" colspan="5">{{ evaluacion.titulo }}</th>
+	    <td class="tga-lz1j" colspan="2" style="text-align: left;"><img src="{% static 'img/unab.png' %}" alt="" width="70"></td>
+	    <td class="tga-8fhc"></td>
+	    <td class="tga-8fhc" colspan="2" style="vertical-align: middle;"><strong>Profesor(es):</strong> {{ evaluacion.datos }}</td>
 	  </tr>
 	  <tr>
-	    <td class="tg-yw4l" colspan="5"></td>
+	    <td class="tga-yw4l" colspan="5"></td>
 	  </tr>
 	  <tr>
-	    <td class="tg-lz1j" colspan="2"></td>
-	    <td class="tg-8fhc"></td>
-	    <td class="tg-8fhc" colspan="2"><strong>Profesor(es):</strong> {{ evaluacion.datos }}</td>
+	    <th class="tga-8370" colspan="5" style="font-size:14px;">{{ evaluacion.titulo }}</th>
 	  </tr>
 	  <tr>
-	    <td class="tg-yw4l" colspan="5"></td>
+	    <td class="tga-yw4l" colspan="5"></td>
 	  </tr>
 	  <tr>
-	    <td class="tg-0qhn">Nombre: </td>
-	    <td class="tg-e3zv"></td>
-	    <td class="tg-0qhn"></td>
-	    <td class="tg-0qhn">Run:</td>
-	    <td class="tg-9hbo">Fecha:</td>
+	    <td class="tga-0qhn">Nombre:________________________________________________________ </td>
+	    <td class="tga-e3zv"></td>
+	    <td class="tga-0qhn"></td>
+	    <td class="tga-0qhn">Run:________________</td>
+	    <td class="tga-9hbo">Fecha:______________</td>
 	  </tr>
 	  <tr>
-	    <td class="tg-031e" colspan="5"></td>
+	    <td class="tga-031e" colspan="5"></td>
 	  </tr>
 	  <tr>
-	    <td class="tg-e3zv" colspan="5">Intrucciones:</td>
+	    <td class="tga-e3zv" colspan="5">Intrucciones:</td>
 	  </tr>
 	  <tr>
-	    <td class="tg-031e" colspan="5">{{ evaluacion.instrucciones }}</td>
+	    <td class="tga-031e" colspan="5">{{ evaluacion.instrucciones }} </td>
 	  </tr>
 	  <tr>
-	    <td class="tg-yw4l" colspan="5"></td>
+	    <td class="tga-yw4l" colspan="5"></td>
 	  </tr>
 		  {% for pregunta in preguntas %}
 		  <tr>
 			{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
-			    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+			    <td class="tga-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
 					{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
 					  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
 					{% endthumbnail %}</p>
@@ -76,7 +84,7 @@
 			     <br><br><br><br></td>
 
 			{% elif pregunta.tipo_pregunta == 'Seleccion multiple' %}
-			    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+			    <td class="tga-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
 				    
 					{% for respuesta in pregunta.respuesta_set.all %}
 						<p>{{ respuesta.opcion }}. {{ respuesta.respuesta }}</p>
@@ -87,21 +95,27 @@
 				</td>
 
 			{% elif pregunta.tipo_pregunta == 'Terminos pareados' %}
-			    <td class="tg-e3zv" colspan="4">1. {{ pregunta.pregunta }}
+			    <td class="tga-e3zv" colspan="4">1. {{ pregunta.pregunta|linebreaksbr }}
+			    	<table class="tg">
+			    		<tr>
+			    			<th class="tg-yvvu" colspan="2"><h4>Fila A</h4></th>
+			    			<th class="tg-o4ll" colspan="2"><h4>Fila B</h4></th>
+			    		</tr>
+			    		<tr>
 					{% for respuesta in pregunta.respuesta_set.all %}
-					{{ respuesta.opcion }}. {{ respuesta.respuesta }}
-					{% endfor %}
-			
-					{% for respuesta in pregunta.respuesta_set.all %}
-					
-							{{ respuesta.opcion }}.
-							{{ respuesta.respuesta }}
-					{% endfor %}
-				</td>
-											
-
+		    			{% if respuesta.status_respuesta == False %}
+			    			<td class="tg-s6z2" style="text-align: right;">{{ respuesta.opcion}}.</td>
+			    			<td class="tg-s6z2" style="font-weight: normal;">{{ respuesta.respuesta }}</td>
+		    			{% else %}
+			    			<td class="tg-s6z2" style="text-align: right;">__.</td>
+			    			<td class="tg-yw4l" style="font-weight: normal;">{{ respuesta.respuesta }}</td>
+			    			</tr>
+		    			{% endif %}
+			    	{% endfor %}
+			    	</table>
+				</td>											
 			{% endif %}
-		    <td class="tg-9hbo">Puntaje: {% for puntaje in pregunta.puntajepregunta_set.all %} {% if puntaje.pregunta == pregunta and puntaje.evaluacion == evaluacion %} {{ puntaje.puntaje|floatformat:0|intcomma }} {% endif %} {% endfor %}pts.</td>
+		    <td class="tga-9hbo">Puntaje: {% for puntaje in pregunta.puntajepregunta_set.all %} {% if puntaje.pregunta == pregunta and puntaje.evaluacion == evaluacion %} {{ puntaje.puntaje|floatformat:0|intcomma }} {% endif %} {% endfor %}pts.</td>
 		    
 	  	</tr>
 	   	{% endfor %}

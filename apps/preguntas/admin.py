@@ -3,8 +3,8 @@ from django.contrib import admin
 from .models import *
 
 class PreguntaAdmin(admin.ModelAdmin):
-	list_display = ('id', 'asignatura', 'usuario', 'dificultad', 'tipo_pregunta', 'status', 'cant_usada')
-	list_editable = ('status',)
+	list_display = ('id', 'asignatura', 'usuario', 'dificultad', 'tipo_pregunta', 'status', 'cant_usada', 'rechazada')
+	list_editable = ('status', 'rechazada')
 	list_filter = ('status','asignatura__nombre','asignatura__tipo_programa', 'tipo_pregunta', 'rechazada')
 	search_fields = ('asignatura__nombre', 'tipo_pregunta')
 

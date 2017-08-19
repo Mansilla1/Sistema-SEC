@@ -19,6 +19,7 @@ urlpatterns = [
 
 	#	Detalle evaluacion
 	url(r'^detalle/(?P<evaluacion_id>\d+)/$', login_required(evaluacion_detail), name='evaluacion_detail'),
+	url(r'^descartar/(?P<evaluacion_id>\d+)/$', login_required(descartar_evaluacion), name='evaluacion_descartar'),
 
 	#	Calificacion alumnos
 	url(r'^estudiantes-notas/(?P<evaluacion_id>\d+)/$', login_required(estudiante_calificacion), name='estudiante_calificacion'),

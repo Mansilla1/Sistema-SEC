@@ -42,7 +42,7 @@ urlpatterns = [
     # USUARIOS
     url(r'^usuarios/', include('apps.usuarios.urls', namespace="usuarios")),
     # # DASHBOARD
-    url(r'^dashboard/', include('apps.dashboard.urls', namespace="dashboard")),
+    url(r'^otros/', include('apps.dashboard.urls', namespace="dashboard")),
 
     #   API
     # url(r'^api/evaluacion/', include('apps.evaluacion.api.urls', namespace="api-evaluaciones")),

@@ -9,17 +9,23 @@
   <form action="/preguntas/pregunta-evaluar/{{ preguntas.pk }}/" method="POST"> {% csrf_token %}
         <p><strong>Asignatura:</strong> {{ preguntas.asignatura.nombre }} - {{ preguntas.asignatura.codigo }}</p>
         <p><strong>Contenido: </strong>{{ preguntas.unidad.nombre }}</p>
+        <p><strong>Objetivos de aprendizaje:</strong> <i><p>
+            {{ preguntas.unidad.aprendizaje }} 
+            {% for contenido in preguntas.contenido.all %}
+              {% if contenido.aprendizaje_esperado %}<p>- {{ contenido.aprendizaje_esperado }}</p>{% endif %}
+            {% endfor %}
+          </p></i></p>
         <p><strong>Dificultad: </strong>{{ preguntas.dificultad }}</p>
         <p><strong>Tipo de pregunta: </strong>{{ preguntas.tipo_pregunta }}</p>
         <p><strong>Propuesta por: </strong>{{ preguntas.usuario.perfilusuario.nombres }} {{ preguntas.usuario.perfilusuario.apellido1 }} {{ preguntas.usuario.perfilusuario.apellido2 }}</p>
-        <p><strong>Pregunta: </strong>{{ preguntas.pregunta }} <br>
+        <p><strong>Pregunta: </strong>{{ preguntas.pregunta|linebreaksbr }} <br>
 
         {% thumbnail preguntas.imagen_pregunta "350x260" crop="center" as im %}
           <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
         {% endthumbnail %}
 
         {% if preguntas.tipo_pregunta == 'Pregunta de desarrollo' %}
-        <p><strong>Respuesta: </strong> {% for respuesta in preguntas.respuesta_set.all %} {{ respuesta.respuesta }}  
+        <p><strong>Respuesta: </strong> {% for respuesta in preguntas.respuesta_set.all %} {{ respuesta.respuesta|linebreaksbr }}  
 
         {% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
           <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
@@ -66,7 +72,10 @@
         </div> -->
         <input type="submit" value="Aceptar pregunta" id="aceptar" class="btn btn-success" name="status">
         <button id="rechazar" class="btn btn-warning">Observación</button>
-        {% if preguntas.count > 1 %} <input type="submit" value="Rechazar pregunta" class="btn btn-danger" name="rechazada">{% endif %}
+        {% if preguntas.count > 1 %} 
+          <input type="submit" value="Rechazar pregunta" class="btn btn-danger" name="rechazada">
+          <a href="{% url 'preguntas:PreguntaEditar' preguntas.pk %}" class="btn btn-primary">Editar pregunta</a>
+        {% endif %}
         
         <br>
         <div class="form-group" id="observacion">

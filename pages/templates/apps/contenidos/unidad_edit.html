@@ -1,0 +1,31 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+
+<div class="modal-header">
+  <button  id="cerrar2" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">Actualizar unidad {{ unidad.unidad }}: {{ unidad.nombre }}</h4>
+</div>
+
+<form action="/contenidos/contenidos/actualizar-unidad/{{ unidad.pk }}/" method="POST"> {% csrf_token %}
+<div class="modal-body">
+		<div class="row">{% bootstrap_form form %}</div>
+</div>
+
+ <div class="modal-footer">
+   <input type="submit" value="Guardar" class="btn btn-success">
+   <button  id="cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+ </div>
+</form>
+
+
+{% block js %}
+<script>
+	$('#cerrar').on('click', function(){
+		location.reload();
+	});
+	$('#cerrar2').on('click', function(){
+		location.reload();
+	});
+</script>
+{% endblock %}

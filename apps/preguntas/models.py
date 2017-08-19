@@ -55,5 +55,5 @@ class Respuesta(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	status_respuesta = models.BooleanField(default=False)
 
-	def __str__(self):
-		return self.respuesta
+	# def __str__(self):
+	# 	return self.respuesta

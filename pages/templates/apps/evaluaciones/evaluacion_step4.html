@@ -116,7 +116,7 @@
 							<div class="col-md-12">
 								<div class="col-md-12" style="border: solid 1px;margin-bottom: 10px;border-radius: 10px;background-color:#CEC7C7;">
 									<div class="col-md-10">
-										<h5><strong>{{ pregunta.pregunta }}</strong></h5>
+										<h5><strong>{{ pregunta.pregunta|linebreaksbr }}</strong></h5>
 										{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
 										<img src="{{ im.url }}" class="img-responsive">
 										{% endthumbnail %}

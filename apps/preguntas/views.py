@@ -50,7 +50,6 @@ def pregunta_create(request):
 
 				form2 = RespuestaForm(parms, request.FILES or None)
 				if form2.is_valid():
-					print "sdfakjsdfka"
 					form2 = form2.save(commit=False)
 
 					if tipo_pregunta == 'Pregunta de desarrollo':
@@ -129,30 +128,48 @@ def pregunta_detail(request, pregunta_id):
     return render(request, 'apps/preguntas/pregunta_detail.html', context)
 
 
-# def pregunta_edit(request, pregunta_id):
-#     pregunta = Pregunta.objects.get(pregunta_id=pregunta_id)
-#     respuestas = Respuesta.objects.filter(pregunta=pregunta)
+def pregunta_edit(request, pregunta_id):
+    pregunta = Pregunta.objects.get(id=pregunta_id)
+    usuario = pregunta.usuario
 
-#     if request.method == 'GET':
-#         form = PreguntaForm(instance=pregunta)
-#     else:
-#         form = PreguntaForm(request.POST, instance=pregunta)
-#         if form.is_valid():
-#             print "entrar"
-#             form = form.save(commit=False)
-#             form.observacion = ''
-#             form.corregida = True
-#             form.save()
+    if pregunta.tipo_pregunta == 'Pregunta de desarrollo':
+    	respuestas = Respuesta.objects.get(pregunta=pregunta)
+    else:
+    	respuestas = Respuesta.objects.filter(pregunta=pregunta)
 
-#         return redirect('preguntas:ListPreguntaView')
+    if request.method == 'GET':
+        form = PreguntaForm(instance=pregunta)
+        # form2 = RespuestaForm(instance=respuestas)
+    else:
+        form = PreguntaForm(request.POST, request.FILES, instance=pregunta)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.usuario = usuario
+            form.observacion = ''
+            form.corregida = True
+            form.save()
 
-#     context = {
-#         'form': form,
-#         'pregunta': pregunta,
-#         'respuestas': respuestas,
-#     }
+            if form.tipo_pregunta == 'Pregunta de desarrollo':
+            	respuesta = request.POST.get('respuesta_0')
+            	imagen_respuesta = request.POST.files('imagen_respuesta_0')
+            	respuestas.respuesta = respuesta
+            	respuestas.imagen_respuesta = imagen_respuesta
+            	respuestas.save()
+            else:
+            	# respuestas = Respuesta.objects.filter(pregunta=pregunta)
+            	print 'caca'
 
-#     return render(request, 'apps/preguntas/pregunta_editar.html', context)
+
+        return redirect('preguntas:list_preguntas')
+
+    context = {
+        'form': form,
+        # 'form2': form2,
+        'pregunta': pregunta,
+        'respuestas': respuestas,
+    }
+
+    return render(request, 'apps/preguntas/pregunta_editar.html', context)
 
 
 # AJAX

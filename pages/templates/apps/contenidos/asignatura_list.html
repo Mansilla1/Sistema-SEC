@@ -21,7 +21,9 @@
       <div class="x_content">
         <div class="row">
           <div class="col-md-6">
-            <a href="{% url 'contenidos:asignaturaCreate' %}" class="btn btn-success" data-toggle="modal" data-target="#myModalCreate"><i class="fa fa-plus"></i> Agregar Asignatura</a>
+            {% if user.perfilusuario.tipo_usuario == 'Administrador' or user.perfilusuario.tipo_usuario == 'Directivo' %}
+            <a href="{% url 'contenidos:asignaturaCreate' %}" class="btn btn-success" data-toggle="modal" data-target="#myModalCreate"><i class="fa fa-plus"></i> Nueva Asignatura</a>
+            {% endif %}
           </div>
           <div class="col-md-6" style="text-align: right;">
             <a href="{% url 'contenidos:cursoList' %}" class="btn btn-primary"><i class="fa fa-address-card-o"></i> Administración Cursos</a>
@@ -67,12 +69,13 @@
                 <td> {{ asignatura.curso_set.count }} </td>
                 <td>
                   <p>
+                    <a href="{% url 'contenidos:contenidos_form' asignatura.pk %}" class="btn btn-danger btn-xs" type="button"><i class="glyphicon glyphicon-bookmark"></i><small> Contenidos</small></a>
+                    <a href="{% url 'contenidos:asignaturaUpdate' asignatura.pk %}" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-xs" type="button"><i class="glyphicon glyphicon-edit"></i><small> Editar</small></a>
+                  </p>
+                  <p>
                     <!-- <a href="#" class="btn btn-success btn-xs" type="button" data-toggle="modal" data-target="#myModal" title="Agregar secciones"><i class="glyphicon glyphicon-plus"></i> Agregar cursos</a> -->
                     <a href="{% url 'contenidos:programaCurso_pdf' asignatura.pk %}" target="_blank" class="btn btn-info btn-xs" type="button"><i class="glyphicon glyphicon-info-sign"></i><small> Programa Curso</small></a>
                     <a href="{% url 'contenidos:syllabus_pdf' asignatura.pk %}" target="_blank" class="btn btn-warning btn-xs" type="button"><i class="glyphicon glyphicon-info-sign"></i><small> Syllabus</small></a>
-                  </p>
-                  <p>
-                    <a href="{% url 'contenidos:asignaturaUpdate' asignatura.pk %}" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-xs" type="button"><i class="glyphicon glyphicon-edit"></i><small> Editar</small></a>
                   </p>
                 </td>
               </tr>

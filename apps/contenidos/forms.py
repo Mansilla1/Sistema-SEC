@@ -3,6 +3,11 @@ from django import forms
 from .models import *
 
 
+class CarreraForm(forms.ModelForm):
+	class Meta:
+		model = Carrera 
+		fields = ['sede', 'facultad', 'codigo_carrera', 'carrera']
+
 class AsignaturaForm(forms.ModelForm):
 	class Meta:
 		model = Asignatura
@@ -45,7 +50,12 @@ class UnidadForm(forms.ModelForm):
 			'nombre',
 			# 'asignatura',
 			'unidad',
+			'aprendizaje',
 		]
+		widgets = {
+			'aprendizaje': forms.TextInput(attrs={'class': 'form-control'}),
+		}
+
 
 
 class ContenidoForm(forms.ModelForm):
@@ -58,26 +68,26 @@ class ContenidoForm(forms.ModelForm):
 		]
 
 
-class InformacionForm(forms.ModelForm):
-	class Meta:
-		model = Informacion
-		fields = [
-			# 'asignatura',
-			'objetivos_educacionales',
-			'competencias_egreso',
-			'aprendizaje',
-			'descripcion',
-			'habilidades',
-			'modalidad',
-		]
+# class InformacionForm(forms.ModelForm):
+# 	class Meta:
+# 		model = Informacion
+# 		fields = [
+# 			# 'asignatura',
+# 			'objetivos_educacionales',
+# 			'competencias_egreso',
+# 			'aprendizaje',
+# 			'descripcion',
+# 			'habilidades',
+# 			'modalidad',
+# 		]
 
 
-class CondicionesAprobacionForm(forms.ModelForm):
-	class Meta:
-		model = CondicionesAprobacion 
-		fields = [
-			'descripcion_condicion',
-		]
+# class CondicionesAprobacionForm(forms.ModelForm):
+# 	class Meta:
+# 		model = CondicionesAprobacion 
+# 		fields = [
+# 			'descripcion_condicion',
+# 		]
 
 class BibliografiaForm(forms.ModelForm):
 	class Meta:

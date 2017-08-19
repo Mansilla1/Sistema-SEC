@@ -23,13 +23,13 @@
   </div>
   <div class="panel-body">
     <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
-      <div class="col-md-8">  
+      <div class="col-md-12">  
         <div class="panel panel-default">
           <div class="panel-heading main-color-bg" style="background-color: #3498db;">
-            <h3 class="panel-title">Contenidos</h3>
+            <h3 class="panel-title" style="background-color: #3498db;color: white;">Contenidos</h3>
           </div>
           <div class="panel-body">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="form-group">
                   <label for="">Asignatura</label>
                   <select id="id_asignatura" name="asignatura" class="form-control" required>
@@ -37,7 +37,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <!-- EL SELECT DE CONTENIDOS -->
                 <div id="contenidos" class="form-group">
                   <label>Unidad</label>
@@ -46,10 +46,31 @@
                   </select>
                 </div>
               </div>
-
-              <div class="col-md-12">
+              
+              <div class="col-md-2">
                 <div class="form-group">
-                  <label>Contenidos <a href="#" class="text-green" type="button" id="detalleContenido" data-toggle="modal" data-target="#myModal"><i class="fa fa-info-circle"></i></a></label>
+                  <label for="id_dificultad">Nivel de dificultad</label>
+                  <select name="dificultad" id="id_dificultad" class="form-control">
+                    <option value="Basica">Básica</option>
+                    <option value="Intermedia">Intermedia</option>
+                    <option value="Avanzada">Avanzada</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="id_tipo_pregunta">Tipo Pregunta</label>
+                  <select id="id_tipo_pregunta" name="tipo_pregunta" required="" class="form-control">
+                    <option value="Pregunta de desarrollo">Desarrollo</option>
+                    <option value="Seleccion multiple">Selección múltiple</option>
+                    <option value="Terminos pareados">Términos pareados</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label>Contenidos</label>
                   <select multiple="" name="contenido" id="sesionesList" class="form-control" required></select>
                 </div>
               </div>
@@ -57,44 +78,14 @@
           <br>
         </div>
       </div>
-      <div class="col-md-4">  
-        <div class="panel panel-default">
-          <div class="panel-heading main-color-bg" style="background-color: #3498db;">
-            <h3 class="panel-title">Características</h3>
-          </div>
-          <div class="panel-body">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="id_dificultad">Nivel de dificultad</label>
-                <select name="dificultad" id="id_dificultad" class="form-control">
-                  <option value="Basica">Básica</option>
-                  <option value="Intermedia">Intermedia</option>
-                  <option value="Avanzada">Avanzada</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="id_tipo_pregunta">Tipo Pregunta</label>
-                <select id="id_tipo_pregunta" name="tipo_pregunta" required="" class="form-control">
-                  <option value="Pregunta de desarrollo">Pregunta de desarrollo</option>
-                  <option value="Seleccion multiple">Selección múltiple</option>
-                  <option value="Terminos pareados">Términos pareados</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="col-md-12">  
         <div class="panel panel-default">
           <div class="panel-heading main-color-bg" style="background-color: #3498db;">
-            <h3 class="panel-title">Pregunta</h3>
+            <h3 class="panel-title" style="background-color: #3498db;color: white;">Pregunta</h3>
           </div>
           <div class="panel-body">
             <div class="col-md-12">
               <!-- Pregunta -->
-              <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
                     <h5><label for="">Pregunta:</label></h5>
@@ -107,7 +98,6 @@
                     <input id="id_imagen_pregunta" name="imagen_pregunta" type="file">
                   </div>
                 </div>
-              </div>
               <!-- Fin Pregunta -->
 
               <!-- Respuestas -->
@@ -118,16 +108,14 @@
                 <div id="desarrollo">
                   <div class="row">
                     <div class="col-md-12">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <h5><label>Respuesta:</label></h5>
-                              <textarea cols="40" name="respuesta_0" rows="4" class="form-control" ></textarea>
-                            </div>
-                          </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <h5><label>Respuesta:</label></h5>
+                          <textarea cols="40" name="respuesta_0" rows="4" class="form-control" ></textarea>
+                        </div>
+                      </div>
 
                       <div class="col-md-4">
-                      <br>
-                      <br>
                         <h5><strong>Adjuntar imagen</strong></h5>
                         <input name="imagen_respuesta_0" type="file">
                         <!-- <label class="btn btn-success"><i class="fa fa-file-image-o"></i>

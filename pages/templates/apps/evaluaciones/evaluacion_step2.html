@@ -67,7 +67,7 @@
 			<div class="col-md-3">
 				<h5 for=""><strong>Tipo de respuesta</strong></h5>
 				<select name="" id="tipo_filtro" class="form-control">
-					<option value="" selected="" disabled="">-------------------------------------------</option>
+					<option value="" selected="">-------------------------------------------</option>
 					<option value="Pregunta de desarrollo">Respuesta de desarrollo</option>
 					<option value="Seleccion multiple">Selección múltiple</option>
 					<option value="Terminos pareados">Términos pareados</option>
@@ -76,7 +76,7 @@
 			<div class="col-md-2">
 				<h5 for=""><strong>Nivel de dificultad</strong></h5>
 				<select name="" id="dificultad_filtro" class="form-control">
-					<option value="" selected="" disabled="">----------------------</option>
+					<option value="" selected="">----------------------</option>
 					<option value="Basica">Básica</option>
 					<option value="Intermedia">Intermedia</option>
 					<option value="Avanzada">Avanzada</option>
@@ -111,7 +111,7 @@
 							</div> -->
 
 							<div class="col-md-12">
-								<h5><strong>{{ pregunta.pregunta }}</strong></h5>
+								<h5><strong>{{ pregunta.pregunta|linebreaksbr }}</strong></h5>
 								<p>{% thumbnail pregunta.imagen_pregunta "350x260" crop="center" as im %}
 								  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
 								{% endthumbnail %}</p>
@@ -120,7 +120,7 @@
 							<div class="col-md-12">
 								{% if pregunta.tipo_pregunta == 'Pregunta de desarrollo' %}
 
-									<p>{% for respuesta in pregunta.respuesta_set.all %} {{ respuesta.respuesta }}</p>
+									<p>{% for respuesta in pregunta.respuesta_set.all %} {{ respuesta.respuesta|linebreaksbr }}</p>
 
 									<p>{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
 									  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
@@ -245,7 +245,7 @@
 		url: '{% url "evaluaciones:ContenidoFiltroAjax" %}',
 		type: 'GET',
 		success: function(data){
-			var html = '<option value"" selected="" disabled="">----------------------------</option>'
+			var html = '<option value"" selected="">----------------------------</option>'
 			for (var i = 0; i<data.length; i++){
 			html += '<option value="'+data[i].pk+'">'+ data[i].fields.nombre +'</option>'
 			}
@@ -266,11 +266,14 @@
 			url: '{% url "evaluaciones:PreguntaObjAjax" %}',
 			type: 'GET',
 			success: function(data){
-			  var html = ""
+			  var html = "<h4>Contenidos</h4>"
+			  var html2 = "<h4>Objetivos de aprendizaje</h4>"
+
 			  for (var i = 0; i<data.length; i++){
-		    	html += '<h4>Contenidos</h4><pre>'+data[i].fields.contenido+'</pre><h4>Objetivos de aprendizaje</h4><pre>'+data[i].fields.aprendizaje_esperado+'</pre>'
+		    	html += '<p>'+data[i].fields.contenido+'</p>'
+		    	html2 += '<p>'+data[i].fields.aprendizaje_esperado+'</p>'
 			  }
-			  $('.modal-body').html(html)
+			  $('.modal-body').html(html + html2)
 
 			  console.log('pasa')
 

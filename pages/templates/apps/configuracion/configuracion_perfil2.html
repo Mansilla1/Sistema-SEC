@@ -1,0 +1,44 @@
+{% extends 'bases/base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% block title %}Configuración perfil{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Configuración perfil</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <ul class="nav nav-tabs">
+          <li><a href="{% url 'dashboard:config-perfil1' %}">Perfil usuario</a></li>
+          <li class="active"><a href="{% url 'dashboard:config-perfil2' %}">Contraseña</a></li>
+        </ul>
+        <div class="col-md-12">
+          <form action="" method="POST">{% csrf_token %}
+            <div class="col-md-6">
+              <br>
+              {% bootstrap_form form %}
+
+              <button class="btn btn-success" type="submit">Guardar</button>
+            </div>
+          </form>
+        </div>       
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block js %}
+
+{% endblock %}

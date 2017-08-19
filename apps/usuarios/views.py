@@ -96,7 +96,13 @@ def login_user(request):
 
 def usuarioList(request):
 	usuario = PerfilUsuario.objects.all()
-	return render(request, 'apps/usuarios/usuario_list.html', {'usuario': usuario})
+
+	
+	context = {
+		'usuario': usuario,
+	}
+
+	return render(request, 'apps/usuarios/usuario_list.html', context)
 
 def usuarioCreate(request):
 	if request.POST:

@@ -7,19 +7,18 @@
   <h4 class="modal-title" id="myModalLabel">Actualizar asignatura {{ asignatura.codigo }} - {{ asignatura.nombre }}</h4>
 </div>
 
-<div class="modal-body">
-	<form action="/contenidos/actualizar-asignatura/{{ asignatura.pk }}/" method="POST"> {% csrf_token %}
+<form action="/contenidos/actualizar-asignatura/{{ asignatura.pk }}/" method="POST"> {% csrf_token %}
+	<div class="modal-body">
 		<div class="row">{% bootstrap_form form %}</div>
 		<!-- <div class="row">{{ form }}</div> -->
-		
 		<br>
-		<input type="submit" value="Guardar" class="btn btn-success">
-	</form>
-</div>
+	</div>
 
- <div class="modal-footer">
-   <button  id="cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
- </div>
+ 	<div class="modal-footer">
+		<button type="submit" class="btn btn-success">Guardar</button>
+   		<button  id="cerrar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+	</div>
+</form>
 
 
 {% block js %}

@@ -10,17 +10,20 @@ from apps.usuarios.models import PerfilUsuario, Estudiante
 class Sede(models.Model):
 	sede = models.CharField(max_length=255, default='Antonio Varas')
 	lugar = models.CharField(max_length=255, blank=True, null=True)
+	descripcion = models.TextField(blank=True, null=True)
 
 	def __unicode__(self):
 		return self.sede
 
 class Facultad(models.Model):
 	facultad = models.CharField(max_length=255, default='Ingenieria')
+	descripcion = models.TextField(blank=True, null=True)
 
 	def __unicode__(self):
 		return self.facultad
 
 class Carrera(models.Model):
+	codigo_carrera = models.CharField(max_length=200, blank=True, null=True)
 	carrera = models.CharField(max_length=200)
 	sede = models.ForeignKey(Sede, on_delete=models.CASCADE)
 	facultad = models.ForeignKey(Facultad, on_delete=models.CASCADE)
@@ -90,6 +93,7 @@ class Unidad(models.Model):
 	nombre = models.CharField(max_length=150)
 	asignatura = models.ForeignKey(Asignatura, verbose_name='Asignatura', on_delete=models.CASCADE)
 	unidad = models.IntegerField(null=True)
+	aprendizaje = models.TextField(null=True, blank=True)
 
 	def __unicode__(self): 	#__unicode__ para atributos que tengan caracteres en español
 		return self.nombre
@@ -103,20 +107,51 @@ class Contenido(models.Model):
 		return self.contenido
 
 
+# # ------------------------------------
+# class Informacion(models.Model):
+# 	asignatura = models.ForeignKey(Asignatura, verbose_name='Asignatura', on_delete=models.CASCADE)
+# 	objetivos_educacionales = models.TextField(blank=True, null=True, verbose_name="Objetivos educacionales")
+# 	competencias_egreso = models.TextField(blank=True, null=True, verbose_name="Competencias de egreso")
+# 	aprendizaje = models.TextField(blank=True, null=True, verbose_name="Resultados de aprendizaje")
+# 	descripcion = models.TextField(blank=True, null=True, verbose_name="Descripción general")
+# 	habilidades = models.TextField(blank=True, null=True, verbose_name="Habilidades transversales")
+# 	modalidad = models.TextField(blank=True, null=True, verbose_name="Modalidad didáctica y procedimientos de evaluaciones")
 
-class Informacion(models.Model):
-	asignatura = models.ForeignKey(Asignatura, verbose_name='Asignatura', on_delete=models.CASCADE)
-	objetivos_educacionales = models.TextField(blank=True, null=True, verbose_name="Objetivos educacionales")
-	competencias_egreso = models.TextField(blank=True, null=True, verbose_name="Competencias de egreso")
-	aprendizaje = models.TextField(blank=True, null=True, verbose_name="Resultados de aprendizaje")
-	descripcion = models.TextField(blank=True, null=True, verbose_name="Descripción general")
-	habilidades = models.TextField(blank=True, null=True, verbose_name="Habilidades transversales")
-	modalidad = models.TextField(blank=True, null=True, verbose_name="Modalidad didáctica y procedimientos de evaluaciones")
+# # ------------------------------------
 
+
+class ObjetivoEducacional(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	objetivo_educacional = models.TextField(blank=True, null=True)
+
+
+class CompetenciaEgreso(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	competencia_egreso = models.TextField(blank=True, null=True)
+
+class ResultadoAprendizaje(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	resultado_aprendizaje = models.TextField(blank=True, null=True)
+
+
+class DescripcionGeneral(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	descripcion_general = models.TextField(blank=True, null=True)
+	
+class HabilidadTransversal(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	habilidad_transversal = models.TextField(blank=True, null=True)
+
+class ModalidadDidactica(models.Model):
+	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
+	modalidad_didactica = models.TextField(blank=True, null=True)
 
 class CondicionesAprobacion(models.Model):
 	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)
 	descripcion_condicion = models.TextField()
+
+
+
 
 class Bibliografia(models.Model):
 	asignatura = models.ForeignKey(Asignatura, on_delete=models.CASCADE)

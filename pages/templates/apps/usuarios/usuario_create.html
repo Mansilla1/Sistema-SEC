@@ -1,3 +1,9 @@
+{% load static %}
+
+{% block css %}
+	<link rel="stylesheet" href="{% static 'app/js/plugins/sweetAlert/sweetalert.css' %}">
+{% endblock %}
+
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
   <h4 class="modal-title" id="myModalLabel">Agregar nuevo usuario</h4>
@@ -23,7 +29,7 @@
 					</div>
 					<div class="form-group">
 						<label>Apellido Materno</label>
-						<input type="text" class="form-control" name="apellido2" placeholder="Ingrese apellidos" required="">
+						<input type="text" class="form-control" name="apellido2" placeholder="Ingrese apellidos">
 					</div>
 					<div class="form-group">
 						<label>Correo electrónico</label>
@@ -58,13 +64,36 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
-	  <input type="submit" value="Guardar" class="btn btn-primary" >
+	<div class="modal-footer showcase sweet">
+	  <button type="submit" class="btn btn-primary" >Guardar</button>
 	  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 	</div>
 </form>
 
 
 {% block js %}
+	<script src="{% static 'app/js/plugins/sweetAlert/sweetalert.min.js' %}"></script>
 
+	<script>
+		document.querySelector('.showcase.sweet button').onclick = function(){
+			swal({
+				title: "Estás seguro?",
+				text: "You will not be able to recover this imaginary file!",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Si, crear usuario",
+				cancelButtonText: "No",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm){
+				if (isConfirm) {
+					swal("El usuario ha sido creado.", "success");
+				} else {
+					swal("Cancelado", "error");
+				}
+			});
+		};
+	</script>
 {% endblock %}

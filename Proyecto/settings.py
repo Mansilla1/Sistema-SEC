@@ -25,6 +25,7 @@ SECRET_KEY = 'wh*7hqgyk*dvcrdvdi&dk$of8eouhqa7qikkra%smrhnr+&m)#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -44,8 +45,8 @@ INSTALLED_APPS = [
     # 'crispy_forms',
     'sorl.thumbnail',
     'import_export',
-    'rest_framework',
     'bootstrap3',
+    'rest_framework',
     #Aplicaciones, encontradas en la carpeta de apps
     'apps.contenidos',
     'apps.preguntas',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'apps.dashboard',
 ]
 
+# SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -151,7 +153,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('login')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))
-MEDIA_ROOT = os.path.join(BASE_DIR, 'pages/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/pages/media')
 STATIC_ROOT = os.path.join(BASE_DIR, '/pages/static/admin/')
 
 
@@ -160,7 +162,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIAFILES_DIRS = [
-    os.path.join(BASE_DIR, "/pages/media"),
+    os.path.join(BASE_DIR, "pages/media"),
 ]
 
 # FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",

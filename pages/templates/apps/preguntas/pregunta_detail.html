@@ -14,20 +14,27 @@
   <h4 class="modal-title" id="myModalLabel">Detalle pregunta #{{ preguntas.pk }}</h4>
 </div>
 <div class="modal-body">
-	<p><strong>Asignatura:</strong>{{ preguntas.asignatura.nombre }} - {{ preguntas.asignatura.codigo }}</p>
+	<p><strong>Asignatura: </strong>{{ preguntas.asignatura.nombre }} - {{ preguntas.asignatura.codigo }}</p>
 	<p><strong>Contenido: </strong>{{ preguntas.unidad.nombre }}</p>
-	<p><strong>Objetivos de aprendizaje:</strong> <i><pre>{% for aprendizaje in preguntas.contenido.all %} {{ aprendizaje.aprendizaje_esperado }} {% endfor %}</pre></i></p>
+	<p><strong>Objetivos de aprendizaje:</strong> <i><p>
+		{{ preguntas.unidad.aprendizaje }} 
+		{% for contenido in preguntas.contenido.all %}
+			{% if contenido.aprendizaje_esperado %}<p>- {{ contenido.aprendizaje_esperado }}</p>{% endif %}
+		{% endfor %}
+	</p></i></p>
+
+
 	<p><strong>Dificultad: </strong>{{ preguntas.dificultad }}</p>
 	<p><strong>Tipo de pregunta: </strong>{{ preguntas.tipo_pregunta }}</p>
 	<p><strong>Propuesta por: </strong>{{ preguntas.usuario.perfilusuario.nombres }} {{ preguntas.usuario.perfilusuario.apellido1 }} {{ preguntas.usuario.perfilusuario.apellido2 }}</p>
 	<p><strong>Fecha de creación: </strong>{{ preguntas.created_at }}</p>
-	<p><strong>Pregunta: </strong>{{ preguntas.pregunta }} 
+	<p><strong>Pregunta: </strong>{{ preguntas.pregunta|linebreaksbr }} 
 	{% thumbnail preguntas.imagen_pregunta "350x260" crop="center" as im %}
 	  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">
 	{% endthumbnail %}</p>
 
 	{% if preguntas.tipo_pregunta == 'Pregunta de desarrollo' %}
-	<p><strong>Respuesta: </strong> {% for respuesta in preguntas.respuesta_set.all %} {{ respuesta.respuesta }}  
+	<p><strong>Respuesta: </strong> {% for respuesta in preguntas.respuesta_set.all %} {{ respuesta.respuesta|linebreaksbr }}  
 
 	{% thumbnail respuesta.imagen_respuesta "350x260" crop="center" as im %}
 	  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-responsive">

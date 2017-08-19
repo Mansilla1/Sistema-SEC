@@ -35,9 +35,9 @@
 
 {% block content %}
 <!-- Usuario admin -->
-{% if user.perfilusuario.tipo_usuario == 'Administrador' or user.perfilusuario.tipo_usuario == 'Comite academico' %}
+{% if user.perfilusuario.tipo_usuario == 'Administrador' or user.perfilusuario.tipo_usuario == 'Directivo' %}
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-xs-12 col-sm-4 col-md-6">
     <div class="col-md-12">
       <div class="panel panel-primary">
       <div class="panel-heading">Top preguntas</div>
@@ -66,7 +66,7 @@
     </div>  
     </div>
     <div class="col-md-12">
-    <div class="panel panel-primary">
+      <div class="panel panel-primary">
       <div class="panel-heading">Profesores con mayor influencia en agregar preguntas</div>
       <div class="panel-body">
         <div class="col-md-12">
@@ -90,11 +90,11 @@
           </table>
         </div>
       </div>
+      </div>
     </div>
- </div>
 
  <div class="col-md-12">
-    <div class="panel panel-success">
+    <div class="panel panel-primary">
       <div class="panel-heading">Profesores que más utilizan la plataforma para generar evaluaciones</div>
       <div class="panel-body">
         <div class="col-md-12">
@@ -122,14 +122,41 @@
  </div>
  </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-6">
+  <!-- <div class="col-xs-12 col-sm-4 col-md-6">
     <div class="x_panel">
       <div class="x_title">
-        <h5>Tasa de rechazo preguntas por línea de formación</h5>
+        <h5>Preguntas propuestas vs preguntas aceptadas por línea de formación</h5>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
-        <canvas id="rechazo_preguntas" width="400" height="400">
+        <canvas id="preguntas_estados" width="400" height="490">
+      </div>
+    </div>
+  </div> -->
+  <div class="col-xs-12 col-sm-4 col-md-6">
+    <div class="x_panel">
+      <div class="x_title">
+        <h5>Preguntas propuestas vs preguntas aceptadas</h5>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <select name="mes" id="get_mes" class="form-control">
+          <option value="0" selected="">---------------</option>
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <br>
+        <canvas id="preguntas_estados_mes" width="400" height="490">
       </div>
     </div>
   </div>
@@ -139,10 +166,121 @@
   
 </div>
 
-{% elif user.perfilusuario.tipo_usuario == 'Directivo' %}
+{% elif user.perfilusuario.tipo_usuario == 'Comite academico' %}
+<div class="row">
+   <div class="col-md-6">
+     <div class="col-md-12">
+       <div class="panel panel-info">
+       <div class="panel-heading">Últimas preguntas por evaluar</div>
+       <div class="panel-body">
+         <div class="col-md-12">
+           <table class="table">
+             <thead>
+               <th style="text-align:center">Código pregunta</th>
+               <th style="text-align:center">Asignatura</th>
+               <th style="text-align:center">Estado</th>
+               <th style="text-align:center">Acciones</th>
+             </thead>
+             <tbody>
+               {% for pregunta in preguntas_evaluar %}
+                 <tr>
+                   <td style="text-align:center">#{{ pregunta.pk }}</td>
+                   <td style="text-align:center">{{ pregunta.asignatura.nombre }}</td>
+                   <td style="text-align:center">
+                    <i title="Por evaluar" class="btn btn-round btn-warning btn-xs glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+                    <p>Por evaluar</p>
+                  </td>
+                   <td style="text-align:center"><a data-backdrop="static" href="{% url 'preguntas:preguntaEvalue' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-warning btn-xs">Evaluar</button></a></td>
+                 </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>  
+     </div>
+  </div>
+  <div class="col-md-6">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+      <div class="panel-heading">Top preguntas</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <th style="text-align:center">Código pregunta</th>
+              <th style="text-align:center">Línea de formación</th>
+              <th style="text-align:center">Cantidad usada</th>
+              <th style="text-align:center">Acciones</th>
+            </thead>
+            <tbody>
+              {% for pregunta in orden_preguntas %}
+                <tr>
+                  <td style="text-align:center">#{{ pregunta.pk }}</td>
+                  <td style="text-align:center">{{ pregunta.asignatura.eje_curricular }}</td>
+                  <td style="text-align:center">{{ pregunta.cant_usada }}</td>
+                  <td style="text-align:center"><a data-backdrop="static" href="{% url 'preguntas:PreguntaDetail' pregunta.pk %}" type="button" data-toggle="modal" data-target="#myModal"><button class="btn btn-primary btn-xs">Detalles</button></a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>  
+    </div>
+ </div>
+</div>
 
 
 {% elif user.perfilusuario.tipo_usuario == 'Docente' %}
+<div class="row">
+  <div class="col-md-4">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+      <div class="panel-heading">Recomendados</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <p><a href="{% url 'preguntas:preguntaCreate' %}" class="btn btn-success"><i class="fa fa-plus"></i> Agregar nueva pregunta</a></p>
+          <p><a href="{% url 'evaluaciones:evaluacion_rapida_step1' %}" class="btn btn-success"><i class="fa fa-plus"></i> Nueva evaluación</a></p>
+        </div>
+      </div>
+    </div>  
+    </div>
+ </div>
+
+  <div class="col-md-8">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+      <div class="panel-heading">Últimas evaluaciones elaboradas</div>
+      <div class="panel-body">
+        <div class="col-md-12">
+          <table class="table">
+            <thead>
+              <th style="text-align:center">Evaluación</th>
+              <th style="text-align:center">Asignatura</th>
+              <th style="text-align:center">Detalle</th>
+              <th style="text-align:center">Calificaciones</th>
+              <th style="text-align:center">Detalle calificaciones</th>
+            </thead>
+            <tbody>
+              {% for evaluacion in evaluaciones_profe %}
+                <tr>
+                  <td style="text-align:center">{% if evaluacion.titulo %} {{ evaluacion.titulo }} {% else %} {% if evaluacion.tipo_evaluacion == 'Otro' %} {{ evaluacion.tipo_evaluacion_otro }} {% else %} {{ evaluacion.tipo_evaluacion }} {% endif %}  {% endif %}</td>
+                  <td style="text-align:center">{{ evaluacion.curso.asignatura.codigo }} - {{ evaluacion.curso.asignatura.nombre }}</td>
+                  <td> <a title="Detalle evaluación" href="{% url 'evaluaciones:evaluacion_detail' evaluacion.pk %}" class="btn btn-danger btn-xs" class="text-red"><i class="glyphicon glyphicon-info-sign"></i> <small>Detalle evaluación</small></a> </td>
+                  <td> <a title="Subir calificaciones" href="{% url 'evaluaciones:calificacionExcel' evaluacion.pk %}" class="btn btn-success btn-xs" type="button" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-file"></i><small> Subir calificaciones</small></a> </td>
+                  <td> {% if evaluacion.promedio_set %} <a title="Calificaciones por estudiantes" href="{% url 'evaluaciones:estudiante_calificacion' evaluacion.pk %}" class="btn btn-primary btn-xs" type="button" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-th-list"></i> <small> Detalle calificaciones</small></a> {% else %} --- {% endif %} </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>  
+    </div>
+ </div>
+</div>
+
 
 {% elif user.perfilusuario.tipo_usuario == 'Estudiante' %}
 <h1>Bienvenido {{ user.first_name }}</h1>
@@ -165,125 +303,34 @@
 <script src="{% static 'app/js/plugins/Chart.js/utils.js' %}"></script>
 
 <script>
-  var randomScalingFactor = function() {
-    return Math.round(Math.random() * 100);
-  };
-
-  var color = Chart.helpers.color;
-  var config = {
-    type: 'radar',
-    data: {
-      labels: ["Desarrollo de Software", "Arquitectura de Software", "Gestión de Proyectos", "Comunicación en idioma inglés"],
-      datasets: [{
-        label: "My First dataset",
-        backgroundColor: color(window.chartColors.red).alpha(0.2).rgbString(),
-        borderColor: window.chartColors.red,
-        pointBackgroundColor: window.chartColors.red,
-        data: [
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor()
-        ]
-      }, {
-        label: "My Second dataset",
-        backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
-        borderColor: window.chartColors.blue,
-        pointBackgroundColor: window.chartColors.blue,
-        data: [
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor(),
-        randomScalingFactor()
-        ]
-      },]
-    },
-  };
-
-  window.onload = function() {
-    window.myRadar = new Chart(document.getElementById("canvas"), config);
-  };
-
-  document.getElementById('randomizeData').addEventListener('click', function() {
-    config.data.datasets.forEach(function(dataset) {
-      dataset.data = dataset.data.map(function() {
-        return randomScalingFactor();
-      });
-    });
-
-    window.myRadar.update();
-  });
-
-  var colorNames = Object.keys(window.chartColors);
-  document.getElementById('addDataset').addEventListener('click', function() {
-    var colorName = colorNames[config.data.datasets.length % colorNames.length];;
-    var newColor = window.chartColors[colorName];
-
-    var newDataset = {
-      label: 'Dataset ' + config.data.datasets.length,
-      borderColor: newColor,
-      backgroundColor: color(newColor).alpha(0.2).rgbString(),
-      pointBorderColor: newColor,
-      data: [],
-    };
-
-    for (var index = 0; index < config.data.labels.length; ++index) {
-      newDataset.data.push(randomScalingFactor());
-    }
-
-    config.data.datasets.push(newDataset);
-    window.myRadar.update();
-  });
-
-  document.getElementById('addData').addEventListener('click', function() {
-    if (config.data.datasets.length > 0) {
-      config.data.labels.push('dataset #' + config.data.labels.length);
-
-      config.data.datasets.forEach(function (dataset) {
-        dataset.data.push(randomScalingFactor());
-      });
-
-      window.myRadar.update();
-    }
-  });
-
-  document.getElementById('removeDataset').addEventListener('click', function() {
-    config.data.datasets.splice(0, 1);
-    window.myRadar.update();
-  });
-
-  document.getElementById('removeData').addEventListener('click', function() {
-config.data.labels.pop(); // remove the label first
-
-config.data.datasets.forEach(function(dataset) {
-  dataset.data.pop();
-});
-
-window.myRadar.update();
-});
-</script>
-</script>
-<script>
   var get_data = []
+  var get_data2 = []
   var get_labels = []
 
+  // $.ajax({
+  //   method: 'GET',
+  //   url: "{% url 'dashboard:tasa-rechazo' %}",
+  //   success: function(data){
+  //     get_data = data.preguntas_propuestas
+  //     get_data2 = data.preguntas_aceptadas
+  //     get_labels = data.formacion
+  //     versusPreguntas();
+  //   },
+  //   error: function(error_data){
+  //     console.log('error')
+  //     // console.log(error_data)
+
+  //   }
+  // });
   $.ajax({
+    // data: {'mes': $('#get_mes').val()},
     method: 'GET',
-    url: "{% url 'dashboard:tasa-rechazo' %}",
+    url: "{% url 'dashboard:estado-preguntas-mes' %}",
     success: function(data){
-      get_data = data.preguntas_total
-      get_labels = data.formacion
-      console.log(get_labels)
-      console.log(get_data)
-      // preguntas = data.preguntas
-      // tipo = 'doughnut'
-      rechazoPreguntas();
+      get_data = data.preguntas_propuestas
+      get_data2 = data.preguntas_aceptadas
+      get_labels = data.tiempo
+      versusPreguntasMes();
     },
     error: function(error_data){
       console.log('error')
@@ -291,6 +338,172 @@ window.myRadar.update();
 
     }
   });
+
+  $('#get_mes').on('change', function(){
+    var mes = $(this).val()
+    mes = parseInt(mes)
+    $.ajax({
+      data: {'mes': $('#get_mes').val()},
+      method: 'GET',
+      url: "{% url 'dashboard:estado-preguntas-mesElegir' %}",
+      success: function(data){
+        get_data = data.preguntas_propuestas
+        get_data2 = data.preguntas_aceptadas
+        get_labels = data.tiempo
+        versusPreguntasMes();
+      },
+      error: function(error_data){
+        console.log('error')
+        // console.log(error_data)
+
+      }
+    });
+  })
+
+  function versusPreguntasMes(){
+    var chart4 = document.getElementById("preguntas_estados_mes");
+    var q4Chart = new Chart(chart4, {
+        type: 'horizontalBar',
+        data: {
+          labels: get_labels,
+          datasets: [{
+            label: 'Preguntas propuestas',
+            backgroundColor: [
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB",
+                "#3498DB"
+            ],
+            borderColor: [
+                "#3498DB"
+            ],
+            data: get_data
+          }, {
+            label: 'Preguntas aceptadas',
+            backgroundColor: [
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff",
+                "#fc00ff"
+            ],
+            borderColor: [
+                "#fc00ff"
+            ],
+            data: get_data2
+          }]
+        },
+        // options: {
+        //   legend:{
+        //     display: false
+        //   },
+        //     scales: {
+        //         xAxes: [{
+        //             ticks: {
+        //                 beginAtZero:true,
+        //                 min:0,
+        //                 max:100,
+        //                 stepSize: 20
+        //             }
+        //         }],
+        //         yAxes: [{
+        //             ticks: {
+        //                 fontSize: 11
+        //             },
+        //             barThickness: 35
+        //         }]
+        //     }
+        // }
+    });
+  };
+
+  // function versusPreguntas(){
+  //   var chart4 = document.getElementById("preguntas_estados");
+  //   var q4Chart = new Chart(chart4, {
+  //       type: 'horizontalBar',
+  //       data: {
+  //         labels: get_labels,
+  //         datasets: [{
+  //           label: 'Preguntas propuestas',
+  //           backgroundColor: [
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB",
+  //               "#3498DB"
+  //           ],
+  //           borderColor: [
+  //               "#3498DB"
+  //           ],
+  //           data: get_data
+  //         }, {
+  //           label: 'Preguntas aceptadas',
+  //           backgroundColor: [
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff",
+  //               "#fc00ff"
+  //           ],
+  //           borderColor: [
+  //               "#fc00ff"
+  //           ],
+  //           data: get_data2
+  //         }]
+  //       },
+  //       // options: {
+  //       //   legend:{
+  //       //     display: false
+  //       //   },
+  //       //     scales: {
+  //       //         xAxes: [{
+  //       //             ticks: {
+  //       //                 beginAtZero:true,
+  //       //                 min:0,
+  //       //                 max:100,
+  //       //                 stepSize: 20
+  //       //             }
+  //       //         }],
+  //       //         yAxes: [{
+  //       //             ticks: {
+  //       //                 fontSize: 11
+  //       //             },
+  //       //             barThickness: 35
+  //       //         }]
+  //       //     }
+  //       // }
+  //   });
+  // };
+
   var chart4 = document.getElementById("prefil_docente");
   var q4Chart = new Chart(chart4, {
       type: 'horizontalBar',
@@ -344,58 +557,6 @@ window.myRadar.update();
   });
 
 
-  function rechazoPreguntas(){
-    var chart4 = document.getElementById("rechazo_preguntas");
-    var q4Chart = new Chart(chart4, {
-        type: 'horizontalBar',
-        data: {
-            labels: get_labels,
-            datasets: [{
-               label: "",
-                data: get_data,
-                backgroundColor: [
-                    '#4D648D',
-                    '#4D648D',
-                    '#4D648D',
-                    '#4D648D'
-                ],
-                hoverBackgroundColor: [
-                    'rgba(255, 159, 64, 0.9)',
-                    'rgba(255, 159, 64, 0.9)',
-                    'rgba(255, 159, 64, 0.9)',
-                    'rgba(255, 159, 64, 0.9)'
-                ],
-                borderColor: [
-                    'rgba(255, 159, 64, 2)',
-                    'rgba(255, 159, 64, 2)',
-                    'rgba(255, 159, 64, 2)',
-                    'rgba(255, 159, 64, 2)'
-                ],
-                borderWidth: 2,
-            }]
-        },
-        options: {
-          legend:{
-            display: false
-          },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        beginAtZero:true,
-                        min:0,
-                        max:100,
-                        stepSize: 20
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        fontSize: 11
-                    },
-                    barThickness: 35
-                }]
-            }
-        }
-    });
-  };
+  
 </script>
 {% endblock %}
