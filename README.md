@@ -30,7 +30,9 @@ $ pip install -r requirements.txt
 ```
 Esto lo que hará, será instalar los requerimientos para que el sistema funcione en la máquina.
 
-* Paso 3: **Configurar Base de Datos**. Se considera la utilización de MySQL, en caso de poseer la base de datos se debe ejecutar el siguiente comando:
+* Paso 3: **Configurar Base de Datos**. 
+	- Crear la base de datos de nombre **sistemaSEC** en MySQL y definir root como dueño de la base.
+	- Importar base de datos con el siguiente comando:
 
 ```
 $ mysql -u root -p -h localhost sistemaSEC < database.sql

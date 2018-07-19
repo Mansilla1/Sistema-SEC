@@ -249,7 +249,8 @@ def evaluacion_rapida_step1(request):
 				p_desarrollo = Pregunta.objects.filter(tipo_pregunta='Pregunta de desarrollo', 
 					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
 				desarrollo += list(p_desarrollo)
-
+				if len(desarrollo) <= 0:
+					break
 			if p1 == 0:
 				break
 
@@ -260,6 +261,8 @@ def evaluacion_rapida_step1(request):
 					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
 				p_alternativas = list(p_alternativas)
 				alternativas += p_alternativas
+				if len(alternativas) <= 0:
+					break
 
 			if p2 == 0:
 				break
@@ -271,6 +274,8 @@ def evaluacion_rapida_step1(request):
 					asignatura=asignatura, status=True, unidad=contents[random.randint(0,len(contents)-1)]).order_by('?')[:1]
 				p_pareados = list(p_pareados)
 				pareados += p_pareados
+				if len(pareados) <= 0:
+					break
 
 			if p3 == 0:
 				break
