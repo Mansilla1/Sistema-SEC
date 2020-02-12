@@ -2,7 +2,7 @@ AST==0.0.2
 certifi==2017.7.27.1
 chardet==3.0.4
 diff-match-patch==20121119
-Django==1.10
+Django==1.11.28
 django-bootstrap3==9.0.0
 django-import-export==0.5.1
 djangorestframework==3.6.3
