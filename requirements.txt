@@ -5,7 +5,7 @@ diff-match-patch==20121119
 Django==1.10
 django-bootstrap3==9.0.0
 django-import-export==0.5.1
-djangorestframework==3.6.3
+djangorestframework==3.11.2
 et-xmlfile==1.0.1
 html5lib==1.0b8
 humanize==0.5.1
