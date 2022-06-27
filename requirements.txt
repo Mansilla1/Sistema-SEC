@@ -18,7 +18,7 @@ openpyxl==2.4.8
 Pillow==4.2.1
 PyPDF2==1.26.0
 PyYAML==3.12
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.18.2
 six==1.10.0
 sorl-thumbnail==12.3
